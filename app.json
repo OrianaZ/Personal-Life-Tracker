@@ -1,17 +1,19 @@
 {
   "expo": {
     "name": "Personal Life Tracker",
-    "slug": "FastingApp",
-    "version": "3.0.0",
+    "slug": "PersonalLifeTracker",
+    "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "fastingapp",
+    "scheme": "PersonalLifeTracker",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
-    "platforms": ["ios"],
+    "platforms": [
+      "ios"
+    ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.0riana.FastingApp",
+      "bundleIdentifier": "com.PersonalLifeTracker.prod",
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false,
         "CFBundleDisplayName": "Personal Life Tracker",
@@ -29,7 +31,7 @@
     "extra": {
       "router": {},
       "eas": {
-        "projectId": "9496d97b-18f7-456d-993a-dfb5fb27f70e"
+        "projectId": "f4c24a48-0bca-4406-a13a-a760c3579d5c"
       }
     }
   }

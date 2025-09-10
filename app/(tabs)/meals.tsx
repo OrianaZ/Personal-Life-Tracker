@@ -234,7 +234,7 @@ export default function MealsScreen() {
       </View>
 
       <TouchableOpacity
-        style={[styles.button, { backgroundColor: Colors.light.red, marginTop: 20 }]}
+        style={[styles.button, { backgroundColor: Colors.light.red, marginTop: 20, marginBottom:50 }]}
         onPress={deleteSelected}
       >
         <ThemedText style={styles.buttonText}>Delete Selected</ThemedText>

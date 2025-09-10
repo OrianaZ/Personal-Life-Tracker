@@ -90,5 +90,4 @@ const styles = StyleSheet.create({
   soda:{ color: Colors.light.purple, fontSize: 16},
   water:{ color: Colors.light.blue, fontSize: 16},
 
-
 });
