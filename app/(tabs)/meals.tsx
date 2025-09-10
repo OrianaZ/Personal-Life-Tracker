@@ -32,7 +32,6 @@ const GroceryRow = ({ item, onUpdate, onBlur }: GroceryRowProps) => {
   const [checked, setChecked] = useState(item.checked);
   const [quantity, setQuantity] = useState(item.quantity);
 
-  // keep local while editing; only commit on blur
   const handleBlur = () => {
     onUpdate({ name, checked, quantity });
     onBlur();
@@ -44,7 +43,6 @@ const GroceryRow = ({ item, onUpdate, onBlur }: GroceryRowProps) => {
         onPress={() => {
           const newChecked = !checked;
           setChecked(newChecked);
-          // commit checkbox immediately
           onUpdate({ name, checked: newChecked, quantity });
         }}
         style={styles.checkbox}
@@ -131,7 +129,7 @@ export default function MealsScreen() {
   const openMealModal = (day: string) => {
     setSelectedDay(day);
     const meal = mealData[day] || { out: '', main: '', side: '' };
-    setTempMeal({ ...meal }); // local scratch
+    setTempMeal({ ...meal });
     setMealModalVisible(true);
   };
   const cancelMealModal = () => {

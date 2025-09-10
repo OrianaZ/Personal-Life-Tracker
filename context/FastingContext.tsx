@@ -1,4 +1,3 @@
-// context/FastingContext.tsx
 import dayjs, { Dayjs } from "dayjs";
 import React, { createContext, useContext, useEffect, useState } from "react";
 

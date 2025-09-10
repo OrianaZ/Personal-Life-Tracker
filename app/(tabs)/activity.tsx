@@ -5,7 +5,6 @@ import { Platform, StyleSheet, View } from 'react-native';
 import AppleHealthKit from 'react-native-health';
 import Svg, { Path } from 'react-native-svg';
 
-// Example: goal of 10,000 steps
 const GOAL = 10000;
 
 const permissions = {
@@ -28,7 +27,7 @@ export default function ActivityScreen() {
     }
 
     const options = {
-      date: new Date().toISOString().split('T')[0], // safer format
+      date: new Date().toISOString().split('T')[0],
     };
 
     AppleHealthKit.getStepCount(options, (err: string, results: { value: number }) => {

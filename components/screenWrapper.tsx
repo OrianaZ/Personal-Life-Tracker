@@ -1,4 +1,3 @@
-// components/ScreenWrapper.tsx
 import { StyleSheet, View } from "react-native";
 
 export default function ScreenWrapper({ children }: { children: React.ReactNode }) {
