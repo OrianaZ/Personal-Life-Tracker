@@ -46,8 +46,8 @@ export default function HomeScreen() {
         <View style={ styles.medContainer }>
           <ThemedText style={{ fontWeight: "bold" }}>Meds:</ThemedText>
           {nextMedications ? (
-            <ThemedText>
-              {nextMedications.meds.map((m) => m.name).join(", ")} {" "}
+            <ThemedText style={{ color: nextMedications.time < new Date() ? Colors.light.red : Colors.light.text,}}>
+              {nextMedications.meds.map((m) => m.name).join(", ")}{" "}
               {nextMedications.time.toLocaleTimeString([], { hour12: false, hour: "2-digit", minute: "2-digit" })}
             </ThemedText>
           ) : (

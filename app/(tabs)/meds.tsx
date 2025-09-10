@@ -185,7 +185,7 @@ export default function MedsScreen() {
                       fontWeight: "bold",
                       color:
                         topTime.time < now && !takenTimes[med.id]?.[topTime.idx]
-                          ? "red"
+                          ? Colors.light.red
                           : Colors.light.text,
                       textDecorationLine: takenTimes[med.id]?.[topTime.idx] ? "line-through" : "none",
                     }}
@@ -210,7 +210,7 @@ export default function MedsScreen() {
                     <ThemedText
                       style={{
                         fontSize: 14,
-                        color: isOverdue ? "red" : Colors.light.text,
+                        color: isOverdue ? Colors.light.red : Colors.light.text,
                         textDecorationLine: takenTimes[med.id]?.[idx] ? "line-through" : "none",
                       }}
                     >
