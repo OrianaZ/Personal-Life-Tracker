@@ -1,6 +1,7 @@
-# Health & Wellness Tracker Mobile App
+# Personal Life Tracker Mobile App
 
 A mobile app built with React Native for tracking daily health and wellness routines. Designed for simplicity, usability, and persistent data storage across app sessions.
+Designed just for me centered around my needs.
 
 ## Features
 
