@@ -1,75 +1,94 @@
-import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
-import { HelloWave } from '@/components/HelloWave';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
+import { Colors } from '@/constants/Colors';
+import { useFasting } from "@/context/FastingContext";
+import { MealsContext } from '@/context/MealsContext';
+import { useMeds } from "@/context/MedsContext";
+import { useWater } from '@/context/WaterContext';
+import { useContext } from 'react';
 
 export default function HomeScreen() {
+    const { isFasting, timerText } = useFasting();
+    
+    const { meals: mealData } = useContext(MealsContext);
+    const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    const today = daysOfWeek[new Date().getDay()];
+    const todayMeal = mealData[today] || { out: '', main: '', side: '' };
+
+    const { nextMedications } = useMeds();
+
+    const { getTodayIntake } = useWater();
+    const todayIntake = getTodayIntake();
+
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12',
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
+    <View  style={styles.homePage}>
+      {/* Fasting */}
+      <View style={styles.FastingContainer}>
+        <ThemedText type="subtitle">
+          {isFasting ? "Fasted For" : "Time Until Fast"}: {timerText}
         </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-        <ThemedText>
-          {`Tap the Explore tab to learn more about what's included in this starter app.`}
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          {`When you're ready, run `}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+      </View>
+
+       {/* Dinner */}
+      {todayMeal && (
+          <View style={styles.dinnerContainer}>
+            <View style={styles.dayHeader}>
+              <ThemedText type="subtitle" style={styles.WeekDay}>Dinner</ThemedText>
+              {todayMeal.out ? <ThemedText style={styles.Out}>{todayMeal.out}</ThemedText> : null}
+            </View>
+            {todayMeal.main ? <ThemedText style={styles.Main}>{todayMeal.main}</ThemedText> : null}
+            {todayMeal.side ? <ThemedText style={styles.Side}>{todayMeal.side}</ThemedText> : null}
+          </View>
+        )}
+
+        {/* Medications */}
+        <View style={ styles.medContainer }>
+          <ThemedText style={{ fontWeight: "bold" }}>Meds:</ThemedText>
+          {nextMedications ? (
+            <ThemedText>
+              {nextMedications.meds.map((m) => m.name).join(", ")} {" "}
+              {nextMedications.time.toLocaleTimeString([], { hour12: false, hour: "2-digit", minute: "2-digit" })}
+            </ThemedText>
+          ) : (
+            <ThemedText>No upcoming meds</ThemedText>
+          )}
+        </View>
+
+         {/* Water + Soda Intake */}
+        <View style={styles.waterContainer}>
+          <ThemedText style={{ fontWeight: "bold" }}>Today’s Intake:</ThemedText>
+          <View style={styles.sodawater}>
+            <ThemedText style={styles.soda}>
+              Soda: {todayIntake.soda} oz
+            </ThemedText>
+            <ThemedText style={styles.water}>
+              Water: {todayIntake.water} oz
+            </ThemedText>
+          </View>
+        </View>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
-  },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
-  },
+  homePage: {flex: 1, justifyContent: "center", marginBottom: 50},
+  
+  FastingContainer: { marginHorizontal: 20, flexDirection: 'row', alignItems: 'center', gap: 8, padding: 12, borderWidth: 1, borderColor: Colors.dark.borderGray, borderRadius: 10,},
+
+  dinnerContainer: { margin: 20, padding: 12, borderWidth: 1, borderColor: Colors.dark.borderGray, borderRadius: 10,},
+  dayHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6, },
+  WeekDay: { fontWeight: "bold", textDecorationLine: "underline", fontSize: 18, color: Colors.light.purple, },
+  Out: { fontStyle: "italic", color: Colors.light.gray, fontSize: 14, },
+  Main: { fontWeight: "bold", fontSize: 16, marginBottom: 2, },
+  Side: { fontStyle: "italic", color: Colors.light.gray, fontSize: 14, marginLeft: 12, },
+
+  medContainer: { marginHorizontal: 20, padding: 12, borderWidth: 1, borderColor: Colors.dark.borderGray, borderRadius: 10,},
+
+  waterContainer: { margin: 20, padding: 12, borderWidth: 1, borderColor: Colors.dark.borderGray, borderRadius: 10,},
+  sodawater:{ flexDirection: "row", justifyContent: "space-around", alignItems: "center", flexWrap: "wrap", marginTop:5, },
+  soda:{ color: Colors.light.purple, fontSize: 16},
+  water:{ color: Colors.light.blue, fontSize: 16},
+
+
 });

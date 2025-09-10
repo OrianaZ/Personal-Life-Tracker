@@ -1,0 +1,33 @@
+{
+  "cli": {
+    "version": ">= 16.18.0",
+    "appVersionSource": "remote"
+  },
+  "build": {
+    "development": {
+      "developmentClient": true,
+      "distribution": "internal",
+      "env": {
+        "EXPO_NO_WEB": "true",
+        "SKIP_BUNDLING_WEB": "1"
+      }
+    },
+    "preview": {
+      "distribution": "internal",
+      "env": {
+        "EXPO_NO_WEB": "true",
+        "SKIP_BUNDLING_WEB": "1"
+      }
+    },
+    "production": {
+      "autoIncrement": true,
+      "env": {
+        "EXPO_NO_WEB": "true",
+        "SKIP_BUNDLING_WEB": "1"
+      }
+    }
+  },
+  "submit": {
+    "production": {}
+  }
+}

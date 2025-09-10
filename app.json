@@ -1,42 +1,36 @@
 {
   "expo": {
-    "name": "FastingApp",
+    "name": "Personal Life Tracker",
     "slug": "FastingApp",
-    "version": "1.0.0",
+    "version": "3.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "fastingapp",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
+    "platforms": ["ios"],
     "ios": {
-      "supportsTablet": true
-    },
-    "android": {
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
-      },
-      "edgeToEdgeEnabled": true
-    },
-    "web": {
-      "bundler": "metro",
-      "output": "static",
-      "favicon": "./assets/images/favicon.png"
+      "supportsTablet": true,
+      "bundleIdentifier": "com.0riana.FastingApp",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false,
+        "CFBundleDisplayName": "Personal Life Tracker",
+        "NSPhotoLibraryUsageDescription": "This app needs access to your photo library so you can select images for your personal life tracking.",
+        "NSHealthShareUsageDescription": "This app reads your step count to display your activity progress.",
+        "NSHealthUpdateUsageDescription": "This app writes your health data (steps, workouts) to HealthKit to track your personal progress."
+      }
     },
     "plugins": [
-      "expo-router",
-      [
-        "expo-splash-screen",
-        {
-          "image": "./assets/images/splash-icon.png",
-          "imageWidth": 200,
-          "resizeMode": "contain",
-          "backgroundColor": "#ffffff"
-        }
-      ]
+      "expo-router"
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "9496d97b-18f7-456d-993a-dfb5fb27f70e"
+      }
     }
   }
 }
