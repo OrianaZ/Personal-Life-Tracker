@@ -1,4 +1,4 @@
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
 
 import { ThemedText } from '@/components/ThemedText';
 import { Colors } from '@/constants/Colors';
@@ -6,9 +6,12 @@ import { useFasting } from "@/context/FastingContext";
 import { MealsContext } from '@/context/MealsContext';
 import { useMeds } from "@/context/MedsContext";
 import { useWater } from '@/context/WaterContext';
+import { useRouter } from 'expo-router';
 import { useContext } from 'react';
 
 export default function HomeScreen() {
+    const router = useRouter();
+
     const { isFasting, timerText } = useFasting();
     
     const { meals: mealData } = useContext(MealsContext);
@@ -23,27 +26,28 @@ export default function HomeScreen() {
 
   return (
     <View  style={styles.homePage}>
+
       {/* Fasting */}
-      <View style={styles.FastingContainer}>
+      <TouchableOpacity style={styles.FastingContainer} onPress={() => router.push('/fasting')}>
         <ThemedText type="subtitle">
           {isFasting ? "Fasted For" : "Time Until Fast"}: {timerText}
         </ThemedText>
-      </View>
+      </TouchableOpacity>
 
        {/* Dinner */}
       {todayMeal && (
-          <View style={styles.dinnerContainer}>
+          <TouchableOpacity style={styles.dinnerContainer} onPress={() => router.push('/meals')}>
             <View style={styles.dayHeader}>
               <ThemedText type="subtitle" style={styles.WeekDay}>Dinner</ThemedText>
               {todayMeal.out ? <ThemedText style={styles.Out}>{todayMeal.out}</ThemedText> : null}
             </View>
             {todayMeal.main ? <ThemedText style={styles.Main}>{todayMeal.main}</ThemedText> : null}
             {todayMeal.side ? <ThemedText style={styles.Side}>{todayMeal.side}</ThemedText> : null}
-          </View>
+          </TouchableOpacity>
         )}
 
         {/* Medications */}
-        <View style={ styles.medContainer }>
+        <TouchableOpacity style={ styles.medContainer } onPress={() => router.push('/meds')}>
           <ThemedText style={{ fontWeight: "bold" }}>Meds:</ThemedText>
           {nextMedications ? (
             <ThemedText style={{ color: nextMedications.time < new Date() ? Colors.light.red : Colors.light.text,}}>
@@ -53,10 +57,10 @@ export default function HomeScreen() {
           ) : (
             <ThemedText>No upcoming meds</ThemedText>
           )}
-        </View>
+        </TouchableOpacity>
 
          {/* Water + Soda Intake */}
-        <View style={styles.waterContainer}>
+        <TouchableOpacity style={styles.waterContainer} onPress={() => router.push('/water')}>
           <ThemedText style={{ fontWeight: "bold" }}>Today’s Intake:</ThemedText>
           <View style={styles.sodawater}>
             <ThemedText style={styles.soda}>
@@ -66,7 +70,7 @@ export default function HomeScreen() {
               Water: {todayIntake.water} oz
             </ThemedText>
           </View>
-        </View>
+        </TouchableOpacity>
     </View>
   );
 }
