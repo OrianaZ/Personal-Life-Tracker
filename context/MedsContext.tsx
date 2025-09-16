@@ -34,6 +34,7 @@ export const MedsProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [nextMedications, setNextMedications] = useState<{ time: Date; meds: Medication[] } | null>(null);
   const [takenTimes, setTakenTimes] = useState<{ [medId: string]: boolean[] }>({});
   const [wait, setWait] = useState(false);
+  const [currentDayKey, setCurrentDayKey] = useState<string>(new Date().toDateString());
 
 // Load medications + takenTimes
 useEffect(() => {
@@ -71,13 +72,13 @@ useEffect(() => {
     });
 
     setTakenTimes(initTaken);
+    setCurrentDayKey(todayKey);
     setWait(true);
   };
 
   loadData();
 }, []);
 
-  // Save medications to storage whenever they change
   useEffect(() => {
     AsyncStorage.setItem(
       STORAGE_KEYS.MEDICATIONS,
@@ -97,7 +98,7 @@ useEffect(() => {
     try {
       await AsyncStorage.setItem(
         STORAGE_KEYS.TAKEN_TIMES,
-        JSON.stringify({ date: new Date().toDateString(), data: takenTimes }),
+        JSON.stringify({ date: currentDayKey, data: takenTimes })
       );
     } catch (e) {
       console.warn("Failed to save takenTimes:", e);
@@ -107,15 +108,31 @@ useEffect(() => {
 }, [takenTimes]);
 
   useEffect(() => {
+    const checkMidnight = () => {
+      const todayKey = new Date().toDateString();
+      if (currentDayKey !== todayKey) {
+        const resetTaken = medications.reduce((acc, med) => {
+          acc[med.id] = med.times.map(() => false);
+          return acc;
+        }, {} as { [medId: string]: boolean[] });
+
+        setTakenTimes(resetTaken);
+        setCurrentDayKey(todayKey);
+      }
+    };
+    checkMidnight();
+
     const now = new Date();
-    const msUntilMidnight =
-      new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1).getTime() - now.getTime();
+    const msUntilMidnight = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1).getTime() - now.getTime();
+
     const timeout = setTimeout(() => {
       const resetTaken = medications.reduce((acc, med) => {
         acc[med.id] = med.times.map(() => false);
         return acc;
       }, {} as { [medId: string]: boolean[] });
+
       setTakenTimes(resetTaken);
+      setCurrentDayKey(new Date().toDateString());
     }, msUntilMidnight);
 
     return () => clearTimeout(timeout);
