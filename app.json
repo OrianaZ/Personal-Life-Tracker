@@ -31,10 +31,7 @@
       "typedRoutes": true
     },
     "extra": {
-      "router": {},
-      "eas": {
-        "projectId": "f4c24a48-0bca-4406-a13a-a760c3579d5c"
-      }
+      "router": {}
     },
     "android": {
       "package": "com.PersonalLifeTracker.prod"

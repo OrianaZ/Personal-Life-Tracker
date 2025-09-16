@@ -54,6 +54,7 @@ export default function GroceryScene({
           ref={groceryInputRef}
           style={styles.input}
           placeholder="Add a grocery item"
+          placeholderTextColor={Colors.light.placeholder}          
           value={tempNewItemText}
           onChangeText={setTempNewItemText}
           onSubmitEditing={addGroceryItem}

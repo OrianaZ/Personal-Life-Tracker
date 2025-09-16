@@ -463,26 +463,31 @@ function Calendar({
                 <ThemedText type="default" style={styles.modalText}>
                   {editingDate ? `How long did you fast on\n${formatDateWithOrdinal(editingDate)}?` : "How long did you fast?"}
                 </ThemedText>
-                <View style={styles.editInputWrapper}>
-                  <ThemedText style={{color: Colors.dark.text, fontWeight: 'bold'}}>h: </ThemedText>
-                  <TextInput
-                    keyboardType="decimal-pad"
-                    value={editingHours}
-                    onChangeText={setEditingHours}
-                    style={styles.editInput}
-                    placeholder="Hours"
-                    placeholderTextColor={Colors.dark.text}
-                  />
-                  <ThemedText style={{color: Colors.dark.text, fontWeight: 'bold'}}>  m: </ThemedText>
-                  <TextInput
-                    keyboardType="decimal-pad"
-                    value={editingMinutes}
-                    onChangeText={setEditingMinutes}
-                    style={styles.editInput}
-                    placeholder="Minutes"
-                    placeholderTextColor={Colors.dark.text}
-                  />
-                </View>
+
+                  <View style={styles.inputRow}>
+                    <ThemedText style={{color: Colors.light.purple, fontWeight: 'bold'}}>Hours: </ThemedText>
+                    <TextInput
+                      keyboardType="decimal-pad"
+                      value={editingHours}
+                      onChangeText={setEditingHours}
+                      style={styles.editInput}
+                      placeholder="Hours"
+                      placeholderTextColor={Colors.dark.text}
+                    />
+                  </View>
+                  
+                  <View style={styles.inputRow}>
+                    <ThemedText style={{color: Colors.light.blue, fontWeight: 'bold'}}>Minutes: </ThemedText>
+                    <TextInput
+                      keyboardType="decimal-pad"
+                      value={editingMinutes}
+                      onChangeText={setEditingMinutes}
+                      style={styles.editInput}
+                      placeholder="Minutes"
+                      placeholderTextColor={Colors.dark.text}
+                    />
+                  </View>
+
                 <TouchableOpacity style={[styles.button, styles.modalButton]} onPress={saveEditedFast}>
                   <ThemedText style={styles.buttonText}>Save</ThemedText>
                 </TouchableOpacity>
@@ -528,12 +533,12 @@ const styles = StyleSheet.create({
 
 
   lowFastText: {color: "red", fontWeight: "bold",},
-  editInputWrapper: { flexDirection: 'row', justifyContent: 'center', alignItems: 'center' },
-  editInput: { borderWidth: 1, borderColor: Colors.light.borderGray, padding: 10, width: "40%", textAlign: "center", borderRadius: 8 },
+  editInput: { borderWidth: 1, borderColor: Colors.light.borderGray, padding: 10, width: "70%", textAlign: "center", borderRadius: 8 },
 
   // Modals
   modalBackground: { flex: 1, backgroundColor: "rgba(0,0,0,0.5)", justifyContent: "center", alignItems: "center" },
   modalContent: { backgroundColor: Colors.light.background, padding: 20, borderRadius: 12, width: "80%", alignItems: "center" },
   modalText: { marginBottom: 10, color: Colors.dark.text, textAlign: "center" },
   modalButton: { marginTop: 20 },
+  inputRow: { flexDirection: "row", alignItems: "center", marginVertical: 8, width: "100%", justifyContent: "space-between", },
 });
