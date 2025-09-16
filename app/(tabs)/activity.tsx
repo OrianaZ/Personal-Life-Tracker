@@ -1,90 +1,72 @@
 import { ThemedText } from '@/components/ThemedText';
-import { Colors } from '@/constants/Colors';
-import React, { useEffect, useState } from 'react';
-import { Platform, StyleSheet, View } from 'react-native';
-import AppleHealthKit from 'react-native-health';
-import Svg, { Path } from 'react-native-svg';
-
-const GOAL = 10000;
-
-const permissions = {
-  permissions: {
-    read: [AppleHealthKit.Constants.Permissions.Steps],
-    write: [],
-  },
-};
+import { useState } from 'react';
+import { StyleSheet, View } from 'react-native';
+import AppleHealthKit, { HealthKitPermissions, HealthValue } from 'react-native-health';
 
 export default function ActivityScreen() {
-  const [steps, setSteps] = useState(0);
+  const [steps, setSteps] = useState<number | null>(null);
+  
+  /* Permission options */
+  const permissions = {
+    permissions: {
+      read: [
+        AppleHealthKit.Constants.Permissions.HeartRate,
+        AppleHealthKit.Constants.Permissions.Steps, 
+        AppleHealthKit.Constants.Permissions.StepCount,      
+      ],
+      write: [
+        AppleHealthKit.Constants.Permissions.Steps,
+        AppleHealthKit.Constants.Permissions.StepCount,
+      ],
+    }
+  } as HealthKitPermissions
 
-  useEffect(() => {
-  if (Platform.OS !== 'ios') return;
+  AppleHealthKit.initHealthKit(permissions, (error: string) => {
 
-  AppleHealthKit.initHealthKit(permissions, (err: string) => {
-    if (err) {
-      console.log('Error initializing HealthKit:', err);
-      return;
+    if (error) {
+      console.log('[ERROR] Cannot grant permissions!')
     }
 
-    const options = {
-      date: new Date().toISOString().split('T')[0],
-    };
+    let options = {
+        date: new Date().toISOString(), 
+        includeManuallyAdded: false,
+    }
 
-    AppleHealthKit.getStepCount(options, (err: string, results: { value: number }) => {
-      if (err) {
-        console.log('Error fetching steps:', err);
-        return;
-      }
-      if (results?.value != null) {
+    AppleHealthKit.getStepCount(
+      options,
+      (err: Object, results: HealthValue) => {
+        if (err) {
+          return
+        }
         setSteps(results.value);
-      }
-    });
-  });
-}, []);
-
-  const progress = Math.min(steps / GOAL, 1);
-
-  // Circle math
-  const radius = 120;
-  const circumference = Math.PI * radius;
-  const strokeDasharray = circumference;
-  const strokeDashoffset = circumference - circumference * progress;
+        console.log(results)
+      },
+    )
+  })
 
   return (
     <View style={styles.container}>
-      <ThemedText type="title">Activity Center</ThemedText>
-
-      <View style={{ marginTop: 50 }}>
-        <Svg width={radius * 2} height={radius + 20}>
-          {/* Background semicircle */}
-          <Path
-            d={`M 0 ${radius} A ${radius} ${radius} 0 0 1 ${radius * 2} ${radius}`}
-            stroke={Colors.light.background}
-            strokeWidth={20}
-            fill="none"
-          />
-          {/* Progress semicircle */}
-          <Path
-            d={`M 0 ${radius} A ${radius} ${radius} 0 0 1 ${radius * 2} ${radius}`}
-            stroke={Colors.light.purple}
-            strokeWidth={20}
-            strokeDasharray={strokeDasharray}
-            strokeDashoffset={strokeDashoffset}
-            strokeLinecap="round"
-            fill="none"
-          />
-        </Svg>
-
-        <View style={styles.stepTextContainer}>
-          <ThemedText type="title">{steps}</ThemedText>
-          <ThemedText type="default">/ {GOAL} steps</ThemedText>
-        </View>
-      </View>
+      <ThemedText style={styles.title}>Today's Steps</ThemedText>
+      <ThemedText style={styles.steps}>{steps !== null ? steps.toLocaleString() : 'Loading...'}</ThemedText>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: 'center', alignItems: 'center', },
-  stepTextContainer: { position: 'absolute', top: '35%', left: 0, right: 0, alignItems: 'center',},
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#fff',
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 16,
+  },
+  steps: {
+    fontSize: 48,
+    fontWeight: 'bold',
+    color: '#007AFF',
+  },
 });

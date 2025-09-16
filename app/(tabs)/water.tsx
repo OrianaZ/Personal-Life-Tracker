@@ -245,7 +245,8 @@ export default function WaterScreen() {
                       value={editingSoda}
                       onChangeText={setEditingSoda}
                       style={[styles.editInput, { borderColor: Colors.light.purple }]}
-                      placeholder="oz"
+                      placeholder="soda ounces"
+                      placeholderTextColor={Colors.dark.text}
                     />
                   </View>
 
@@ -256,7 +257,8 @@ export default function WaterScreen() {
                       value={editingWater}
                       onChangeText={setEditingWater}
                       style={[styles.editInput, { borderColor: Colors.light.blue }]}
-                      placeholder="oz"
+                      placeholder="water ounces"
+                      placeholderTextColor={Colors.dark.text}                      
                     />
                   </View>
 

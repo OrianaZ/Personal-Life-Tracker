@@ -1,139 +1,38 @@
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import dayjs from "dayjs";
-import customParseFormat from "dayjs/plugin/customParseFormat";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import {
-  FlatList, Modal, Pressable, StyleSheet,
-  TextInput,
-  TouchableOpacity, TouchableWithoutFeedback, View
+  FlatList, Modal,
+  Pressable,
+  StyleSheet,
+  TextInput, TouchableOpacity, TouchableWithoutFeedback, View
 } from "react-native";
 
 import { ThemedText } from "@/components/ThemedText";
 import { Colors } from "@/constants/Colors";
 import { useFasting } from "@/context/FastingContext";
 
-dayjs.extend(customParseFormat);
-
 export default function FastingScreen() {
   const {
-    isFasting,
-    timerText,
-    fastStart,
-    lastMealTime,
-    setFastStart,
-    setLastMealTime,
-    setIsFasting
+    isFasting, timerText, fastStart, lastMealTime, fastLog, pickerTime,
+    editingDate, editingHours, editingMinutes, showEditModal,
+    setLastMealTime, setPickerTime, setEditingDate, setEditingHours, setEditingMinutes, setShowEditModal,
+    handleStartFast, handleEndFast, saveEditedFast
   } = useFasting();
 
-  // ---------- State ----------
-  const [pickerTime, setPickerTime] = useState(new Date());
-  const [tempTime, setTempTime] = useState(new Date());
-
+  // ---------- Local UI state ----------
   const [endTempTime, setEndTempTime] = useState(new Date());
   const [showEndPicker, setShowEndPicker] = useState(false);
 
-  const [fastLog, setFastLog] = useState<{ [date: string]: number }>({});
   const [currentMonth, setCurrentMonth] = useState(dayjs().format("MMMM"));
   const [showTodayButton, setShowTodayButton] = useState(false);
   const calendarRef = useRef<FlatList<any>>(null);
 
-  const [editingDate, setEditingDate] = useState<string | null>(null);
-  const [editingHours, setEditingHours] = useState<string>("");
-  const [showEditModal, setShowEditModal] = useState(false);
-
-  // ---------- Storage Keys ----------
-  const STORAGE_KEYS = {
-    FAST_START: "FAST_START",
-    IS_FASTING: "IS_FASTING",
-    PICKER_TIME: "PICKER_TIME",
-    FAST_LOG: "FAST_LOG",
-    LAST_MEAL: "LAST_MEAL",
-  };
-
-  // ---------- Effects ----------
-  useEffect(() => {
-    loadStorageData();
-  }, []);
-
-  const loadStorageData = async () => {
-    try {
-      const [savedFastStart, savedIsFasting, savedPickerTime, savedLog, savedLastMeal] =
-        await Promise.all([
-          AsyncStorage.getItem(STORAGE_KEYS.FAST_START),
-          AsyncStorage.getItem(STORAGE_KEYS.IS_FASTING),
-          AsyncStorage.getItem(STORAGE_KEYS.PICKER_TIME),
-          AsyncStorage.getItem(STORAGE_KEYS.FAST_LOG),
-          AsyncStorage.getItem(STORAGE_KEYS.LAST_MEAL),
-        ]);
-
-      if (savedFastStart) setFastStart(dayjs(savedFastStart));
-      if (savedIsFasting) setIsFasting(savedIsFasting === "true");
-      if (savedPickerTime) setPickerTime(new Date(savedPickerTime));
-      if (savedLog) setFastLog(JSON.parse(savedLog));
-      if (savedLastMeal) setLastMealTime(dayjs(savedLastMeal));
-    } catch (e) {
-      console.log("Error loading data", e);
-    }
-  };
-
-  // ---------- Time Helpers ----------
+  // ---------- Helpers ----------
   const formatTime = (date: Date | dayjs.Dayjs) => {
     const d = dayjs(date);
     return `${d.hour().toString().padStart(2, "0")}:${d.minute().toString().padStart(2, "0")}`;
-  };
-
-  const parseTime = (str: string) => {
-    const [hours, minutes] = str.split(":").map(Number);
-    const date = dayjs().hour(hours).minute(minutes).second(0);
-    return date;
-  };
-
-  // ---------- Handlers ----------
-  const handleStartFast = async (fromTime: Date) => {
-    const dayjsTime = dayjs(fromTime);
-    setFastStart(dayjsTime);
-    setIsFasting(true);
-    setTempTime(fromTime);
-    setLastMealTime(dayjsTime);
-
-    try {
-      await Promise.all([
-        AsyncStorage.setItem(STORAGE_KEYS.FAST_START, dayjsTime.toISOString()),
-        AsyncStorage.setItem(STORAGE_KEYS.IS_FASTING, "true"),
-        AsyncStorage.setItem(STORAGE_KEYS.PICKER_TIME, fromTime.toISOString()),
-        AsyncStorage.setItem(STORAGE_KEYS.LAST_MEAL, dayjsTime.toISOString()),
-      ]);
-    } catch (e) {
-      console.log("Error saving start fast", e);
-    }
-  };
-
-  const handleEndFast = async (endTime: Date) => {
-    if (fastStart) {
-      const elapsedSeconds = dayjs(endTime).diff(fastStart, "second");
-      const elapsedHours = +(elapsedSeconds / 3600).toFixed(2);
-
-      const endDateStr = dayjs(endTime).format("YYYY-MM-DD");
-      const updatedLog = { ...fastLog, [endDateStr]: (fastLog[endDateStr] || 0) + elapsedHours };
-      setFastLog(updatedLog);
-
-      try {
-        await AsyncStorage.setItem(STORAGE_KEYS.FAST_LOG, JSON.stringify(updatedLog));
-        await AsyncStorage.removeItem(STORAGE_KEYS.FAST_START);
-        await AsyncStorage.setItem(STORAGE_KEYS.IS_FASTING, "false");
-        await AsyncStorage.setItem(STORAGE_KEYS.LAST_MEAL, dayjs(endTime).toISOString());
-      } catch (e) {
-        console.log("Error saving end fast", e);
-      }
-    }
-
-    setFastStart(null);
-    setIsFasting(false);
-    setShowEndPicker(false);
-    setLastMealTime(dayjs(endTime));
-    setTempTime(endTime);
   };
 
   const handleEndPickerChange = (_event: any, selectedDate?: Date) => {
@@ -142,7 +41,7 @@ export default function FastingScreen() {
 
   const handleScroll = (event: any) => {
     const offsetX = event.nativeEvent.contentOffset.x;
-    const index = Math.round(offsetX / 90);
+    const index = Math.round(offsetX / 100);
     setCurrentMonth(dayjs().subtract(365 - index, "day").format("MMMM"));
     setShowTodayButton(index !== 365);
   };
@@ -150,56 +49,51 @@ export default function FastingScreen() {
   const scrollToToday = () => calendarRef.current?.scrollToIndex({ index: 365, animated: true });
 
   const formatDateWithOrdinal = (dateStr: string) => {
-    const date = dayjs(dateStr, "YYYY-MM-DD");
-    if (!date.isValid()) return "";
-    const day = date.date();
-    const ordinal =
-      day === 1 || day === 21 || day === 31
-        ? "st"
-        : day === 2 || day === 22
-        ? "nd"
-        : day === 3 || day === 23
-        ? "rd"
-        : "th";
-    return `${date.format("MMMM")} ${day}${ordinal}`;
-  };
+  const date = dayjs(dateStr, "YYYY-MM-DD");
+  if (!date.isValid()) return "";
 
-  const saveEditedFast = async () => {
-    if (!editingDate) return;
-    const updatedLog = { ...fastLog, [editingDate]: parseFloat(editingHours) || 0 };
-    setFastLog(updatedLog);
-    try {
-      await AsyncStorage.setItem(STORAGE_KEYS.FAST_LOG, JSON.stringify(updatedLog));
-    } catch (e) {
-      console.log("Error saving edited fast", e);
-    }
-    setShowEditModal(false);
-    setEditingDate(null);
-    setEditingHours("");
-  };
+  // Hide future dates
+  if (date.isAfter(dayjs(), "day")) return "";
 
-  // ---------- Progress Bar ----------
-  let progress = 0;
-  const fastStartRef = fastStart ?? lastMealTime;
-  if (fastStartRef) {
-    const elapsed = dayjs().diff(fastStartRef, "second");
+  const day = date.date();
+  const ordinal = day === 1 || day === 21 || day === 31
+    ? "st"
+    : day === 2 || day === 22
+    ? "nd"
+    : day === 3 || day === 23
+    ? "rd"
+    : "th";
+
+  return `${date.format("MMMM")} ${day}${ordinal}`;
+};
+
+  // ---------- Progress ----------
+let progress = 0;
+const fastStartRef = fastStart ?? lastMealTime;
+if (fastStartRef) {
+  const now = dayjs();
+  if (isFasting) {
+    const elapsed = now.diff(fastStartRef, "second");
     const totalFasting = 16 * 60 * 60;
-    progress = isFasting ? Math.min(elapsed / totalFasting, 1) : 0;
+    progress = Math.min(elapsed / totalFasting, 1);
+  } else {
+    const fastStartToday = dayjs().hour(20).minute(0).second(0);
+    const eightHoursBefore = fastStartToday.subtract(8, "hour");
+    const now = dayjs();
+    const elapsed = now.diff(eightHoursBefore, "second");
+    progress = Math.min(Math.max(elapsed / (8 * 60 * 60), 0), 1);
   }
+}
 
   // ---------- JSX ----------
   return (
     <View style={styles.container}>
-      <View style={styles.container1}>
-        {/* <ThemedText type="title">Fasting Tracker</ThemedText> */}
-      </View>
-
       {!isFasting && (
         <View style={styles.lastMealContainer}>
           <ThemedText type="subtitle">Last Meal:</ThemedText>
           <TimePickerInline
-            value={tempTime}
-            setTempTime={setTempTime}
+            value={pickerTime}
+            setTempTime={setPickerTime}
             setLastMealTime={(d: Date) => setLastMealTime(dayjs(d))}
           />
         </View>
@@ -219,17 +113,11 @@ export default function FastingScreen() {
         />
 
         {!isFasting ? (
-          <TouchableOpacity
-            style={[styles.button]}
-            onPress={() => handleStartFast(tempTime)}
-          >
+          <TouchableOpacity style={styles.button} onPress={() => handleStartFast(pickerTime)}>
             <ThemedText style={styles.buttonText}>Start Fast</ThemedText>
           </TouchableOpacity>
         ) : (
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => setShowEndPicker(true)}
-          >
+          <TouchableOpacity style={styles.button} onPress={() => setShowEndPicker(true)}>
             <ThemedText style={styles.buttonText}>End Fast</ThemedText>
           </TouchableOpacity>
         )}
@@ -244,15 +132,18 @@ export default function FastingScreen() {
                   <DateTimePicker
                     value={endTempTime}
                     mode="datetime"
-                    display="spinner"
+                    display="default"
                     onChange={handleEndPickerChange}
                     maximumDate={new Date()}
-                    textColor= {Colors.dark.text}
+                    textColor={Colors.dark.text}
                   />
 
                   <TouchableOpacity
                     style={[styles.button, styles.modalButton]}
-                    onPress={() => handleEndFast(endTempTime)}
+                    onPress={() => {
+                      handleEndFast(endTempTime);
+                      setShowEndPicker(false);
+                    }}
                   >
                     <ThemedText style={styles.buttonText}>End</ThemedText>
                   </TouchableOpacity>
@@ -272,8 +163,10 @@ export default function FastingScreen() {
         handleScroll={handleScroll}
         editingDate={editingDate}
         editingHours={editingHours}
+        editingMinutes={editingMinutes}
         setEditingDate={setEditingDate}
         setEditingHours={setEditingHours}
+        setEditingMinutes={setEditingMinutes}
         showEditModal={showEditModal}
         setShowEditModal={setShowEditModal}
         saveEditedFast={saveEditedFast}
@@ -283,59 +176,15 @@ export default function FastingScreen() {
   );
 }
 
-// ---------- TimePickerModal Component ----------
-function InlineNumberPicker({ 
-  type, data, value, onChange, visible,
-}: { 
-  type: "hours" | "minutes" | "date"; 
-  data: any[];
-  value: any;
-  onChange: (n: any) => void;
-  visible: boolean;
-}) {
-  if (!visible) return null;
-
-  const itemHeight = 40;
-
-  return (
-    <View style={{ position: "absolute", top: -itemHeight * 2, width: 80, alignItems: "center", zIndex: 100 }}>
-      <FlatList
-        data={data}
-        keyExtractor={(item, index) => type === "date" ? item.date.toISOString() : item.toString()}
-        showsVerticalScrollIndicator={false}
-        snapToInterval={itemHeight}
-        decelerationRate="fast"
-        initialScrollIndex={Math.max(0, data.findIndex(d => {
-          if (type === "date") {
-            return d.date.toDateString() === value.toDateString();
-          }
-          return d === value;
-        }))}
-        getItemLayout={(_, index) => ({ length: itemHeight, offset: itemHeight * index, index })}
-        style={{ maxHeight: itemHeight * 5, backgroundColor: Colors.dark.gray, borderRadius: 6, paddingVertical: 5, width: 70 }}
-        renderItem={({ item }) => (
-          <TouchableOpacity onPress={() => onChange(item)} style={{ height: itemHeight, justifyContent: "center", alignItems: "center"}}>
-            <ThemedText style={[
-              { fontSize: 16 },
-              (type === "date" ? item.date.toDateString() === value.toDateString() : item === value) && { fontWeight: "bold", color: Colors.light.purple }
-            ]}>
-              {type === "date" ? item.label : item.toString().padStart(2, "0")}
-            </ThemedText>
-          </TouchableOpacity>
-        )}
-      />
-    </View>
-  );
-}
-
+// ---------- TimePickerInline ----------
 function TimePickerInline({
   value,
   setTempTime,
   setLastMealTime,
 }: { 
   value: Date,
-  setTempTime: (d: Date) => void 
-    setLastMealTime?: (d: Date) => void;
+  setTempTime: (d: Date) => void;
+  setLastMealTime?: (d: Date) => void;
 
 }) {
   const [editingPart, setEditingPart] = useState<"hours" | "minutes" | "date" | null>(null);
@@ -448,9 +297,53 @@ function TimePickerInline({
   );
 }
 
+// ---------- TimePickerModal Component ----------
+function InlineNumberPicker({ 
+  type, data, value, onChange, visible,
+}: { 
+  type: "hours" | "minutes" | "date"; 
+  data: any[];
+  value: any;
+  onChange: (n: any) => void;
+  visible: boolean;
+}) {
+  if (!visible) return null;
 
-// ---------- ProgressBar Component ----------
-function ProgressBar({ progress, isFasting, lastMealTime, formatTime}: any) {
+  const itemHeight = 40;
+
+  return (
+    <View style={{ position: "absolute", top: -itemHeight * 2, width: 80, alignItems: "center", zIndex: 100 }}>
+      <FlatList
+        data={data}
+        keyExtractor={(item, index) => type === "date" ? item.date.toISOString() : item.toString()}
+        showsVerticalScrollIndicator={false}
+        snapToInterval={itemHeight}
+        decelerationRate="fast"
+        initialScrollIndex={Math.max(0, data.findIndex(d => {
+          if (type === "date") {
+            return d.date.toDateString() === value.toDateString();
+          }
+          return d === value;
+        }))}
+        getItemLayout={(_, index) => ({ length: itemHeight, offset: itemHeight * index, index })}
+        style={{ maxHeight: itemHeight * 5, backgroundColor: Colors.dark.gray, borderRadius: 6, paddingVertical: 5, width: 70 }}
+        renderItem={({ item }) => (
+          <TouchableOpacity onPress={() => onChange(item)} style={{ height: itemHeight, justifyContent: "center", alignItems: "center"}}>
+            <ThemedText style={[
+              { fontSize: 16 },
+              (type === "date" ? item.date.toDateString() === value.toDateString() : item === value) && { fontWeight: "bold", color: Colors.light.purple }
+            ]}>
+              {type === "date" ? item.label : item.toString().padStart(2, "0")}
+            </ThemedText>
+          </TouchableOpacity>
+        )}
+      />
+    </View>
+  );
+}
+
+// ---------- ProgressBar ----------
+function ProgressBar({ progress, isFasting, lastMealTime, formatTime }: any) {
   return (
     <View style={styles.progressContainer}>
       {/* Start Icon */}
@@ -479,7 +372,9 @@ function ProgressBar({ progress, isFasting, lastMealTime, formatTime}: any) {
         {isFasting ? (
           <>
             <MaterialCommunityIcons name="silverware-fork-knife" size={24} color={Colors.light.orange} />
-            <ThemedText style={styles.iconTime}>{formatTime(new Date(lastMealTime.getTime() + 16 * 60 * 60 * 1000))}</ThemedText>
+            <ThemedText style={styles.iconTime}>
+              {formatTime(new Date(lastMealTime.getTime() + 16 * 60 * 60 * 1000))}
+            </ThemedText>
           </>
         ) : (
           <>
@@ -492,10 +387,10 @@ function ProgressBar({ progress, isFasting, lastMealTime, formatTime}: any) {
   );
 }
 
-// ---------- Calendar Component ----------
+// ---------- Calendar ----------
 function Calendar({
   fastLog, currentMonth, showTodayButton, scrollToToday, calendarRef, handleScroll,
-  editingDate, editingHours, setEditingDate, setEditingHours, showEditModal, setShowEditModal,
+  editingDate, editingHours, editingMinutes, setEditingDate, setEditingHours, setEditingMinutes, showEditModal, setShowEditModal,
   saveEditedFast, formatDateWithOrdinal
 }: any) {
   const today = dayjs();
@@ -517,7 +412,7 @@ function Calendar({
         horizontal
         showsHorizontalScrollIndicator={false}
         initialScrollIndex={365}
-        getItemLayout={(_, index) => ({ length: 90, offset: 90 * index, index })}
+        getItemLayout={(_, index) => ({ length: 100, offset: 100 * index, index })}
         keyExtractor={(item) => item.format("YYYY-MM-DD")}
         onScroll={handleScroll}
         scrollEventThrottle={16}
@@ -531,15 +426,28 @@ function Calendar({
             <TouchableOpacity
               onPress={() => {
                 if (isFuture) return;
+                const total = fastLog[dateStr] || 0;
+                const h = Math.floor(total);
+                const m = Math.round((total - h) * 60);
+
                 setEditingDate(dateStr);
-                setEditingHours(hours > 0 ? hours.toString() : "");
+                setEditingHours(h.toString());
+                setEditingMinutes(m.toString());
                 setShowEditModal(true);
               }}
               disabled={isFuture}
             >
               <View style={[styles.item, isToday && styles.todayItem, isFuture && styles.futureItem]}>
                 <ThemedText style={styles.itemText}>{item.format("ddd")} {item.format("D")}</ThemedText>
-                <ThemedText style={[styles.itemHours, isToday && styles.todayHours]}>{hours > 0 ? `${hours.toFixed(1)}h` : ""}</ThemedText>
+                  <ThemedText
+                    style={[ styles.itemHours,
+                      isToday
+                        ? hours >= 16 ? styles.todayHours : styles.todayLowFast
+                        : hours >= 16 ? styles.normalHours : styles.lowFastHours
+                    ]}>
+                    {fastLog[dateStr] && fastLog[dateStr] > 0
+                        ? `${Math.floor(fastLog[dateStr])}h ${Math.round((fastLog[dateStr] - Math.floor(fastLog[dateStr])) * 60)}m` : ""}
+                    </ThemedText>
               </View>
             </TouchableOpacity>
           );
@@ -555,13 +463,26 @@ function Calendar({
                 <ThemedText type="default" style={styles.modalText}>
                   {editingDate ? `How long did you fast on\n${formatDateWithOrdinal(editingDate)}?` : "How long did you fast?"}
                 </ThemedText>
-                <TextInput
-                  keyboardType="decimal-pad"
-                  value={editingHours}
-                  onChangeText={setEditingHours}
-                  style={styles.editInput}
-                  placeholder="Hours"
-                />
+                <View style={styles.editInputWrapper}>
+                  <ThemedText style={{color: Colors.dark.text, fontWeight: 'bold'}}>h: </ThemedText>
+                  <TextInput
+                    keyboardType="decimal-pad"
+                    value={editingHours}
+                    onChangeText={setEditingHours}
+                    style={styles.editInput}
+                    placeholder="Hours"
+                    placeholderTextColor={Colors.dark.text}
+                  />
+                  <ThemedText style={{color: Colors.dark.text, fontWeight: 'bold'}}>  m: </ThemedText>
+                  <TextInput
+                    keyboardType="decimal-pad"
+                    value={editingMinutes}
+                    onChangeText={setEditingMinutes}
+                    style={styles.editInput}
+                    placeholder="Minutes"
+                    placeholderTextColor={Colors.dark.text}
+                  />
+                </View>
                 <TouchableOpacity style={[styles.button, styles.modalButton]} onPress={saveEditedFast}>
                   <ThemedText style={styles.buttonText}>Save</ThemedText>
                 </TouchableOpacity>
@@ -576,14 +497,9 @@ function Calendar({
 
 // ---------- Styles ----------
 const styles = StyleSheet.create({
-  container: { flex: 1, paddingBottom: 50 },
-  container1: { flex: 0.4, justifyContent: "center", alignItems: "center" },
-
-  // Last Meal
+  container: { flex: 1, paddingBottom: 150, justifyContent: 'center',},
   lastMealContainer: { flexDirection: "row", alignItems: "center", justifyContent: "center", marginBottom: 12, gap: 10 },
   inputText: { textAlign: "center", fontSize: 16 },
-  numberText: { fontSize: 16, },
-  selectedNumber: { fontWeight: "bold", color: Colors.light.purple },
 
   // Timer & Progress
   container2: { justifyContent: "center", alignItems: "center", padding: 20, backgroundColor: Colors.dark.gray, margin: 20, borderRadius: 12 },
@@ -594,19 +510,26 @@ const styles = StyleSheet.create({
   progressBackground: { flexDirection: "row", width: "68%", height: 12, borderRadius: 6, overflow: "hidden" },
   button: { backgroundColor: Colors.light.purple, paddingVertical: 12, paddingHorizontal: 24, borderRadius: 8, marginTop: 20, width: "100%" },
   buttonText: { fontWeight: "bold", textAlign: "center" },
-  startFastReady: { backgroundColor: Colors.light.red, paddingVertical: 16, paddingHorizontal: 28, borderRadius: 8, marginTop: 20 },
 
   // Calendar
   container3: { paddingVertical: 20, position: "absolute", bottom: 50, left: 0, right: 0 },  
   header: { flexDirection: "row", justifyContent: "space-between", paddingHorizontal: 10 },
   todayButton: { color: Colors.light.purple, fontWeight: "bold" },
-  item: { width: 80, height: 90, marginHorizontal: 5, borderRadius: 8, padding: 10, paddingTop: 15, alignItems: "center", borderWidth: 1, borderColor: Colors.light.borderGray },
+  item: { width: 90, height: 90, marginHorizontal: 5, borderRadius: 8, padding: 10, paddingTop: 15, alignItems: "center", borderWidth: 1, borderColor: Colors.light.borderGray },
   todayItem: { backgroundColor: Colors.light.purple, borderWidth: 0 },
   futureItem: { opacity: 0.6 },
   itemText: { fontWeight: "bold" },
   itemHours: { marginTop: 5, fontWeight: "bold", color: Colors.light.purple },
+
   todayHours: { color: Colors.dark.purple },
-  editInput: { borderWidth: 1, borderColor: Colors.light.borderGray, padding: 10, width: "60%", textAlign: "center", borderRadius: 8 },
+  todayLowFast: { color: Colors.dark.red },
+  normalHours: { color: Colors.light.purple },
+  lowFastHours: { color: Colors.light.red },
+
+
+  lowFastText: {color: "red", fontWeight: "bold",},
+  editInputWrapper: { flexDirection: 'row', justifyContent: 'center', alignItems: 'center' },
+  editInput: { borderWidth: 1, borderColor: Colors.light.borderGray, padding: 10, width: "40%", textAlign: "center", borderRadius: 8 },
 
   // Modals
   modalBackground: { flex: 1, backgroundColor: "rgba(0,0,0,0.5)", justifyContent: "center", alignItems: "center" },

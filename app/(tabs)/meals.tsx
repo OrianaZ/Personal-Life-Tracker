@@ -1,85 +1,44 @@
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
+import {
+  Alert, InteractionManager, Keyboard, KeyboardAvoidingView, Modal,
+  Platform, ScrollView, StyleSheet,
+  TextInput, TouchableOpacity,
+  View
+} from 'react-native';
+import { RenderItemParams } from "react-native-draggable-flatlist";
+import type { FlatList } from "react-native-gesture-handler";
+import { TabBar, TabView } from 'react-native-tab-view';
+
+import GroceryScene from '@/components/GroceryScene';
 import { ThemedText } from '@/components/ThemedText';
 import { Colors } from '@/constants/Colors';
 import { MealsContext } from '@/context/MealsContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
-import {
-  Alert, KeyboardAvoidingView, Modal,
-  Platform,
-  ScrollView, StyleSheet,
-  TextInput, TouchableOpacity, View
-} from 'react-native';
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { TabBar, TabView } from 'react-native-tab-view';
 
-
-const STORAGE_KEYS = {
-  MEALS: 'MEALS_DATA',
-  GROCERY: 'GROCERY_LIST',
-};
+const STORAGE_KEY = 'GROCERY_ITEMS';
 
 const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
-// --- Grocery Row Component ---
-type GroceryRowProps = {
-  item: { name: string; checked: boolean; quantity: string };
-  onUpdate: (updated: { name: string; checked: boolean; quantity: string }) => void;
-  onBlur: () => void;
-};
-
-const GroceryRow = ({ item, onUpdate, onBlur }: GroceryRowProps) => {
-  const [name, setName] = useState(item.name);
-  const [checked, setChecked] = useState(item.checked);
-  const [quantity, setQuantity] = useState(item.quantity);
-
-  const handleBlur = () => {
-    onUpdate({ name, checked, quantity });
-    onBlur();
-  };
-
-  return (
-    <View style={styles.groceryItem}>
-      <TouchableOpacity
-        onPress={() => {
-          const newChecked = !checked;
-          setChecked(newChecked);
-          onUpdate({ name, checked: newChecked, quantity });
-        }}
-        style={styles.checkbox}
-      >
-        <ThemedText style={styles.checkboxText}>{checked ? '☑' : '☐'}</ThemedText>
-      </TouchableOpacity>
-      <TextInput
-        style={[styles.groceryItemTextInput, { textDecorationLine: checked ? 'line-through' : 'none' }]}
-        value={name}
-        onChangeText={setName}
-        onBlur={handleBlur}
-        placeholder="Item name"
-        placeholderTextColor= {Colors.light.placeholder}
-      />
-      <TextInput
-        style={styles.quantityInput}
-        value={quantity}
-        onChangeText={(val) => { if (/^\d*$/.test(val)) setQuantity(val); }}
-        onBlur={handleBlur}
-        keyboardType="numeric"
-        placeholder=""
-        placeholderTextColor={Colors.light.placeholder}
-      />
-    </View>
-  );
-};
+interface GroceryItem {
+  id: string;
+  text: string;
+  quantity: string;
+  checked: boolean;
+}
 
 // --- Main Component ---
 export default function MealsScreen() {
   const [index, setIndex] = useState(0);
   const [routes] = useState([
     { key: 'meals', title: 'Meals' },
-    { key: 'grocery', title: 'Grocery' },
+    { key: 'grocery', title: 'Grocery List' },
   ]);
 
-  // Meals
+  // Meals Context
   const { meals: mealData, setMeals: setMealData } = useContext(MealsContext);
+
+  // --- Meals State ---
   const [selectedDay, setSelectedDay] = useState<string | null>(null);
   const [mealModalVisible, setMealModalVisible] = useState(false);
   const mainInputRef = useRef<TextInput>(null);
@@ -114,18 +73,7 @@ export default function MealsScreen() {
     );
   };
 
-  // Grocery
-  const [groceryItems, setGroceryItems] = useState<{ name: string; checked: boolean; quantity: string }[]>([{ name: '', checked: false, quantity: '' }]);
-
-  // Load AsyncStorage once
-  useEffect(() => {
-    (async () => {
-      const groceryJson = await AsyncStorage.getItem(STORAGE_KEYS.GROCERY);
-      if (groceryJson) setGroceryItems(JSON.parse(groceryJson));
-    })();
-  }, []);
-
-  // --- Meals Modal handlers (purely local until Save) ---
+  // --- Meals Modal Handlers ---
   const openMealModal = (day: string) => {
     setSelectedDay(day);
     const meal = mealData[day] || { out: '', main: '', side: '' };
@@ -144,111 +92,221 @@ export default function MealsScreen() {
     setTempMeal({ out: '', main: '', side: '' });
   };
 
-  // --- Grocery handlers ---
-  // Ensure always one empty row at the bottom
+  // --- Grocery List State ---
+  const [groceryItems, setGroceryItems] = useState<GroceryItem[]>([]);
+  const [tempNewItemText, setTempNewItemText] = useState("");
+  const groceryInputRef = useRef<TextInput>(null);
+  const flatListRef = useRef<FlatList<GroceryItem>>(null);
+
   useEffect(() => {
-    if (groceryItems.length === 0 || groceryItems[groceryItems.length - 1].name.trim() !== "") {
-      setGroceryItems(prev => [...prev, { name: "", checked: false, quantity: "" }]);
-    }
+    (async () => {
+      try {
+        const saved = await AsyncStorage.getItem(STORAGE_KEY);
+        if (saved) {
+          setGroceryItems(JSON.parse(saved));
+        }
+      } catch (err) {
+        console.warn('Failed to load grocery items', err);
+      }
+    })();
+  }, []);
+
+  useEffect(() => {
+    AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(groceryItems)).catch(err =>
+      console.warn('Failed to save grocery items', err)
+    );
   }, [groceryItems]);
 
-  const updateGroceryItem = (i: number, updated: { name: string; checked: boolean; quantity: string }) => {
-    const newItems = groceryItems.map((item, idx) => (idx === i ? updated : item));
-    setGroceryItems(newItems);
-    AsyncStorage.setItem(STORAGE_KEYS.GROCERY, JSON.stringify(newItems));
-  };
+ const addGroceryItem = useCallback(() => {
+    const trimmed = tempNewItemText.trim();
+    if (!trimmed) return;
 
-  const handleGroceryBlur = (i: number) => {
-    const lastItem = groceryItems[groceryItems.length - 1];
-    if (lastItem.name.trim() !== '' && i === groceryItems.length - 1) {
-      setGroceryItems([...groceryItems, { name: '', checked: false, quantity: '' }]);
-    }
-  };
+    const newItem: GroceryItem = {
+      id: Date.now().toString(),
+      text: trimmed,
+      quantity: "",
+      checked: false,
+    };
 
-  // remove all checked items, but keep at least one blank
-  const deleteSelected = () => {
-    Alert.alert(
-      "Delete Selected Items",
-      "Are you sure you want to delete the crossed-out items?",
-      [
-        { text: "Cancel", style: "cancel" },
-        {
-          text: "Delete",
-          style: "destructive",
-          onPress: async () => {
-            let filtered = groceryItems.filter(item => !item.checked);
-            if (filtered.length === 0 || filtered[filtered.length - 1].name.trim() !== "") {
-              filtered = [...filtered, { name: "", checked: false, quantity: "" }];
-            }
-            setGroceryItems(filtered);
-            await AsyncStorage.setItem(STORAGE_KEYS.GROCERY, JSON.stringify(filtered));
-          }
-        }
-      ]
+    // update list
+    setGroceryItems(prev => {
+      return [...prev, newItem];
+    });
+
+    // clear input immediately
+    setTempNewItemText("");
+
+    // Re-focus after interactions/render finishes
+    InteractionManager.runAfterInteractions(() => {
+      // small fallback in case runAfterInteractions is not enough
+      groceryInputRef.current?.focus();
+      setTimeout(() => groceryInputRef.current?.focus(), 50);
+    });
+  }, [tempNewItemText]);
+
+  const toggleGroceryChecked = useCallback((id: string) => {
+    setGroceryItems(prev => prev.map(item => (item.id === id ? { ...item, checked: !item.checked } : item)));
+  }, []);
+
+  const deleteCheckedGroceryItems = useCallback(() => {
+    setGroceryItems(prev => prev.filter(item => !item.checked));
+  }, []);
+
+  const updateGroceryQuantity = useCallback((id: string, quantity: string) => {
+    setGroceryItems(prev => prev.map(item => (item.id === id ? { ...item, quantity } : item)));
+  }, []);
+
+const renderGroceryItem = useCallback(
+  ({ item, drag, isActive }: RenderItemParams<GroceryItem>) => {
+    const [isEditing, setIsEditing] = useState(false);
+    const [editText, setEditText] = useState(item.text);
+    const inputRef = useRef<TextInput>(null);
+    const [localQuantity, setLocalQuantity] = useState(item.quantity);
+
+    useEffect(() => {
+      if (!isEditing) setEditText(item.text);
+    }, [item.text, isEditing]);
+
+    useEffect(() => {
+      if (isEditing) {
+        const t = setTimeout(() => inputRef.current?.focus(), 0);
+        return () => clearTimeout(t);
+      }
+    }, [isEditing]);
+
+    const saveEdit = () => {
+      setGroceryItems(prev => prev.map(i => (i.id === item.id ? { ...i, text: editText } : i)));
+      setIsEditing(false);
+    };
+
+    // helper to ensure the row is visible when an input focuses
+    const scrollIntoView = () => {
+      try {
+        flatListRef.current?.scrollToIndex({
+          index,
+          animated: true,
+          viewPosition: 0.5, // center-ish
+        });
+      } catch (e) {
+        // scrollToIndex can throw if index out of range; ignore
+      }
+    };
+
+    return (
+      <View
+        style={[
+          styles.groceryItemContainer,
+          isActive && styles.activeItem,
+          { alignItems: "center" },
+        ]}
+      >
+        <TouchableOpacity
+          onLongPress={drag}
+          onPressIn={drag}
+          delayLongPress={150}
+          style={styles.dragHandle}
+        >
+          <MaterialCommunityIcons name="drag" size={20} color={Colors.light.gray} />
+        </TouchableOpacity>
+
+        <TouchableOpacity onPress={() => toggleGroceryChecked(item.id)}>
+          <MaterialCommunityIcons
+            name={item.checked ? "checkbox-marked-outline" : "checkbox-blank-outline"}
+            size={24}
+            color={item.checked ? Colors.light.purple : Colors.light.gray}
+          />
+        </TouchableOpacity>
+
+        {isEditing ? (
+          <TextInput
+            ref={inputRef}
+            style={[styles.groceryItemText, { flex: 1 }]}
+            value={editText}
+            onChangeText={setEditText}
+            onBlur={saveEdit}
+            onSubmitEditing={saveEdit}
+            returnKeyType="done"
+            blurOnSubmit={true}
+            onFocus={scrollIntoView}
+          />
+        ) : (
+          <TouchableOpacity
+            style={{ flex: 1 }}
+            onPress={() => {
+              // 1) Blur any currently active input so the keyboard stays open
+              //    but React Native knows we’re switching.
+              Keyboard.dismiss();
+
+              // 2) Wait a frame before flipping editing state so the FlatList
+              //    doesn’t re-measure while the old keyboard is closing.
+              requestAnimationFrame(() => setIsEditing(true));
+            }}
+          >
+            <ThemedText
+              style={[styles.groceryItemText, item.checked && styles.checkedText]}
+            >
+              {item.text}
+            </ThemedText>
+          </TouchableOpacity>
+        )}
+
+        <TextInput
+          style={styles.quantityInput}
+          keyboardType="number-pad"
+          value={localQuantity}
+          onChangeText={setLocalQuantity}
+          onBlur={() => updateGroceryQuantity(item.id, localQuantity)}
+          onSubmitEditing={() => updateGroceryQuantity(item.id, localQuantity)}
+          returnKeyType="done"
+          onFocus={scrollIntoView}
+        />
+      </View>
     );
-  };
+  },
+  [toggleGroceryChecked, updateGroceryQuantity, setGroceryItems]
+);
 
-  const totalQuantity = groceryItems.reduce((acc, item) => acc + Number(item.quantity || 0), 0);
 
-  // --- Scenes (NO SceneMap; prevents remounting on each keystroke) ---
+  // --- Scenes ---
   const MealsScene = useCallback(() => (
     <ScrollView contentContainerStyle={styles.scrollContainer} keyboardShouldPersistTaps="handled">
       {daysOfWeek.map(day => (
         <TouchableOpacity key={day} style={styles.dayContainer} onPress={() => openMealModal(day)}>
           <View style={styles.dayHeader}>
             <ThemedText type="subtitle" style={styles.WeekDay}>{day}</ThemedText>
-            {mealData[day]?.out ? <ThemedText style={styles.Out}>{mealData[day]?.out || ''}</ThemedText> : null}
+            {mealData[day]?.out ? <ThemedText style={styles.Out}>{mealData[day]?.out}</ThemedText> : null}
           </View>
-          {mealData[day]?.main ? <ThemedText style={styles.Main}>{mealData[day]?.main || ''}</ThemedText> : null}
-          {mealData[day]?.side ? <ThemedText style={styles.Side}>{mealData[day]?.side || ''}</ThemedText> : null}
+          {mealData[day]?.main ? <ThemedText style={styles.Main}>{mealData[day]?.main}</ThemedText> : null}
+          {mealData[day]?.side ? <ThemedText style={styles.Side}>{mealData[day]?.side}</ThemedText> : null}
         </TouchableOpacity>
       ))}
-      <TouchableOpacity
-        style={[styles.button, { backgroundColor: Colors.light.red, marginBottom: 50 }]}
-        onPress={clearAllMeals}
-      >
+      <TouchableOpacity style={[styles.button, { backgroundColor: Colors.light.red, marginBottom: 50 }]} onPress={clearAllMeals}>
         <ThemedText style={styles.buttonText}>Clear All Meals</ThemedText>
       </TouchableOpacity>
     </ScrollView>
   ), [mealData]);
-  
 
-  const GroceryScene = useCallback(() => (
-    <KeyboardAwareScrollView
-      contentContainerStyle={{ flexGrow: 1, padding: 20 }}
-      keyboardShouldPersistTaps="handled"
-      enableOnAndroid
-      extraScrollHeight={50}
-    >
-      {groceryItems.map((item, idx) => (
-        <GroceryRow
-          key={idx}
-          item={item}
-          onUpdate={updated => updateGroceryItem(idx, updated)}
-          onBlur={() => handleGroceryBlur(idx)}
-        />
-      ))}
-
-      <View style={styles.totalContainer}>
-        <ThemedText style={styles.totalText}>Total: {totalQuantity}</ThemedText>
-      </View>
-
-      <TouchableOpacity
-        style={[styles.button, { backgroundColor: Colors.light.red, marginTop: 20, marginBottom:50 }]}
-        onPress={deleteSelected}
-      >
-        <ThemedText style={styles.buttonText}>Delete Selected</ThemedText>
-      </TouchableOpacity>
-    </KeyboardAwareScrollView>
-  ), [groceryItems, totalQuantity]);
-
-  const renderScene = useCallback(({ route }: { route: { key: string } }) => {
+  const renderScene = ({ route }: { route: { key: string } }) => {
     switch (route.key) {
-      case 'meals': return <MealsScene />;
-      case 'grocery': return <GroceryScene />;
-      default: return null;
+      case "meals":
+        return <MealsScene />;
+      case "grocery":
+        return (
+          <GroceryScene
+            groceryItems={groceryItems}
+            tempNewItemText={tempNewItemText}
+            setTempNewItemText={setTempNewItemText}
+            addGroceryItem={addGroceryItem}
+            renderGroceryItem={renderGroceryItem}
+            deleteCheckedGroceryItems={deleteCheckedGroceryItems}
+            setGroceryItems={setGroceryItems}
+            flatListRef={flatListRef}
+          />
+        );
+      default:
+        return null;
     }
-  }, [MealsScene, GroceryScene]);
+  };
 
   return (
     <>
@@ -261,14 +319,14 @@ export default function MealsScreen() {
         renderTabBar={(props: any) => (
           <TabBar
             {...props}
-            indicatorStyle={{ backgroundColor: Colors.light.purple}}
+            indicatorStyle={{ backgroundColor: Colors.light.purple }}
             style={{ backgroundColor: 'transparent' }}
             labelStyle={{ color: 'black', fontWeight: 'bold' }}
           />
         )}
       />
 
-      {/* Keep Modal OUTSIDE the scene to avoid unmounts while typing */}
+      {/* Meals Modal */}
       <Modal visible={mealModalVisible} transparent animationType="slide">
         <KeyboardAvoidingView style={styles.modalContainer} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
           <View style={styles.modalContent}>
@@ -312,30 +370,32 @@ export default function MealsScreen() {
 }
 
 const styles = StyleSheet.create({
-  tabContainer: { marginBottom: 50 },
+  tabContainer: { marginBottom: 0 },
   scrollContainer: { padding: 20 },
-  
-  dayContainer: { marginBottom: 20, padding: 12, borderWidth: 1, borderColor: Colors.dark.borderGray, borderRadius: 10,},
-  dayHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6, },
-  WeekDay: { fontWeight: "bold", textDecorationLine: "underline", fontSize: 18, color: Colors.light.purple, },
-  Out: { fontStyle: "italic", color: Colors.light.gray, fontSize: 14, },
-  Main: { fontWeight: "bold", fontSize: 16, marginBottom: 2, },
-  Side: { fontStyle: "italic", color: Colors.light.gray, fontSize: 14, marginLeft: 12, },
-  
-  modalContainer: { flex: 1, backgroundColor: Colors.dark.backgroundOpacity, justifyContent: 'center', alignItems: 'center', },
-  modalContent: { width: '80%', backgroundColor: Colors.dark.gray, padding: 20, borderRadius: 10, },
-  modalInput: { borderBottomWidth: 1, borderBottomColor: Colors.dark.borderGray, color:  Colors.light.text, marginBottom: 12, fontSize: 16, paddingVertical: 4, },
-  
-  groceryItem: { flexDirection: 'row', alignItems: 'center', marginBottom: 12 },
-  checkbox: { marginRight: 10 },
-  checkboxText: { fontSize: 18 },
 
-  groceryItemTextInput: { flex: 1, fontSize: 16, borderBottomWidth: 1, borderBottomColor: Colors.dark.borderGray, color:  Colors.light.text, paddingVertical: 4, paddingHorizontal: 2, },
-  quantityInput: { width: 50, height: 30, color:  Colors.light.text, fontSize: 16, textAlign: 'center', marginLeft: 10, backgroundColor: Colors.dark.placeholder, },
+  // Meals
+  dayContainer: { marginBottom: 20, padding: 12, borderWidth: 1, borderColor: Colors.dark.borderGray, borderRadius: 10 },
+  dayHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 },
+  WeekDay: { fontWeight: "bold", textDecorationLine: "underline", fontSize: 18, color: Colors.light.purple },
+  Out: { fontStyle: "italic", color: Colors.light.gray, fontSize: 14 },
+  Main: { fontWeight: "bold", fontSize: 16, marginBottom: 2 },
+  Side: { fontStyle: "italic", color: Colors.light.gray, fontSize: 14, marginLeft: 12 },
 
-  totalContainer: { marginTop: 20, alignItems: 'flex-end' },
-  totalText: { fontWeight: 'bold', fontSize: 16 },
+  // Meals Modal
+  modalContainer: { flex: 1, backgroundColor: Colors.dark.backgroundOpacity, justifyContent: 'center', alignItems: 'center' },
+  modalContent: { width: '80%', backgroundColor: Colors.dark.gray, padding: 20, borderRadius: 10 },
+  modalInput: { borderBottomWidth: 1, borderBottomColor: Colors.dark.borderGray, color: Colors.light.text, marginBottom: 12, fontSize: 16, paddingVertical: 4 },
 
-  button: { padding: 12, borderRadius: 8, alignItems: 'center', },
+  // Buttons
+  button: { padding: 12, borderRadius: 8, alignItems: 'center' },
   buttonText: { fontWeight: 'bold' },
+
+  // Grocery
+  groceryItemContainer: { flexDirection: "row", alignItems: "center", justifyContent: 'center', paddingHorizontal: 12, paddingVertical: 7, },
+  activeItem: { backgroundColor: Colors.dark.gray },
+  groceryItemText: { fontSize: 16, color: Colors.light.text, borderBottomColor: Colors.light.borderGray, borderBottomWidth: 1, padding:5, marginHorizontal: 10},
+  checkedText: { textDecorationLine: "line-through", color: Colors.light.placeholder },
+  quantityInput: { width: 50, height: 36, backgroundColor: Colors.dark.gray, borderRadius: 6, textAlign: "center", color: Colors.light.text },
+
+  dragHandle: { justifyContent: "center", alignItems: "center", marginRight: 8 },
 });

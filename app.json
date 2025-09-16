@@ -1,11 +1,11 @@
 {
   "expo": {
     "name": "Personal Life Tracker",
-    "slug": "PersonalLifeTracker",
+    "slug": "personal-life-tracker",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "PersonalLifeTracker",
+    "scheme": "personal-life-tracker",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "platforms": [

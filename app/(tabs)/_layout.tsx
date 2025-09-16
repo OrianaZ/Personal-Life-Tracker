@@ -11,12 +11,13 @@ import { MealsProvider } from '@/context/MealsContext';
 import { MedsProvider } from '@/context/MedsContext';
 import { WaterProvider } from "@/context/WaterContext";
 import { Ionicons } from '@expo/vector-icons';
-
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 export default function TabLayout() {
 
   return (
     <ScreenWrapper>
+      <GestureHandlerRootView style={{ flex: 1 }}>
       <WaterProvider>
       <MedsProvider>
       <MealsProvider>
@@ -96,6 +97,7 @@ export default function TabLayout() {
       </MealsProvider>
       </MedsProvider>
       </WaterProvider>
+      </GestureHandlerRootView>
     </ScreenWrapper>
   );
 }

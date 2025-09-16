@@ -27,7 +27,7 @@ export const Colors = {
     background: '#151718',
     backgroundOpacity: '#151718aa',
 
-    red: 'red',
+    red: '#8f1b1bff',
     orange: 'orange',
     blue: '#1b368fff',
     purple: '#410969ff',
