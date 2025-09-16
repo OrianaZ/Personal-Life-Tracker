@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+  <dict>
+    <key>CFBundleIdentifier</key>
+    <string>com.PersonalLifeTracker.prod</string>
+    <key>CFBundleName</key>
+    <string>Personal Life Tracker</string>
+    <key>CFBundleDisplayName</key>
+    <string>Personal Life Tracker</string>
+    <key>CFBundleVersion</key>
+    <string>1</string>
+    <key>CFBundleShortVersionString</key>
+    <string>1.0.0</string>
+    <key>ITSAppUsesNonExemptEncryption</key>
+    <false/>
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>This app needs access to your photo library so you can select images for your personal life tracking.</string>
+    <key>NSHealthShareUsageDescription</key>
+    <string>This app reads your step count to display your activity progress.</string>
+    <key>NSHealthUpdateUsageDescription</key>
+    <string>This app writes your health data (steps, workouts) to HealthKit to track your personal progress.</string>
+    <key>NSSupportsLiveActivities</key>
+    <true/>
+    <key>CFBundleURLTypes</key>
+    <array>
+      <dict>
+        <key>CFBundleURLSchemes</key>
+        <array>
+          <string>personal-life-tracker</string>
+        </array>
+      </dict>
+    </array>
+  </dict>
+</plist>
