@@ -1,4 +1,4 @@
-import { ThemedText } from "@/components/ThemedText";
+import { ThemedText } from "@/components/theme/ThemedText";
 import { Colors } from "@/constants/Colors";
 import React, { JSX, useRef } from "react";
 import {

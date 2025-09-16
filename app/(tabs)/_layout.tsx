@@ -2,14 +2,10 @@ import { Tabs } from 'expo-router';
 import React from 'react';
 import { Platform } from 'react-native';
 
-import { HapticTab } from '@/components/HapticTab';
-import ScreenWrapper from "@/components/screenWrapper";
-import TabBarBackground from '@/components/ui/TabBarBackground';
+import { HapticTab } from '@/components/functional/HapticTab';
+import ScreenWrapper from "@/components/tabHelpers/screenWrapper";
+import TabBarBackground from '@/components/theme/TabBarBackground';
 import { Colors } from '@/constants/Colors';
-import { FastingProvider } from "@/context/FastingContext";
-import { MealsProvider } from '@/context/MealsContext';
-import { MedsProvider } from '@/context/MedsContext';
-import { WaterProvider } from "@/context/WaterContext";
 import { Ionicons } from '@expo/vector-icons';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
@@ -18,10 +14,6 @@ export default function TabLayout() {
   return (
     <ScreenWrapper>
       <GestureHandlerRootView style={{ flex: 1 }}>
-      <WaterProvider>
-      <MedsProvider>
-      <MealsProvider>
-      <FastingProvider>
         <Tabs
           screenOptions={{
             tabBarActiveTintColor: Colors.tint,
@@ -93,10 +85,6 @@ export default function TabLayout() {
           />
         </Tabs>
         
-      </FastingProvider>
-      </MealsProvider>
-      </MedsProvider>
-      </WaterProvider>
       </GestureHandlerRootView>
     </ScreenWrapper>
   );

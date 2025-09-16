@@ -9,9 +9,9 @@ import {
   TextInput, TouchableOpacity, TouchableWithoutFeedback, View
 } from "react-native";
 
-import { ThemedText } from "@/components/ThemedText";
+import { useFasting } from "@/components/context/FastingContext";
+import { ThemedText } from "@/components/theme/ThemedText";
 import { Colors } from "@/constants/Colors";
-import { useFasting } from "@/context/FastingContext";
 
 export default function FastingScreen() {
   const {

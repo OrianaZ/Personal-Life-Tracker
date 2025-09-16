@@ -19,11 +19,13 @@
         "CFBundleDisplayName": "Personal Life Tracker",
         "NSPhotoLibraryUsageDescription": "This app needs access to your photo library so you can select images for your personal life tracking.",
         "NSHealthShareUsageDescription": "This app reads your step count to display your activity progress.",
-        "NSHealthUpdateUsageDescription": "This app writes your health data (steps, workouts) to HealthKit to track your personal progress."
+        "NSHealthUpdateUsageDescription": "This app writes your health data (steps, workouts) to HealthKit to track your personal progress.",
+        "NSSupportsLiveActivities": true
       }
     },
     "plugins": [
-      "expo-router"
+      "expo-router",
+      "expo-live-activity"
     ],
     "experiments": {
       "typedRoutes": true
@@ -33,6 +35,9 @@
       "eas": {
         "projectId": "f4c24a48-0bca-4406-a13a-a760c3579d5c"
       }
+    },
+    "android": {
+      "package": "com.PersonalLifeTracker.prod"
     }
   }
 }

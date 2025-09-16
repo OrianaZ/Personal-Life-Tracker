@@ -1,4 +1,4 @@
-import { ThemedText } from '@/components/ThemedText';
+import { ThemedText } from '@/components/theme/ThemedText';
 import { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import AppleHealthKit, { HealthKitPermissions, HealthValue } from 'react-native-health';

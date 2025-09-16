@@ -1,6 +1,6 @@
-import { ThemedText } from "@/components/ThemedText";
+import { useMeds } from "@/components/context/MedsContext";
+import { ThemedText } from "@/components/theme/ThemedText";
 import { Colors } from "@/constants/Colors";
-import { useMeds } from "@/context/MedsContext";
 import React, { useState } from "react";
 import {
   Alert,

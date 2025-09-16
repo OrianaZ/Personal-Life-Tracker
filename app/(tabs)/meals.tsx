@@ -10,10 +10,10 @@ import { RenderItemParams } from 'react-native-draggable-flatlist';
 import type { FlatList } from "react-native-gesture-handler";
 import { TabBar, TabView } from 'react-native-tab-view';
 
-import GroceryScene from '@/components/GroceryScene';
-import { ThemedText } from '@/components/ThemedText';
+import { MealsContext } from '@/components/context/MealsContext';
+import GroceryScene from '@/components/tabHelpers/GroceryScene';
+import { ThemedText } from '@/components/theme/ThemedText';
 import { Colors } from '@/constants/Colors';
-import { MealsContext } from '@/context/MealsContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const STORAGE_KEY = 'GROCERY_ITEMS';

@@ -1,7 +1,7 @@
 // WaterScreen.tsx
-import { ThemedText } from "@/components/ThemedText";
+import { useWater } from "@/components/context/WaterContext";
+import { ThemedText } from "@/components/theme/ThemedText";
 import { Colors } from "@/constants/Colors";
-import { useWater } from "@/context/WaterContext";
 import dayjs from "dayjs";
 import React, { useRef, useState } from "react";
 import {

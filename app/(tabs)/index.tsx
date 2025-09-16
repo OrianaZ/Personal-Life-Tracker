@@ -1,11 +1,11 @@
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 
-import { ThemedText } from '@/components/ThemedText';
+import { useFasting } from "@/components/context/FastingContext";
+import { MealsContext } from '@/components/context/MealsContext';
+import { useMeds } from "@/components/context/MedsContext";
+import { useWater } from '@/components/context/WaterContext';
+import { ThemedText } from '@/components/theme/ThemedText';
 import { Colors } from '@/constants/Colors';
-import { useFasting } from "@/context/FastingContext";
-import { MealsContext } from '@/context/MealsContext';
-import { useMeds } from "@/context/MedsContext";
-import { useWater } from '@/context/WaterContext';
 import { useRouter } from 'expo-router';
 import { useContext } from 'react';
 

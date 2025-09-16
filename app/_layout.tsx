@@ -1,3 +1,7 @@
+import { FastingProvider } from '@/components/context/FastingContext';
+import { MealsProvider } from '@/components/context/MealsContext';
+import { MedsProvider } from '@/components/context/MedsContext';
+import { WaterProvider } from '@/components/context/WaterContext';
 import { DarkTheme, ThemeProvider } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
@@ -16,11 +20,22 @@ export default function RootLayout() {
 
   return (
     <ThemeProvider value={DarkTheme} >
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="+not-found" />
-      </Stack>
-      <StatusBar style="auto" />
+      <FastingProvider>
+        <MealsProvider>
+          <MedsProvider>
+            <WaterProvider>
+
+              <Stack>
+                <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+                <Stack.Screen name="+not-found" />
+              </Stack>
+              <StatusBar style="auto" />
+              {/* <NotificationsManager /> */}
+
+            </WaterProvider>
+          </MedsProvider>
+        </MealsProvider>
+      </FastingProvider>
     </ThemeProvider>
   );
 }
