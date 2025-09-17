@@ -18,7 +18,6 @@ import { Colors } from '@/constants/Colors';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const STORAGE_KEY = 'GROCERY_ITEMS';
-const ITEM_HEIGHT = 50;
 
 const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
@@ -266,7 +265,7 @@ export default function MealsScreen() {
           {mealData[day]?.side ? <ThemedText style={styles.Side}>{mealData[day]?.side}</ThemedText> : null}
         </TouchableOpacity>
       ))}
-      <TouchableOpacity style={[styles.button, { backgroundColor: Colors.light.red, marginBottom: 50 }]} onPress={clearAllMeals}>
+      <TouchableOpacity style={[styles.button, { backgroundColor: Colors.light.red, marginBottom: 80 }]} onPress={clearAllMeals}>
         <ThemedText style={styles.buttonText}>Clear All Meals</ThemedText>
       </TouchableOpacity>
     </ScrollView>
@@ -390,7 +389,7 @@ const styles = StyleSheet.create({
   buttonText: { fontWeight: 'bold' },
 
   // Grocery
-  groceryItemContainer: { flexDirection: "row", alignItems: "center", justifyContent: 'center', paddingHorizontal: 12, paddingVertical: 7, height: ITEM_HEIGHT },
+  groceryItemContainer: { flexDirection: "row", alignItems: "center", justifyContent: 'center', paddingHorizontal: 12, paddingVertical: 7, height: 50 },
   activeItem: { backgroundColor: Colors.dark.gray },
   groceryItemText: { fontSize: 16, color: Colors.light.text, borderBottomColor: Colors.light.borderGray, borderBottomWidth: 1, padding:5, marginHorizontal: 10},
   checkedText: { textDecorationLine: "line-through", color: Colors.light.placeholder },

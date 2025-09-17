@@ -47,11 +47,11 @@ export default function OverviewScreen() {
     return data;
   };
 
-    const forceMin12 = (arr: (number | null)[]) =>
+    const forceMin14 = (arr: (number | null)[]) =>
     arr.map(v =>
       typeof v === 'number' && Number.isFinite(v)
-        ? Math.max(v, 12)
-        : 12   // <-- give a safe floor
+        ? Math.max(v, 14)
+        : 14   // <-- give a safe floor
     );
 
 
@@ -173,9 +173,10 @@ export default function OverviewScreen() {
         data={{
           labels: xLabels,
           datasets: [
-            { data: Array(daysInMonth).fill(16), color: () => Colors.light.red, strokeWidth: 1, strokeDashArray: [4,4]},
-            { data: forceMin12(fastingPrev) as unknown as number[], color: () => Colors.dark.orange, strokeWidth: 1, },
-            { data: forceMin12(fastingData) as unknown as number[], color: () => Colors.light.orange, strokeWidth: 2, },
+            { data: Array(daysInMonth).fill(14.8), color: () => 'rgba(255, 99, 71, 0.2)', strokeWidth: 60, },
+            { data: Array(daysInMonth).fill(16), color: () => Colors.light.red, strokeWidth: 1, strokeDashArray: [4,4], },
+            { data: forceMin14(fastingPrev) as unknown as number[], color: () => Colors.dark.orange, strokeWidth: 1, },
+            { data: forceMin14(fastingData) as unknown as number[], color: () => Colors.light.orange, strokeWidth: 2, },
           ],
         }}
         width={screenWidth}
