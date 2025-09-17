@@ -83,6 +83,15 @@ export default function TabLayout() {
               ),
             }}
           />
+          <Tabs.Screen
+            name="overview"
+            options={{
+              title: "Overview",
+              tabBarIcon: ({ color, size }) => (
+                <Ionicons name="bar-chart-outline" size={size} color={color} />
+              ),
+            }}
+          />
         </Tabs>
         
       </GestureHandlerRootView>

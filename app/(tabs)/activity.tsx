@@ -1,4 +1,5 @@
 import { ThemedText } from '@/components/theme/ThemedText';
+import { Colors } from '@/constants/Colors';
 import { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import AppleHealthKit, { HealthKitPermissions, HealthValue } from 'react-native-health';
@@ -58,7 +59,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#fff',
   },
   title: {
     fontSize: 24,
@@ -68,6 +68,6 @@ const styles = StyleSheet.create({
   steps: {
     fontSize: 48,
     fontWeight: 'bold',
-    color: '#007AFF',
+    color: Colors.light.blue,
   },
 });

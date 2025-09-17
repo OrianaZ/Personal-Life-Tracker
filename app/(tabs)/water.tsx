@@ -55,7 +55,7 @@ export default function WaterScreen() {
 
   const handleScroll = (event: any) => {
     const offsetX = event.nativeEvent.contentOffset.x;
-    const index = Math.round(offsetX / 90);
+    const index = Math.round(offsetX / 95);
     setCurrentMonth(dayjs().subtract(365 - index, "day").format("MMMM"));
     setShowTodayButton(index !== 365);
   };
@@ -181,7 +181,7 @@ export default function WaterScreen() {
             horizontal
             showsHorizontalScrollIndicator={false}
             initialScrollIndex={365}
-            getItemLayout={(_, index) => ({ length: 90, offset: 90 * index, index })}
+            getItemLayout={(_, index) => ({ length: 95, offset: 95 * index, index })}
             keyExtractor={(item) => item.format("YYYY-MM-DD")}
             onScroll={handleScroll}
             scrollEventThrottle={16}
@@ -296,7 +296,7 @@ const styles = StyleSheet.create({
   container3: { paddingVertical: 20, position: "absolute", bottom: 50, left: 0, right: 0 },
   header: { flexDirection: "row", justifyContent: "space-between", paddingHorizontal: 10, marginTop:10 },
   todayButton: { color: Colors.light.purple, fontWeight: "bold" },
-  item: { width: 80, height: 90, marginHorizontal: 5, borderRadius: 8, padding: 10, paddingTop: 15, alignItems: "center", borderWidth: 1, borderColor: Colors.light.borderGray },
+  item: { width: 85, height: 90, marginHorizontal: 5, borderRadius: 8, padding: 10, paddingTop: 15, alignItems: "center", borderWidth: 1, borderColor: Colors.light.borderGray },
   todayItem: { backgroundColor: Colors.light.purple, borderWidth: 0 },
   futureItem: { opacity: 0.6 },
   itemText: { fontWeight: "bold" },
