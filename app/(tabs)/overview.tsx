@@ -200,6 +200,7 @@ export default function OverviewScreen() {
           labelColor: () => Colors.light.text,
           propsForLabels: { fontSize: 12, fontWeight: "bold" },
         }}
+        bezier
         style={styles.graph}
       />
       {/* Water & Soda Chart */}
@@ -269,6 +270,7 @@ export default function OverviewScreen() {
           labelColor: () => Colors.light.text,
           propsForLabels: { fontSize: 12, fontWeight: "bold" },
         }}
+        bezier
         style={styles.graph}
       />
     </ScrollView>
@@ -342,6 +344,7 @@ export default function OverviewScreen() {
           labelColor: () => Colors.light.text,
           propsForLabels: { fontSize: 12, fontWeight: 'bold' },
         }}
+        bezier
         style={styles.graph}
       />
     </ScrollView>
