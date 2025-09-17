@@ -24,7 +24,8 @@ export default function ActivityScreen() {
   AppleHealthKit.initHealthKit(permissions, (error: string) => {
 
     if (error) {
-      console.log('[ERROR] Cannot grant permissions!')
+      console.log('[ERROR] Cannot grant permissions!', error);
+      return;
     }
 
     let options = {

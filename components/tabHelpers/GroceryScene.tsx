@@ -79,7 +79,7 @@ export default function GroceryScene({
         keyboardDismissMode="interactive"
         automaticallyAdjustKeyboardInsets={true}
         removeClippedSubviews={false}
-        maintainVisibleContentPosition={{ minIndexForVisible: 1,}}
+        maintainVisibleContentPosition={groceryItems.length > 5 ? { minIndexForVisible: 1 } : undefined}
         ListFooterComponent={
           <View>
             <View style={styles.totalRow}>

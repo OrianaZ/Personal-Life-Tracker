@@ -12,6 +12,7 @@ import { TabBar, TabView } from 'react-native-tab-view';
 
 import { MealsContext } from '@/components/context/MealsContext';
 import GroceryScene from '@/components/tabHelpers/GroceryScene';
+import ScanScene from '@/components/tabHelpers/scanScene';
 import { ThemedText } from '@/components/theme/ThemedText';
 import { Colors } from '@/constants/Colors';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -131,6 +132,7 @@ export default function MealsScreen() {
   const [routes] = useState([
     { key: 'meals', title: 'Meals' },
     { key: 'grocery', title: 'Grocery List' },
+    { key: 'scan', title: 'Barcode' },
   ]);
 
   const { meals: mealData, setMeals: setMealData } = useContext(MealsContext);
@@ -230,7 +232,18 @@ export default function MealsScreen() {
   }, [tempNewItemText]);
 
   const toggleGroceryChecked = useCallback((id: string) => {
-    setGroceryItems(prev => prev.map(item => item.id === id ? { ...item, checked: !item.checked } : item));
+    setGroceryItems(prev => {
+      const updated = prev.map(item =>
+        item.id === id ? { ...item, checked: !item.checked } : item
+      );
+
+      updated.sort((a, b) => {
+        if (a.checked === b.checked) return 0;
+        return a.checked ? 1 : -1;
+      });
+
+      return updated;
+    });
   }, []);
 
   const deleteCheckedGroceryItems = useCallback(() => {
@@ -286,6 +299,10 @@ export default function MealsScreen() {
             flatListRef={flatListRef}
           />
         );
+        case "scan":
+          return(
+            <ScanScene />
+          )
       default: return null;
     }
   };
