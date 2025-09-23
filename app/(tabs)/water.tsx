@@ -49,7 +49,7 @@ export default function WaterScreen() {
 
   const handleScroll = (event: any) => {
     const offsetX = event.nativeEvent.contentOffset.x;
-    const index = Math.round(offsetX / 95);
+    const index = Math.round(offsetX / 100);
     setCurrentMonth(dayjs().subtract(365 - index, "day").format("MMMM"));
     setShowTodayButton(index !== 365);
   };
@@ -175,7 +175,7 @@ export default function WaterScreen() {
             horizontal
             showsHorizontalScrollIndicator={false}
             initialScrollIndex={365}
-            getItemLayout={(_, index) => ({ length: 95, offset: 95 * index, index })}
+            getItemLayout={(_, index) => ({ length: 100, offset: 100 * index, index })}
             keyExtractor={(item) => item.format("YYYY-MM-DD")}
             onScroll={handleScroll}
             scrollEventThrottle={16}
