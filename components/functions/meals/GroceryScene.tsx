@@ -85,12 +85,14 @@ export default function GroceryScene({
               <ThemedText style={mealsStyles.totalValue}>{total}</ThemedText>
             </View>
 
-            <TouchableOpacity
-              style={mealsStyles.deleteButton}
-              onPress={deleteCheckedGroceryItems}
-            >
-              <ThemedText style={mealsStyles.addButtonText}>Delete Selected</ThemedText>
-            </TouchableOpacity>
+              {groceryItems.some(item => item.checked) && (
+                <TouchableOpacity
+                  style={mealsStyles.deleteButton}
+                  onPress={deleteCheckedGroceryItems}
+                >
+                  <ThemedText style={mealsStyles.addButtonText}>Delete Selected</ThemedText>
+                </TouchableOpacity>
+              )}
           </View>
         }
       />

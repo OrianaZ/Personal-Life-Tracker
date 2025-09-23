@@ -1,7 +1,8 @@
 //general
 import dayjs from 'dayjs';
+import { router } from 'expo-router';
 import React, { useMemo, useState } from 'react';
-import { Dimensions, ScrollView, View } from 'react-native';
+import { Dimensions, ScrollView, TouchableOpacity, View } from 'react-native';
 import { LineChart } from 'react-native-chart-kit';
 import Svg, { Line } from 'react-native-svg';
 import { SceneMap, TabBar, TabView } from 'react-native-tab-view';
@@ -40,7 +41,6 @@ export default function OverviewScreen() {
     for (let i = 0; i < days; i++) {
       const date = monthStart.add(i, 'day');
 
-      // break line if out of current month or future
       if (!date.isSame(monthStart, 'month') || date.isAfter(today, 'day')) {
         data.push(null);
         continue;
@@ -49,7 +49,6 @@ export default function OverviewScreen() {
       const dateStr = date.format('YYYY-MM-DD');
       const rawValue = key ? log[dateStr]?.[key] : log[dateStr];
 
-      // push null if no log, so line doesn't drop to 0
       data.push(typeof rawValue === 'number' ? rawValue : null);
     }
 
@@ -60,7 +59,7 @@ export default function OverviewScreen() {
     arr.map(v =>
       typeof v === 'number' && Number.isFinite(v)
         ? Math.max(v, 14)
-        : 14   // <-- give a safe floor
+        : 14
     );
 
 
@@ -157,208 +156,220 @@ export default function OverviewScreen() {
 
   const DietScene = () => (
     <ScrollView style={{ paddingHorizontal: 20 }}>
+
       {/* Fasting Chart */}
-      <ThemedText style={[overviewStyles.chartTitle, overviewStyles.chartTitle1]}>Fasting</ThemedText>
+      <TouchableOpacity activeOpacity={1} onPress={() => router.push('/fasting')}>
+        <ThemedText style={[overviewStyles.chartTitle, overviewStyles.chartTitle1]}>Fasting</ThemedText>
 
-      <View style={overviewStyles.legendContainer}>
+        <View style={overviewStyles.legendContainer}>
 
-        <View style={overviewStyles.legendItem}>
-          <View style={[ overviewStyles.legendColorBox, { backgroundColor: Colors.dark.orange },]} />
-          <ThemedText style={overviewStyles.legendText}>{today.subtract(1, "month").format("MMM")}:</ThemedText>
+          <View style={overviewStyles.legendItem}>
+            <View style={[ overviewStyles.legendColorBox, { backgroundColor: Colors.dark.orange },]} />
+            <ThemedText style={overviewStyles.legendText}>{today.subtract(1, "month").format("MMM")}:</ThemedText>
+          </View>
+          <View style={overviewStyles.legendItem}>
+            <View style={[ overviewStyles.legendColorBox, { backgroundColor: Colors.light.orange }, ]}/>
+            <ThemedText style={overviewStyles.legendText}>{today.format("MMM")}: </ThemedText>
+          </View>
+          <View style={overviewStyles.legendItem}>
+            <Svg height={12} width={24}>
+              <Line x1="0" y1="6" x2="24" y2="6" stroke={Colors.light.red} strokeWidth="2" strokeDasharray="4,4" />
+            </Svg>
+            <ThemedText style={overviewStyles.legendText}>16h Target</ThemedText>
+          </View>
         </View>
-        <View style={overviewStyles.legendItem}>
-          <View style={[ overviewStyles.legendColorBox, { backgroundColor: Colors.light.orange }, ]}/>
-          <ThemedText style={overviewStyles.legendText}>{today.format("MMM")}: </ThemedText>
-        </View>
-        <View style={overviewStyles.legendItem}>
-          <Svg height={12} width={24}>
-            <Line x1="0" y1="6" x2="24" y2="6" stroke={Colors.light.red} strokeWidth="2" strokeDasharray="4,4" />
-          </Svg>
-          <ThemedText style={overviewStyles.legendText}>16h Target</ThemedText>
-        </View>
-      </View>
 
-      <LineChart
-        data={{
-          labels: xLabels,
-          datasets: [
-            { data: Array(daysInMonth).fill(26), color: () => 'transparent', strokeWidth: 0, },
-            { data: Array(daysInMonth).fill(14.55), color: () => 'rgba(255, 99, 71, 0.2)', strokeWidth: 40, },
-            { data: Array(daysInMonth).fill(16), color: () => Colors.light.red, strokeWidth: 1, strokeDashArray: [4,4], },
-            { data: forceMin14(fastingPrev) as unknown as number[], color: () => Colors.dark.orange, strokeWidth: 1, },
-            { data: forceMin14(fastingData) as unknown as number[], color: () => Colors.light.orange, strokeWidth: 2, },
-          ],
-        }}
-        width={screenWidth}
-        height={220}
-        withDots={false}
-        withShadow={false}
-        withInnerLines={false}
-        withOuterLines={false}
-        yAxisSuffix=""
-        yLabelsOffset={15}
-        hidePointsAtIndex={[]}
-        formatYLabel={(yValue) => {
-          const num = Number(yValue);
-          if (Number.isNaN(num)) return '';
-          return Math.round(num).toString();
-        }}
-        chartConfig={{
-          backgroundColor: "transparent",
-          backgroundGradientFrom: Colors.dark.borderGray,
-          backgroundGradientTo: Colors.dark.gray,
-          color: (opacity = 1) => Colors.light.text,
-          labelColor: () => Colors.light.text,
-          propsForLabels: { fontSize: 12, fontWeight: "bold" },
-        }}
-        bezier
-        style={overviewStyles.graph}
-      />
+        <LineChart
+          data={{
+            labels: xLabels,
+            datasets: [
+              { data: Array(daysInMonth).fill(26), color: () => 'transparent', strokeWidth: 0, },
+              { data: Array(daysInMonth).fill(14.55), color: () => 'rgba(255, 99, 71, 0.2)', strokeWidth: 40, },
+              { data: Array(daysInMonth).fill(16), color: () => Colors.light.red, strokeWidth: 1, strokeDashArray: [4,4], },
+              { data: forceMin14(fastingPrev) as unknown as number[], color: () => Colors.dark.orange, strokeWidth: 1, },
+              { data: forceMin14(fastingData) as unknown as number[], color: () => Colors.light.orange, strokeWidth: 2, },
+            ],
+          }}
+          width={screenWidth}
+          height={220}
+          withDots={false}
+          withShadow={false}
+          withInnerLines={false}
+          withOuterLines={false}
+          yAxisSuffix=""
+          yLabelsOffset={15}
+          hidePointsAtIndex={[]}
+          formatYLabel={(yValue) => {
+            const num = Number(yValue);
+            if (Number.isNaN(num)) return '';
+            return Math.round(num).toString();
+          }}
+          chartConfig={{
+            backgroundColor: "transparent",
+            backgroundGradientFrom: Colors.dark.borderGray,
+            backgroundGradientTo: Colors.dark.gray,
+            color: (opacity = 1) => Colors.light.text,
+            labelColor: () => Colors.light.text,
+            propsForLabels: { fontSize: 12, fontWeight: "bold" },
+          }}
+          bezier
+          style={overviewStyles.graph}
+        />
+      </TouchableOpacity>
+
       {/* Water & Soda Chart */}
-      <ThemedText style={[overviewStyles.chartTitle, overviewStyles.chartTitle2]}>Liquids</ThemedText>
+      <TouchableOpacity activeOpacity={1} onPress={() => router.push('/water')}>
+        <ThemedText style={[overviewStyles.chartTitle, overviewStyles.chartTitle2]}>Liquids</ThemedText>
 
-      <View style={overviewStyles.legendContainer}>
-        <ThemedText style={overviewStyles.legendText}>
-          {today.subtract(1, "month").format("MMM")}:
-        </ThemedText>
-        <View style={overviewStyles.legendItem}>
-          <View style={[ overviewStyles.legendColorBox, { backgroundColor: Colors.dark.blue }, ]} />
-          <ThemedText style={overviewStyles.legendText}>Water</ThemedText>
-        </View>
-        <View style={overviewStyles.legendItem}>
-          <View style={[ overviewStyles.legendColorBox, { backgroundColor: Colors.dark.purple }, ]}/>
-          <ThemedText style={overviewStyles.legendText}>Soda</ThemedText>
-        </View>
-      </View>
-      <View style={overviewStyles.legendContainer}>
-        <ThemedText style={overviewStyles.legendText}>{today.format("MMM")}: </ThemedText>
-        <View style={overviewStyles.legendItem}>
-          <View style={[ overviewStyles.legendColorBox, { backgroundColor: Colors.light.blue }, ]}/>
-          <ThemedText style={overviewStyles.legendText}>Water</ThemedText>
-        </View>
-        <View style={overviewStyles.legendItem}>
-          <View style={[ overviewStyles.legendColorBox, { backgroundColor: Colors.light.purple }, ]}/>
-          <ThemedText style={overviewStyles.legendText}>Soda</ThemedText>
-        </View>
-      </View>
-
-
-      <View style={overviewStyles.yAxisSoda}>
-        {[25, 50, 75, 100].reverse().map((v) => (
-          <ThemedText key={v} style={overviewStyles.yAxisText}>
-            {v}
+        <View style={overviewStyles.legendContainer}>
+          <ThemedText style={overviewStyles.legendText}>
+            {today.subtract(1, "month").format("MMM")}:
           </ThemedText>
-        ))}
-      </View>
-      <LineChart
-        data={{
-          labels: xLabels,
-          datasets: [
-            { data: waterPrev as unknown as number[], color: () => Colors.dark.blue, strokeWidth: 1 },
-            { data: sodaNormalizedPrev as unknown as number[], color: () => Colors.dark.purple, strokeWidth: 1, },
-            { data: waterData as unknown as number[], color: () => Colors.light.blue, strokeWidth: 2 },
-            { data: sodaNormalized as unknown as number[], color: () => Colors.light.purple, strokeWidth: 2, },
-          ],
-        }}
-        width={screenWidth}
-        height={220}
-        withDots={false}
-        withShadow={false}
-        withInnerLines={false}
-        withOuterLines={false}
-        yAxisSuffix=""
-        yLabelsOffset={15}
-        formatYLabel={(yValue) => {
-          const num = Number(yValue);
-          if (Number.isNaN(num)) return '';
-          return Math.round(num).toString();
-        }}
-        chartConfig={{
-          backgroundColor: "transparent",
-          backgroundGradientFrom: Colors.dark.borderGray,
-          backgroundGradientTo: Colors.dark.gray,
-          color: (opacity = 1) => Colors.light.text,
-          labelColor: () => Colors.light.text,
-          propsForLabels: { fontSize: 12, fontWeight: "bold" },
-        }}
-        bezier
-        style={overviewStyles.graph}
-      />
+          <View style={overviewStyles.legendItem}>
+            <View style={[ overviewStyles.legendColorBox, { backgroundColor: Colors.dark.blue }, ]} />
+            <ThemedText style={overviewStyles.legendText}>Water</ThemedText>
+          </View>
+          <View style={overviewStyles.legendItem}>
+            <View style={[ overviewStyles.legendColorBox, { backgroundColor: Colors.dark.purple }, ]}/>
+            <ThemedText style={overviewStyles.legendText}>Soda</ThemedText>
+          </View>
+        </View>
+        <View style={overviewStyles.legendContainer}>
+          <ThemedText style={overviewStyles.legendText}>{today.format("MMM")}: </ThemedText>
+          <View style={overviewStyles.legendItem}>
+            <View style={[ overviewStyles.legendColorBox, { backgroundColor: Colors.light.blue }, ]}/>
+            <ThemedText style={overviewStyles.legendText}>Water</ThemedText>
+          </View>
+          <View style={overviewStyles.legendItem}>
+            <View style={[ overviewStyles.legendColorBox, { backgroundColor: Colors.light.purple }, ]}/>
+            <ThemedText style={overviewStyles.legendText}>Soda</ThemedText>
+          </View>
+        </View>
+
+
+        <View style={overviewStyles.yAxisSoda}>
+          {[25, 50, 75, 100].reverse().map((v) => (
+            <ThemedText key={v} style={overviewStyles.yAxisText}>
+              {v}
+            </ThemedText>
+          ))}
+        </View>
+    
+        <LineChart
+          data={{
+            labels: xLabels,
+            datasets: [
+              { data: Array(daysInMonth).fill(16), color: () => 'transparent', strokeWidth: 0, }, //min height
+              { data: waterPrev as unknown as number[], color: () => Colors.dark.blue, strokeWidth: 1 },
+              { data: sodaNormalizedPrev as unknown as number[], color: () => Colors.dark.purple, strokeWidth: 1, },
+              { data: waterData as unknown as number[], color: () => Colors.light.blue, strokeWidth: 2 },
+              { data: sodaNormalized as unknown as number[], color: () => Colors.light.purple, strokeWidth: 2, },
+            ],
+          }}
+          width={screenWidth}
+          height={220}
+          withDots={false}
+          withShadow={false}
+          withInnerLines={false}
+          withOuterLines={false}
+          yAxisSuffix=""
+          yLabelsOffset={15}
+          formatYLabel={(yValue) => {
+            const num = Number(yValue);
+            if (Number.isNaN(num)) return '';
+            return Math.round(num).toString();
+          }}
+          chartConfig={{
+            backgroundColor: "transparent",
+            backgroundGradientFrom: Colors.dark.borderGray,
+            backgroundGradientTo: Colors.dark.gray,
+            color: (opacity = 1) => Colors.light.text,
+            labelColor: () => Colors.light.text,
+            propsForLabels: { fontSize: 12, fontWeight: "bold" },
+          }}
+          bezier
+          style={overviewStyles.graph}
+        />
+      </TouchableOpacity>
     </ScrollView>
   );
 
   const ActivityScene = () => (
-    <ScrollView style={{ paddingHorizontal: 20 }}>
-      <ThemedText style={[overviewStyles.chartTitle, overviewStyles.chartTitle2]}>Activity</ThemedText>
+    <TouchableOpacity activeOpacity={1} onPress={() => router.push('/activity')}>
+      <ScrollView style={{ paddingHorizontal: 20 }}>
+        <ThemedText style={[overviewStyles.chartTitle, overviewStyles.chartTitle2]}>Activity</ThemedText>
 
-      <View style={overviewStyles.legendContainer}>
-        <ThemedText style={overviewStyles.legendText}>
-          {today.subtract(1, "month").format("MMM")}:
-        </ThemedText>
-        <View style={overviewStyles.legendItem}>
-          <View style={[ overviewStyles.legendColorBox, { backgroundColor: Colors.dark.blue }, ]} />
-          <ThemedText style={overviewStyles.legendText}>Steps</ThemedText>
+        <View style={overviewStyles.legendContainer}>
+          <ThemedText style={overviewStyles.legendText}>
+            {today.subtract(1, "month").format("MMM")}:
+          </ThemedText>
+          <View style={overviewStyles.legendItem}>
+            <View style={[ overviewStyles.legendColorBox, { backgroundColor: Colors.dark.blue }, ]} />
+            <ThemedText style={overviewStyles.legendText}>Steps</ThemedText>
+          </View>
+          <View style={overviewStyles.legendItem}>
+            <View style={[ overviewStyles.legendColorBox, { backgroundColor: Colors.dark.purple }, ]}/>
+            <ThemedText style={overviewStyles.legendText}>Weight</ThemedText>
+          </View>
         </View>
-        <View style={overviewStyles.legendItem}>
-          <View style={[ overviewStyles.legendColorBox, { backgroundColor: Colors.dark.purple }, ]}/>
-          <ThemedText style={overviewStyles.legendText}>Weight</ThemedText>
+        <View style={overviewStyles.legendContainer}>
+          <ThemedText style={overviewStyles.legendText}>{today.format("MMM")}: </ThemedText>
+          <View style={overviewStyles.legendItem}>
+            <View style={[ overviewStyles.legendColorBox, { backgroundColor: Colors.light.blue }, ]}/>
+            <ThemedText style={overviewStyles.legendText}>Steps</ThemedText>
+          </View>
+          <View style={overviewStyles.legendItem}>
+            <View style={[ overviewStyles.legendColorBox, { backgroundColor: Colors.light.purple }, ]}/>
+            <ThemedText style={overviewStyles.legendText}>Weight</ThemedText>
+          </View>
         </View>
-      </View>
-      <View style={overviewStyles.legendContainer}>
-        <ThemedText style={overviewStyles.legendText}>{today.format("MMM")}: </ThemedText>
-        <View style={overviewStyles.legendItem}>
-          <View style={[ overviewStyles.legendColorBox, { backgroundColor: Colors.light.blue }, ]}/>
-          <ThemedText style={overviewStyles.legendText}>Steps</ThemedText>
-        </View>
-        <View style={overviewStyles.legendItem}>
-          <View style={[ overviewStyles.legendColorBox, { backgroundColor: Colors.light.purple }, ]}/>
-          <ThemedText style={overviewStyles.legendText}>Weight</ThemedText>
-        </View>
-      </View>
 
-      <View style={overviewStyles.yAxisWeight}>
-        {[140, 155, 170, 185, 200].reverse().map((v) => (
-          <ThemedText key={v} style={overviewStyles.yAxisText}>
-            {v}
-          </ThemedText> ))}
-      </View>
+        <View style={overviewStyles.yAxisWeight}>
+          {[140, 155, 170, 185, 200].reverse().map((v) => (
+            <ThemedText key={v} style={overviewStyles.yAxisText}>
+              {v}
+            </ThemedText> ))}
+        </View>
 
-      <LineChart
-        data={{
-          labels: xLabels,
-          datasets: [
-            { data: stepsDataPrev, color: () => Colors.dark.blue, strokeWidth: 1 },
-            { data: weightNormalizedPrev, color: () => Colors.dark.purple, strokeWidth: 1 },
+        <LineChart
+          data={{
+            labels: xLabels,
+            datasets: [
+              { data: Array(daysInMonth).fill(500), color: () => 'transparent', strokeWidth: 0, }, //min height
+              { data: stepsDataPrev, color: () => Colors.dark.blue, strokeWidth: 1 },
+              { data: weightNormalizedPrev, color: () => Colors.dark.purple, strokeWidth: 1 },
 
-            { data: stepsData, color: () => Colors.light.blue, strokeWidth: 2 },
-            { data: weightNormalized, color: () => Colors.light.purple, strokeWidth: 2 },
-          ],
-        }}
-        width={screenWidth}
-        height={260}
-        withDots={false}
-        withShadow={false}
-        withInnerLines={false}
-        withOuterLines={false}
-        yAxisSuffix=""
-        yLabelsOffset={15}
-        formatYLabel={(yValue) => {
-          const num = Number(yValue);
-          if (Number.isNaN(num)) return '';
-          return (Math.round(num / 250) * 250).toString();
-        }}       
-        chartConfig={{
-          backgroundColor: 'transparent',
-          backgroundGradientFrom: Colors.dark.borderGray,
-          backgroundGradientTo: Colors.dark.gray,
-          color: (opacity = 1) => Colors.light.text,
-          labelColor: () => Colors.light.text,
-          propsForLabels: { fontSize: 12, fontWeight: 'bold' },
-        }}
-        bezier
-        style={overviewStyles.graph}
-      />
-    </ScrollView>
+              { data: stepsData, color: () => Colors.light.blue, strokeWidth: 2 },
+              { data: weightNormalized, color: () => Colors.light.purple, strokeWidth: 2 },
+            ],
+          }}
+          width={screenWidth}
+          height={260}
+          withDots={false}
+          withShadow={false}
+          withInnerLines={false}
+          withOuterLines={false}
+          yAxisSuffix=""
+          yLabelsOffset={15}
+          formatYLabel={(yValue) => {
+            const num = Number(yValue);
+            if (Number.isNaN(num)) return '';
+            return (Math.round(num / 250) * 250).toString();
+          }}       
+          chartConfig={{
+            backgroundColor: 'transparent',
+            backgroundGradientFrom: Colors.dark.borderGray,
+            backgroundGradientTo: Colors.dark.gray,
+            color: (opacity = 1) => Colors.light.text,
+            labelColor: () => Colors.light.text,
+            propsForLabels: { fontSize: 12, fontWeight: 'bold' },
+          }}
+          bezier
+          style={overviewStyles.graph}
+        />
+      </ScrollView>
+    </TouchableOpacity>
+
   );
 
   const renderScene = SceneMap({

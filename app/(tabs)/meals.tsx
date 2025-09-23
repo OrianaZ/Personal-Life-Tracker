@@ -251,7 +251,23 @@ export default function MealsScreen() {
   }, []);
 
   const deleteCheckedGroceryItems = useCallback(() => {
-    setGroceryItems(prev => prev.filter(item => !item.checked));
+    Alert.alert(
+      "Confirm Delete",
+      "Are you sure you want to delete all checked items?",
+      [
+        {
+          text: "Cancel",
+          style: "cancel"
+        },
+        {
+          text: "Delete",
+          style: "destructive",
+          onPress: () => {
+            setGroceryItems(prev => prev.filter(item => !item.checked));
+          }
+        }
+      ]
+    );
   }, []);
 
   const updateGroceryQuantity = useCallback((id: string, quantity: string) => {

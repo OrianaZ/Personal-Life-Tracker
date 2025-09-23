@@ -2,7 +2,7 @@ import { Colors } from "@/components/theme/Colors";
 import { StyleSheet } from "react-native";
 
 export const medsStyles = StyleSheet.create({
-  addButton: { backgroundColor: Colors.light.purple, padding: 15, borderRadius: 10, marginTop: 10 },
+  addButton: { backgroundColor: Colors.light.purple, padding: 15, borderRadius: 10, marginTop: 10, marginBottom: 80,},
   saveButton: { backgroundColor: Colors.light.purple, padding: 15, borderRadius: 10, marginTop: 15, width: "100%", alignItems: "center" },
   cancelButton: { backgroundColor: "transparent", borderWidth: 1, borderColor: Colors.light.purple, borderRadius: 10, padding: 15, marginTop: 10, width: "100%", alignItems: "center" },
   deleteButtonModal: { backgroundColor: Colors.light.red, padding: 15, borderRadius: 10, marginTop: 10, width: "100%", alignItems: "center" },

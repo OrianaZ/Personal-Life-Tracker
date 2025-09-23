@@ -6,7 +6,7 @@ import { Alert, KeyboardAvoidingView, Modal, Platform, ScrollView, TextInput, To
 import { medsStyles } from "@/components/styles/_meds.styles";
 
 //context
-import { Medication, useMeds } from "@/components/context/MedsContext";
+import { Medication, useMeds, } from "@/components/context/MedsContext";
 
 //theme
 import { Colors } from "@/components/theme/Colors";
@@ -14,7 +14,7 @@ import { ThemedText } from "@/components/theme/ThemedText";
 
 
 export default function MedsScreen() {
-  const { medications, setMedications, takenTimes, toggleTaken } = useMeds();
+  const { medications, setMedications, takenTimes, toggleTaken, setTakenTimes } = useMeds();
   const [modalVisible, setModalVisible] = useState(false);
 
   const [name, setName] = useState("");
@@ -39,25 +39,19 @@ export default function MedsScreen() {
     return digits.slice(0, 2) + ":" + digits.slice(2, 4);
   };
 
-  const parseTime = (t: { time: string }): Date | null => {
-    const val = t.time;
-    if (!val) return null;
-    const match = /^([01]?\d|2[0-3]):([0-5]\d)$/.exec(val);
-    if (!match) return null;
-    const [, hh, mm] = match;
-    const d = new Date();
-    d.setHours(parseInt(hh), parseInt(mm), 0, 0);
-    return d;
-  };
-
   const openEditModal = (med: any) => {
     setName(med.name);
     setPills(med.pills);
     setTimesPerDay(med.times.length.toString());
     setTimeInputs(
-      med.times.map((t: Date) => ({
-        time: t.toLocaleTimeString([], { hour12: false, hour: "2-digit", minute: "2-digit" }),
-      }))
+      med.times.map((t: string) => {
+        const [hh, mm] = t.split(":").map(Number);
+        const d = new Date();
+        d.setHours(hh, mm, 0, 0);
+        return {
+            time: d.toLocaleTimeString([], { hour12: false, hour: "2-digit", minute: "2-digit" }),
+        };
+      })
     );
     setEditingId(med.id);
     setModalVisible(true);
@@ -72,6 +66,11 @@ export default function MedsScreen() {
         style: "destructive",
         onPress: () => {
           setMedications(medications.filter((med) => med.id !== editingId));
+          setTakenTimes((prev) => {
+            const updated = { ...prev };
+            delete updated[editingId];
+            return updated;
+          });
           setModalVisible(false);
           resetModal();
         },
@@ -88,14 +87,21 @@ export default function MedsScreen() {
   };
 
   const saveMedication = () => {
+    function localTimeToUTCISO(hhmm: string) {
+      const [hh, mm] = hhmm.split(":").map(Number);
+      const local = new Date();
+      local.setHours(hh, mm, 0, 0);
+      return local.toISOString();
+    }
+
     const parsedTimes = timeInputs
       .map((t) => {
         const match = /^([01]?\d|2[0-3]):([0-5]\d)$/.exec(t.time);
         if (!match) return null;
-        const [, hh, mm] = match;
-        return `${hh.padStart(2, "0")}:${mm.padStart(2, "0")}`; // store as HH:mm string
+        return localTimeToUTCISO(match[0]);
       })
       .filter((t): t is string => t !== null);
+
 
     if (!name || !pills || parsedTimes.length === 0) {
       Alert.alert("Error", "Please fill all fields and times.");
@@ -129,13 +135,8 @@ export default function MedsScreen() {
         const takenArray = takenTimes[med.id] || Array(med.times.length).fill(false);
         const allTaken = takenArray.every(Boolean);
         const now = new Date();
-
-        const getTodayTime = (hhmm: string) => {
-          const [hh, mm] = hhmm.split(":").map(Number);
-          const d = new Date();
-          d.setHours(hh, mm, 0, 0);
-          return d;
-        };
+        
+        const getTodayTime = (isoString: string) => new Date(isoString);
 
         // Split untaken and taken times
         const untakenTimes = med.times

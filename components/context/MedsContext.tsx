@@ -21,6 +21,7 @@ type MedsContextType = {
   nextMedications: { time: Date; meds: Medication[] } | null;
   takenTimes: { [medId: string]: boolean[] };
   toggleTaken: (medId: string, idx: number) => void;
+  setTakenTimes: React.Dispatch<React.SetStateAction<{ [medId: string]: boolean[] }>>;
 };
 
 const MedsContext = createContext<MedsContextType | undefined>(undefined);
@@ -39,12 +40,7 @@ export const MedsProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [currentDayKey, setCurrentDayKey] = useState<string>(new Date().toDateString());
 
   // Helper to get today's Date from HH:mm
-  const getTodayTime = (hhmm: string) => {
-    const [hh, mm] = hhmm.split(":").map(Number);
-    const d = new Date();
-    d.setHours(hh, mm, 0, 0);
-    return d;
-  };
+  const getTodayTime = (isoString: string) => new Date(isoString);
 
   // Load medications + takenTimes
   useEffect(() => {
@@ -180,7 +176,7 @@ export const MedsProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   return (
     <MedsContext.Provider
-      value={{ medications, setMedications, nextMedications, takenTimes, toggleTaken }}
+      value={{ medications, setMedications, nextMedications, takenTimes, toggleTaken, setTakenTimes }}
     >
       {children}
     </MedsContext.Provider>
