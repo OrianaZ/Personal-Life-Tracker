@@ -18,8 +18,8 @@ import { Colors } from '@/components/theme/Colors';
 import { ThemedText } from '@/components/theme/ThemedText';
 
 //functions
-import GroceryScene from '@/components/functions/Meals/GroceryScene';
-import ScanScene from '@/components/functions/Meals/scanScene';
+import GroceryScene from '@/components/functions/meals/GroceryScene';
+import ScanScene from '@/components/functions/meals/ScanScene';
 
 
 const STORAGE_KEY = 'GROCERY_ITEMS';

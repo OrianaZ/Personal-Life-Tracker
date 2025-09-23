@@ -6,12 +6,12 @@ import { Platform } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 //theme
-import { HapticTab } from '@/components/functional/HapticTab';
+import { HapticTab } from '@/components/functions/other/HapticTab';
 import { Colors } from '@/components/theme/Colors';
 import TabBarBackground from '@/components/theme/TabBarBackground';
 
 //functions
-import ScreenWrapper from "@/components/theme/screenWrapper";
+import ScreenWrapper from "@/components/theme/ScreenWrapper";
 
 
 export default function TabLayout() {
