@@ -11,8 +11,8 @@ import type { FlatList } from "react-native-gesture-handler";
 import { TabBar, TabView } from 'react-native-tab-view';
 
 import { MealsContext } from '@/components/context/MealsContext';
-import GroceryScene from '@/components/tabHelpers/GroceryScene';
-import ScanScene from '@/components/tabHelpers/scanScene';
+import GroceryScene from '@/components/tabHelpers/Meals/GroceryScene';
+import ScanScene from '@/components/tabHelpers/Meals/scanScene';
 import { ThemedText } from '@/components/theme/ThemedText';
 import { Colors } from '@/constants/Colors';
 import AsyncStorage from '@react-native-async-storage/async-storage';

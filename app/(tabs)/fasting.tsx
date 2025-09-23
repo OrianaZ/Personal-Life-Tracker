@@ -1,17 +1,21 @@
-import { MaterialCommunityIcons } from '@expo/vector-icons';
 import DateTimePicker from "@react-native-community/datetimepicker";
 import dayjs from "dayjs";
 import React, { useRef, useState } from "react";
 import {
   FlatList, Modal,
-  Pressable,
-  StyleSheet,
-  TextInput, TouchableOpacity, TouchableWithoutFeedback, View
+  TouchableOpacity, TouchableWithoutFeedback, View
 } from "react-native";
 
 import { useFasting } from "@/components/context/FastingContext";
 import { ThemedText } from "@/components/theme/ThemedText";
 import { Colors } from "@/constants/Colors";
+
+import FastingCalendar from "@/components/tabHelpers/Fasting/FastingCalendar";
+import LastMealDateTimePicker from "@/components/tabHelpers/Fasting/LastMealDateTimePicker";
+import ProgressBar from "@/components/tabHelpers/Fasting/ProgressBar";
+
+import { styles } from "@/components/styles/_fasting.styles";
+
 
 export default function FastingScreen() {
   const {
@@ -91,7 +95,7 @@ if (fastStartRef) {
       {!isFasting && (
         <View style={styles.lastMealContainer}>
           <ThemedText type="subtitle">Last Meal:</ThemedText>
-          <TimePickerInline
+          <LastMealDateTimePicker
             value={pickerTime}
             setTempTime={setPickerTime}
             setLastMealTime={(d: Date) => setLastMealTime(dayjs(d))}
@@ -154,7 +158,7 @@ if (fastStartRef) {
         </Modal>
       </View>
 
-      <Calendar
+      <FastingCalendar
         fastLog={fastLog}
         currentMonth={currentMonth}
         showTodayButton={showTodayButton}
@@ -175,370 +179,3 @@ if (fastStartRef) {
     </View>
   );
 }
-
-// ---------- TimePickerInline ----------
-function TimePickerInline({
-  value,
-  setTempTime,
-  setLastMealTime,
-}: { 
-  value: Date,
-  setTempTime: (d: Date) => void;
-  setLastMealTime?: (d: Date) => void;
-
-}) {
-  const [editingPart, setEditingPart] = useState<"hours" | "minutes" | "date" | null>(null);
-
-  const handleHourChange = (val: string | number) => {
-    if (typeof val === "number") {
-      const newTime = new Date(value);
-      newTime.setHours(val);
-      setTempTime(newTime);
-      setEditingPart(null);
-    }
-  };
-
-  const handleMinuteChange = (val: string | number) => {
-    if (typeof val === "number") {
-      const newTime = new Date(value);
-      newTime.setMinutes(val);
-      setTempTime(newTime);
-      setEditingPart(null);
-    }
-  };
-
-  const today = new Date()
-  const temptoday = new Date();
-  temptoday.setDate(temptoday.getDate() + 1);
-  const start = new Date(temptoday);
-
-  const dateArray: { date: Date; label: string }[] = [];
-  let curr = new Date(start.setFullYear(start.getFullYear() - 1));
-
-  while (curr <= today) {
-    dateArray.push({
-      date: new Date(curr),
-      label: curr.toLocaleDateString("en-US", { month: "short", day: "numeric" }),
-    });
-      curr.setDate(curr.getDate() + 1);
-  }
-
-  return (
-    <View style={{ alignItems: "center", position: "relative" }}>
-      <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
-
-        <View style={{ position: "relative" }}>
-          <TouchableOpacity onPress={() => setEditingPart(editingPart === "date" ? null : "date")}>
-            <ThemedText style={styles.inputText}>{value.toLocaleDateString("en-US", { month: "short", day: "numeric" })}</ThemedText>
-          </TouchableOpacity>
-          <Modal transparent visible={editingPart === "date"} animationType="fade" onRequestClose={() => setEditingPart(null)}>
-            <Pressable style={{ flex: 1, backgroundColor: "rgba(0, 0, 0, 0.3)" }} onPress={() => setEditingPart(null)}>
-              <View style={{ position: "absolute", top: 250, left: 240 }}>
-                <InlineNumberPicker
-                  type="date"
-                  data={dateArray}
-                  value={value}
-                  onChange={(item) => {
-                    if (typeof item === "object" && item.date instanceof Date) {
-                      setTempTime(item.date);
-                      setEditingPart(null);
-                    }
-                  }}
-                  visible={editingPart === "date"}
-                />
-              </View>
-            </Pressable>
-          </Modal>
-        </View>
-        
-        <ThemedText style={{fontSize: 18 }}>,</ThemedText>        
-        
-        <View style={{ position: "relative" }}>
-          <TouchableOpacity onPress={() => setEditingPart(editingPart === "hours" ? null : "hours")}>
-            <ThemedText style={styles.inputText}>{value.getHours().toString().padStart(2, "0")}</ThemedText>
-          </TouchableOpacity>
-          <Modal transparent visible={editingPart === "hours"} animationType="fade" onRequestClose={() => setEditingPart(null)}>
-            <Pressable style={{ flex: 1, backgroundColor: "rgba(0, 0, 0, 0.3)" }} onPress={() => setEditingPart(null)}>
-              <View style={{ position: "absolute", top: 250, left: 280 }}>
-                <InlineNumberPicker
-                  type="hours"
-                  data={Array.from({ length: 24 }, (_, i) => i)}
-                  value={value.getHours()}
-                  onChange={handleHourChange}
-                  visible={editingPart === "hours"}
-                />
-              </View>
-            </Pressable>
-          </Modal>
-        </View>
-
-        <ThemedText style={{fontSize: 18 }}>:</ThemedText>
-
-        <View style={{ position: "relative" }}>
-          <TouchableOpacity onPress={() => setEditingPart(editingPart === "minutes" ? null : "minutes")}>
-            <ThemedText style={styles.inputText}>{value.getMinutes().toString().padStart(2, "0")}</ThemedText>
-          </TouchableOpacity>
-          <Modal transparent visible={editingPart === "minutes"} animationType="fade" onRequestClose={() => setEditingPart(null)}>
-            <Pressable style={{ flex: 1, backgroundColor: "rgba(0, 0, 0, 0.3)" }} onPress={() => setEditingPart(null)}>
-              <View style={{ position: "absolute", top: 250, left: 320 }}>
-                <InlineNumberPicker
-                  type="minutes"
-                  data={Array.from({ length: 60 }, (_, i) => i)}
-                  value={value.getMinutes()}
-                  onChange={handleMinuteChange}
-                  visible={editingPart === "minutes"}
-                />
-              </View>
-            </Pressable>
-          </Modal>
-        </View>
-      </View>
-    </View>
-  );
-}
-
-// ---------- TimePickerModal Component ----------
-function InlineNumberPicker({ 
-  type, data, value, onChange, visible,
-}: { 
-  type: "hours" | "minutes" | "date"; 
-  data: any[];
-  value: any;
-  onChange: (n: any) => void;
-  visible: boolean;
-}) {
-  if (!visible) return null;
-
-  const itemHeight = 40;
-
-  return (
-    <View style={{ position: "absolute", top: -itemHeight * 2, width: 80, alignItems: "center", zIndex: 100 }}>
-      <FlatList
-        data={data}
-        keyExtractor={(item, index) => type === "date" ? item.date.toISOString() : item.toString()}
-        showsVerticalScrollIndicator={false}
-        snapToInterval={itemHeight}
-        decelerationRate="fast"
-        initialScrollIndex={Math.max(0, data.findIndex(d => {
-          if (type === "date") {
-            return d.date.toDateString() === value.toDateString();
-          }
-          return d === value;
-        }))}
-        getItemLayout={(_, index) => ({ length: itemHeight, offset: itemHeight * index, index })}
-        style={{ maxHeight: itemHeight * 5, backgroundColor: Colors.dark.gray, borderRadius: 6, paddingVertical: 5, width: 70 }}
-        renderItem={({ item }) => (
-          <TouchableOpacity onPress={() => onChange(item)} style={{ height: itemHeight, justifyContent: "center", alignItems: "center"}}>
-            <ThemedText style={[
-              { fontSize: 16 },
-              (type === "date" ? item.date.toDateString() === value.toDateString() : item === value) && { fontWeight: "bold", color: Colors.light.purple }
-            ]}>
-              {type === "date" ? item.label : item.toString().padStart(2, "0")}
-            </ThemedText>
-          </TouchableOpacity>
-        )}
-      />
-    </View>
-  );
-}
-
-// ---------- ProgressBar ----------
-function ProgressBar({ progress, isFasting, lastMealTime, formatTime }: any) {
-  return (
-    <View style={styles.progressContainer}>
-      {/* Start Icon */}
-      <View style={styles.iconContainer}>
-        {isFasting ? (
-          <>
-            <MaterialCommunityIcons name="clock-outline" size={24} color={Colors.light.blue} />
-            <ThemedText style={styles.iconTime}>{formatTime(lastMealTime)}</ThemedText>
-          </>
-        ) : (
-          <>
-            <MaterialCommunityIcons name="silverware-fork-knife" size={24} color={Colors.light.orange} />
-            <ThemedText style={styles.iconTime}>{formatTime(lastMealTime)}</ThemedText>
-          </>
-        )}
-      </View>
-
-      {/* Progress */}
-      <View style={styles.progressBackground}>
-        <View style={{ flex: progress, backgroundColor: isFasting ? Colors.light.blue : Colors.light.orange }} />
-        <View style={{ flex: 1 - progress, backgroundColor: Colors.light.gray }} />
-      </View>
-
-      {/* End Icon */}
-      <View style={styles.iconContainer}>
-        {isFasting ? (
-          <>
-            <MaterialCommunityIcons name="silverware-fork-knife" size={24} color={Colors.light.orange} />
-            <ThemedText style={styles.iconTime}>
-              {formatTime(new Date(lastMealTime.getTime() + 16 * 60 * 60 * 1000))}
-            </ThemedText>
-          </>
-        ) : (
-          <>
-            <MaterialCommunityIcons name="clock-outline" size={24} color={Colors.light.blue} />
-            <ThemedText style={styles.iconTime}>20:00</ThemedText>
-          </>
-        )}
-      </View>
-    </View>
-  );
-}
-
-// ---------- Calendar ----------
-function Calendar({
-  fastLog, currentMonth, showTodayButton, scrollToToday, calendarRef, handleScroll,
-  editingDate, editingHours, editingMinutes, setEditingDate, setEditingHours, setEditingMinutes, showEditModal, setShowEditModal,
-  saveEditedFast, formatDateWithOrdinal
-}: any) {
-  const today = dayjs();
-
-  return (
-    <View style={styles.container3}>
-      <View style={styles.header}>
-        <ThemedText type="title">{currentMonth}</ThemedText>
-        {showTodayButton && (
-          <TouchableOpacity onPress={scrollToToday}>
-            <ThemedText style={styles.todayButton}>Today</ThemedText>
-          </TouchableOpacity>
-        )}
-      </View>
-
-      <FlatList
-        ref={calendarRef}
-        data={Array.from({ length: 730 }, (_, i) => dayjs().subtract(365 - i, "day"))}
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        initialScrollIndex={365}
-        getItemLayout={(_, index) => ({ length: 105, offset: 105 * index, index })}
-        keyExtractor={(item) => item.format("YYYY-MM-DD")}
-        onScroll={handleScroll}
-        scrollEventThrottle={16}
-        renderItem={({ item }) => {
-          const dateStr = item.format("YYYY-MM-DD");
-          const hours = fastLog[dateStr] || 0;
-          const isToday = dateStr === today.format("YYYY-MM-DD");
-          const isFuture = item.isAfter(today, "day");
-
-          return (
-            <TouchableOpacity
-              onPress={() => {
-                if (isFuture) return;
-                const total = fastLog[dateStr] || 0;
-                const h = Math.floor(total);
-                const m = Math.round((total - h) * 60);
-
-                setEditingDate(dateStr);
-                setEditingHours(h.toString());
-                setEditingMinutes(m.toString());
-                setShowEditModal(true);
-              }}
-              disabled={isFuture}
-            >
-              <View style={[styles.item, isToday && styles.todayItem, isFuture && styles.futureItem]}>
-                <ThemedText style={styles.itemText}>{item.format("ddd")} {item.format("D")}</ThemedText>
-                  <ThemedText
-                    style={[ styles.itemHours,
-                      isToday
-                        ? hours >= 16 ? styles.todayHours : styles.todayLowFast
-                        : hours >= 16 ? styles.normalHours : styles.lowFastHours
-                    ]}>
-                    {fastLog[dateStr] && fastLog[dateStr] > 0
-                        ? `${Math.floor(fastLog[dateStr])}h ${Math.round((fastLog[dateStr] - Math.floor(fastLog[dateStr])) * 60)}m` : ""}
-                    </ThemedText>
-              </View>
-            </TouchableOpacity>
-          );
-        }}
-      />
-
-      {/* Edit Modal */}
-      <Modal visible={showEditModal} transparent animationType="fade">
-        <TouchableWithoutFeedback onPress={() => setShowEditModal(false)}>
-          <View style={styles.modalBackground}>
-            <TouchableWithoutFeedback>
-              <View style={styles.modalContent}>
-                <ThemedText type="default" style={styles.modalText}>
-                  {editingDate ? `How long did you fast on\n${formatDateWithOrdinal(editingDate)}?` : "How long did you fast?"}
-                </ThemedText>
-
-                  <View style={styles.inputRow}>
-                    <ThemedText style={{color: Colors.light.purple, fontWeight: 'bold'}}>Hours: </ThemedText>
-                    <TextInput
-                      keyboardType="decimal-pad"
-                      value={editingHours}
-                      onChangeText={setEditingHours}
-                      style={styles.editInput}
-                      placeholder="Hours"
-                      placeholderTextColor={Colors.dark.text}
-                    />
-                  </View>
-                  
-                  <View style={styles.inputRow}>
-                    <ThemedText style={{color: Colors.light.blue, fontWeight: 'bold'}}>Minutes: </ThemedText>
-                    <TextInput
-                      keyboardType="decimal-pad"
-                      value={editingMinutes}
-                      onChangeText={setEditingMinutes}
-                      style={styles.editInput}
-                      placeholder="Minutes"
-                      placeholderTextColor={Colors.dark.text}
-                    />
-                  </View>
-
-                <TouchableOpacity style={[styles.button, styles.modalButton]} onPress={saveEditedFast}>
-                  <ThemedText style={styles.buttonText}>Save</ThemedText>
-                </TouchableOpacity>
-              </View>
-            </TouchableWithoutFeedback>
-          </View>
-        </TouchableWithoutFeedback>
-      </Modal>
-    </View>
-  );
-}
-
-// ---------- Styles ----------
-const styles = StyleSheet.create({
-  container: { flex: 1, paddingBottom: 150, justifyContent: 'center',},
-  lastMealContainer: { flexDirection: "row", alignItems: "center", justifyContent: "center", marginBottom: 12, gap: 10 },
-  inputText: { textAlign: "center", fontSize: 16 },
-
-  // Timer & Progress
-  container2: { justifyContent: "center", alignItems: "center", padding: 20, backgroundColor: Colors.dark.gray, margin: 20, borderRadius: 12 },
-  topText: { flexDirection: "row", justifyContent: "space-between", marginBottom: 20, width: "100%" },
-  progressContainer: { flexDirection: "row", alignItems: "center", width: "100%" },
-  iconContainer: { alignItems: "center", width: 50 },
-  iconTime: { fontSize: 12, marginTop: 4 },
-  progressBackground: { flexDirection: "row", width: "68%", height: 12, borderRadius: 6, overflow: "hidden" },
-  button: { backgroundColor: Colors.light.purple, paddingVertical: 12, paddingHorizontal: 24, borderRadius: 8, marginTop: 20, width: "100%" },
-  buttonText: { fontWeight: "bold", textAlign: "center" },
-
-  // Calendar
-  container3: { paddingVertical: 20, position: "absolute", bottom: 50, left: 0, right: 0 },  
-  header: { flexDirection: "row", justifyContent: "space-between", paddingHorizontal: 10 },
-  todayButton: { color: Colors.light.purple, fontWeight: "bold" },
-  item: { width: 95, height: 90, marginHorizontal: 5, borderRadius: 8, padding: 10, paddingTop: 15, alignItems: "center", borderWidth: 1, borderColor: Colors.light.borderGray },
-  todayItem: { backgroundColor: Colors.light.purple, borderWidth: 0 },
-  futureItem: { opacity: 0.6 },
-  itemText: { fontWeight: "bold" },
-  itemHours: { marginTop: 5, fontWeight: "bold", color: Colors.light.purple },
-
-  todayHours: { color: Colors.dark.purple },
-  todayLowFast: { color: Colors.dark.red },
-  normalHours: { color: Colors.light.purple },
-  lowFastHours: { color: Colors.light.red },
-
-
-  lowFastText: {color: "red", fontWeight: "bold",},
-  editInput: { borderWidth: 1, borderColor: Colors.light.borderGray, padding: 10, width: "70%", textAlign: "center", borderRadius: 8 },
-
-  // Modals
-  modalBackground: { flex: 1, backgroundColor: "rgba(0,0,0,0.5)", justifyContent: "center", alignItems: "center" },
-  modalContent: { backgroundColor: Colors.light.background, padding: 20, borderRadius: 12, width: "80%", alignItems: "center" },
-  modalText: { marginBottom: 10, color: Colors.dark.text, textAlign: "center" },
-  modalButton: { marginTop: 20 },
-  inputRow: { flexDirection: "row", alignItems: "center", marginVertical: 8, width: "100%", justifyContent: "space-between", },
-});
