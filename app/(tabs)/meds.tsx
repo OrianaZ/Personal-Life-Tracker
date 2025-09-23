@@ -6,7 +6,7 @@ import { Alert, KeyboardAvoidingView, Modal, Platform, ScrollView, TextInput, To
 import { medsStyles } from "@/components/styles/_meds.styles";
 
 //context
-import { useMeds } from "@/components/context/MedsContext";
+import { Medication, useMeds } from "@/components/context/MedsContext";
 
 //theme
 import { Colors } from "@/components/theme/Colors";
@@ -89,15 +89,20 @@ export default function MedsScreen() {
 
   const saveMedication = () => {
     const parsedTimes = timeInputs
-      .map((t) => parseTime(t))
-      .filter((t): t is Date => t !== null);
+      .map((t) => {
+        const match = /^([01]?\d|2[0-3]):([0-5]\d)$/.exec(t.time);
+        if (!match) return null;
+        const [, hh, mm] = match;
+        return `${hh.padStart(2, "0")}:${mm.padStart(2, "0")}`; // store as HH:mm string
+      })
+      .filter((t): t is string => t !== null);
 
     if (!name || !pills || parsedTimes.length === 0) {
       Alert.alert("Error", "Please fill all fields and times.");
       return;
     }
 
-    const medData = {
+    const medData: Medication = {
       id: editingId || Date.now().toString(),
       name,
       pills,
@@ -114,6 +119,7 @@ export default function MedsScreen() {
     resetModal();
   };
 
+
   return (
     <ScrollView
       style={{ flex: 1, width: "100%" }}
@@ -124,12 +130,20 @@ export default function MedsScreen() {
         const allTaken = takenArray.every(Boolean);
         const now = new Date();
 
+        const getTodayTime = (hhmm: string) => {
+          const [hh, mm] = hhmm.split(":").map(Number);
+          const d = new Date();
+          d.setHours(hh, mm, 0, 0);
+          return d;
+        };
+
         // Split untaken and taken times
         const untakenTimes = med.times
-          .map((t: Date, idx: number) => ({ time: t, idx }))
+          .map((t, idx) => ({ time: getTodayTime(t), idx }))
           .filter(({ idx }) => !takenTimes[med.id]?.[idx]);
+
         const takenTimesList = med.times
-          .map((t: Date, idx: number) => ({ time: t, idx }))
+          .map((t, idx) => ({ time: getTodayTime(t), idx }))
           .filter(({ idx }) => takenTimes[med.id]?.[idx]);
 
         // Split untaken into past/future

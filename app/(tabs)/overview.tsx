@@ -76,7 +76,7 @@ export default function OverviewScreen() {
   const sodaMin = 0;
   const sodaMax = 100;
   // --- compute min/max ignoring NaN/null so axis scaling stays correct ---
-  const allRelevant = [...fastingData, ...waterData];
+  const allRelevant = [...sodaData, ...waterData, ...sodaPrev, ...waterPrev];
   const numeric = allRelevant.filter((v) => v != null && !Number.isNaN(v)) as number[];
 
   const minY = numeric.length ? Math.min(...numeric, 0) : 0;
@@ -182,7 +182,8 @@ export default function OverviewScreen() {
         data={{
           labels: xLabels,
           datasets: [
-            { data: Array(daysInMonth).fill(14.8), color: () => 'rgba(255, 99, 71, 0.2)', strokeWidth: 60, },
+            { data: Array(daysInMonth).fill(26), color: () => 'transparent', strokeWidth: 0, },
+            { data: Array(daysInMonth).fill(14.55), color: () => 'rgba(255, 99, 71, 0.2)', strokeWidth: 40, },
             { data: Array(daysInMonth).fill(16), color: () => Colors.light.red, strokeWidth: 1, strokeDashArray: [4,4], },
             { data: forceMin14(fastingPrev) as unknown as number[], color: () => Colors.dark.orange, strokeWidth: 1, },
             { data: forceMin14(fastingData) as unknown as number[], color: () => Colors.light.orange, strokeWidth: 2, },

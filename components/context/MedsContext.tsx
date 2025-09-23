@@ -12,7 +12,7 @@ export type Medication = {
   id: string;
   name: string;
   pills: string;
-  times: Date[];
+  times: string[];
 };
 
 type MedsContextType = {
@@ -38,77 +38,76 @@ export const MedsProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [wait, setWait] = useState(false);
   const [currentDayKey, setCurrentDayKey] = useState<string>(new Date().toDateString());
 
-// Load medications + takenTimes
-useEffect(() => {
-  const loadData = async () => {
-    const storedMeds = await AsyncStorage.getItem(STORAGE_KEYS.MEDICATIONS);
-    const storedTaken = await AsyncStorage.getItem(STORAGE_KEYS.TAKEN_TIMES);
-    const todayKey = new Date().toDateString();
-
-    let meds: Medication[] = [];
-    if (storedMeds) {
-      meds = JSON.parse(storedMeds).map((m: any) => ({
-        ...m,
-        times: m.times.map((t: string) => new Date(t)),
-      }));
-      setMedications(meds);
-    }
-
-    let initTaken: { [medId: string]: boolean[] } = {};
-
-    if (storedTaken) {
-      try {
-        const parsed = JSON.parse(storedTaken);
-        if (parsed?.date === todayKey && parsed?.data) {
-          initTaken = parsed.data;
-        }
-      } catch {
-        console.warn("Failed to parse takenTimes");
-      }
-    }
-
-    meds.forEach((med) => {
-      if (!initTaken[med.id] || initTaken[med.id].length !== med.times.length) {
-        initTaken[med.id] = med.times.map(() => false);
-      }
-    });
-
-    setTakenTimes(initTaken);
-    setCurrentDayKey(todayKey);
-    setWait(true);
+  // Helper to get today's Date from HH:mm
+  const getTodayTime = (hhmm: string) => {
+    const [hh, mm] = hhmm.split(":").map(Number);
+    const d = new Date();
+    d.setHours(hh, mm, 0, 0);
+    return d;
   };
 
-  loadData();
-}, []);
-
+  // Load medications + takenTimes
   useEffect(() => {
-    AsyncStorage.setItem(
-      STORAGE_KEYS.MEDICATIONS,
-      JSON.stringify(
-        medications.map((m) => ({
-          ...m,
-          times: m.times.map((t) => t.toISOString()),
-        }))
-      )
-    );
+    const loadData = async () => {
+      const storedMeds = await AsyncStorage.getItem(STORAGE_KEYS.MEDICATIONS);
+      const storedTaken = await AsyncStorage.getItem(STORAGE_KEYS.TAKEN_TIMES);
+      const todayKey = new Date().toDateString();
+
+      let meds: Medication[] = [];
+      if (storedMeds) {
+        meds = JSON.parse(storedMeds);
+        setMedications(meds);
+      }
+
+      let initTaken: { [medId: string]: boolean[] } = {};
+
+      if (storedTaken) {
+        try {
+          const parsed = JSON.parse(storedTaken);
+          if (parsed?.date === todayKey && parsed?.data) {
+            initTaken = parsed.data;
+          }
+        } catch {
+          console.warn("Failed to parse takenTimes");
+        }
+      }
+
+      meds.forEach((med) => {
+        if (!initTaken[med.id] || initTaken[med.id].length !== med.times.length) {
+          initTaken[med.id] = med.times.map(() => false);
+        }
+      });
+
+      setTakenTimes(initTaken);
+      setCurrentDayKey(todayKey);
+      setWait(true);
+    };
+
+    loadData();
+  }, []);
+
+  // Save medications
+  useEffect(() => {
+    AsyncStorage.setItem(STORAGE_KEYS.MEDICATIONS, JSON.stringify(medications));
   }, [medications]);
 
-  // Save taken to storage whenever they change  
-useEffect(() => {
+  // Save taken times whenever they change
+  useEffect(() => {
     if (!wait) return;
-  const saveTakenTimes = async () => {
-    try {
-      await AsyncStorage.setItem(
-        STORAGE_KEYS.TAKEN_TIMES,
-        JSON.stringify({ date: currentDayKey, data: takenTimes })
-      );
-    } catch (e) {
-      console.warn("Failed to save takenTimes:", e);
-    }
-  };
-  saveTakenTimes();
-}, [takenTimes]);
+    const saveTakenTimes = async () => {
+      try {
+        await AsyncStorage.setItem(
+          STORAGE_KEYS.TAKEN_TIMES,
+          JSON.stringify({ date: currentDayKey, data: takenTimes })
+        );
+      } catch (e) {
+        console.warn("Failed to save takenTimes:", e);
+      }
+    };
+    saveTakenTimes();
+  }, [takenTimes]);
 
+  // Reset takenTimes at local midnight
   useEffect(() => {
     const checkMidnight = () => {
       const todayKey = new Date().toDateString();
@@ -125,7 +124,8 @@ useEffect(() => {
     checkMidnight();
 
     const now = new Date();
-    const msUntilMidnight = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1).getTime() - now.getTime();
+    const msUntilMidnight =
+      new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1).getTime() - now.getTime();
 
     const timeout = setTimeout(() => {
       const resetTaken = medications.reduce((acc, med) => {
@@ -151,7 +151,7 @@ useEffect(() => {
     });
   };
 
-  // Calculate next unchecked medications
+  // Calculate next unchecked medications in local time
   useEffect(() => {
     const now = new Date();
     let nextMedTime: Date | null = null;
@@ -160,9 +160,8 @@ useEffect(() => {
     medications.forEach((med) => {
       const taken = takenTimes[med.id] || Array(med.times.length).fill(false);
 
-      med.times.forEach((time, idx) => {
-        const medTime = new Date(time);
-        medTime.setFullYear(now.getFullYear(), now.getMonth(), now.getDate());
+      med.times.forEach((timeStr, idx) => {
+        const medTime = getTodayTime(timeStr);
 
         if (!taken[idx]) {
           if (!nextMedTime || medTime < nextMedTime) {
@@ -175,15 +174,14 @@ useEffect(() => {
       });
     });
 
-    if (nextMedTime) {
-      setNextMedications({ time: nextMedTime, meds: nextMeds });
-    } else {
-      setNextMedications(null);
-    }
+    if (nextMedTime) setNextMedications({ time: nextMedTime, meds: nextMeds });
+    else setNextMedications(null);
   }, [medications, takenTimes]);
 
   return (
-    <MedsContext.Provider value={{ medications, setMedications, nextMedications, takenTimes, toggleTaken }}>
+    <MedsContext.Provider
+      value={{ medications, setMedications, nextMedications, takenTimes, toggleTaken }}
+    >
       {children}
     </MedsContext.Provider>
   );
