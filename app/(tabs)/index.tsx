@@ -1,13 +1,21 @@
-import { StyleSheet, TouchableOpacity, View } from 'react-native';
+//general
+import { useRouter } from 'expo-router';
+import { useContext } from 'react';
+import { TouchableOpacity, View } from 'react-native';
 
+//styles
+import { indexStyles } from '@/components/styles/_index.styles';
+
+//context
 import { useFasting } from "@/components/context/FastingContext";
 import { MealsContext } from '@/components/context/MealsContext';
 import { useMeds } from "@/components/context/MedsContext";
 import { useWater } from '@/components/context/WaterContext';
+
+//theme
+import { Colors } from '@/components/theme/Colors';
 import { ThemedText } from '@/components/theme/ThemedText';
-import { Colors } from '@/constants/Colors';
-import { useRouter } from 'expo-router';
-import { useContext } from 'react';
+
 
 export default function HomeScreen() {
     const router = useRouter();
@@ -25,10 +33,10 @@ export default function HomeScreen() {
     const todayIntake = getTodayIntake();
 
   return (
-    <View  style={styles.homePage}>
+    <View  style={indexStyles.homePage}>
 
       {/* Fasting */}
-      <TouchableOpacity style={styles.FastingContainer} onPress={() => router.push('/fasting')}>
+      <TouchableOpacity style={indexStyles.FastingContainer} onPress={() => router.push('/fasting')}>
         <ThemedText type="subtitle">
           {isFasting ? "Fasted For" : "Time Until Fast"}: {timerText}
         </ThemedText>
@@ -36,18 +44,18 @@ export default function HomeScreen() {
 
        {/* Dinner */}
       {todayMeal && (
-          <TouchableOpacity style={styles.dinnerContainer} onPress={() => router.push('/meals')}>
-            <View style={styles.dayHeader}>
-              <ThemedText type="subtitle" style={styles.WeekDay}>Dinner</ThemedText>
-              {todayMeal.out ? <ThemedText style={styles.Out}>{todayMeal.out}</ThemedText> : null}
+          <TouchableOpacity style={indexStyles.dinnerContainer} onPress={() => router.push('/meals')}>
+            <View style={indexStyles.dayHeader}>
+              <ThemedText type="subtitle" style={indexStyles.WeekDay}>Dinner</ThemedText>
+              {todayMeal.out ? <ThemedText style={indexStyles.Out}>{todayMeal.out}</ThemedText> : null}
             </View>
-            {todayMeal.main ? <ThemedText style={styles.Main}>{todayMeal.main}</ThemedText> : null}
-            {todayMeal.side ? <ThemedText style={styles.Side}>{todayMeal.side}</ThemedText> : null}
+            {todayMeal.main ? <ThemedText style={indexStyles.Main}>{todayMeal.main}</ThemedText> : null}
+            {todayMeal.side ? <ThemedText style={indexStyles.Side}>{todayMeal.side}</ThemedText> : null}
           </TouchableOpacity>
         )}
 
         {/* Medications */}
-        <TouchableOpacity style={ styles.medContainer } onPress={() => router.push('/meds')}>
+        <TouchableOpacity style={ indexStyles.medContainer } onPress={() => router.push('/meds')}>
           <ThemedText style={{ fontWeight: "bold" }}>Meds:</ThemedText>
           {nextMedications ? (
             <ThemedText style={{ color: nextMedications.time < new Date() ? Colors.light.red : Colors.light.text,}}>
@@ -60,13 +68,13 @@ export default function HomeScreen() {
         </TouchableOpacity>
 
          {/* Water + Soda Intake */}
-        <TouchableOpacity style={styles.waterContainer} onPress={() => router.push('/water')}>
+        <TouchableOpacity style={indexStyles.waterContainer} onPress={() => router.push('/water')}>
           <ThemedText style={{ fontWeight: "bold" }}>Today’s Intake:</ThemedText>
-          <View style={styles.sodawater}>
-            <ThemedText style={styles.soda}>
+          <View style={indexStyles.sodawater}>
+            <ThemedText style={indexStyles.soda}>
               Soda: {todayIntake.soda} oz
             </ThemedText>
-            <ThemedText style={styles.water}>
+            <ThemedText style={indexStyles.water}>
               Water: {todayIntake.water} oz
             </ThemedText>
           </View>
@@ -74,24 +82,3 @@ export default function HomeScreen() {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  homePage: {flex: 1, justifyContent: "center", marginBottom: 50},
-  
-  FastingContainer: { marginHorizontal: 20, flexDirection: 'row', alignItems: 'center', gap: 8, padding: 12, borderWidth: 1, borderColor: Colors.dark.borderGray, borderRadius: 10,},
-
-  dinnerContainer: { margin: 20, padding: 12, borderWidth: 1, borderColor: Colors.dark.borderGray, borderRadius: 10,},
-  dayHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6, },
-  WeekDay: { fontWeight: "bold", textDecorationLine: "underline", fontSize: 18, color: Colors.light.purple, },
-  Out: { fontStyle: "italic", color: Colors.light.gray, fontSize: 14, },
-  Main: { fontWeight: "bold", fontSize: 16, marginBottom: 2, },
-  Side: { fontStyle: "italic", color: Colors.light.gray, fontSize: 14, marginLeft: 12, },
-
-  medContainer: { marginHorizontal: 20, padding: 12, borderWidth: 1, borderColor: Colors.dark.borderGray, borderRadius: 10,},
-
-  waterContainer: { margin: 20, padding: 12, borderWidth: 1, borderColor: Colors.dark.borderGray, borderRadius: 10,},
-  sodawater:{ flexDirection: "row", justifyContent: "space-around", alignItems: "center", flexWrap: "wrap", marginTop:5, },
-  soda:{ color: Colors.light.purple, fontSize: 16},
-  water:{ color: Colors.light.blue, fontSize: 16},
-
-});

@@ -1,20 +1,23 @@
+//general
 import DateTimePicker from "@react-native-community/datetimepicker";
 import dayjs from "dayjs";
 import React, { useRef, useState } from "react";
-import {
-  FlatList, Modal,
-  TouchableOpacity, TouchableWithoutFeedback, View
-} from "react-native";
+import { FlatList, Modal, TouchableOpacity, TouchableWithoutFeedback, View } from "react-native";
 
+//styles
+import { fastingStyles } from "@/components/styles/_fasting.styles";
+
+//context
 import { useFasting } from "@/components/context/FastingContext";
-import { ThemedText } from "@/components/theme/ThemedText";
-import { Colors } from "@/constants/Colors";
 
+//theme
+import { Colors } from "@/components/theme/Colors";
+import { ThemedText } from "@/components/theme/ThemedText";
+
+//functions
 import FastingCalendar from "@/components/tabHelpers/Fasting/FastingCalendar";
 import LastMealDateTimePicker from "@/components/tabHelpers/Fasting/LastMealDateTimePicker";
 import ProgressBar from "@/components/tabHelpers/Fasting/ProgressBar";
-
-import { styles } from "@/components/styles/_fasting.styles";
 
 
 export default function FastingScreen() {
@@ -91,9 +94,9 @@ if (fastStartRef) {
 
   // ---------- JSX ----------
   return (
-    <View style={styles.container}>
+    <View style={fastingStyles.container}>
       {!isFasting && (
-        <View style={styles.lastMealContainer}>
+        <View style={fastingStyles.lastMealContainer}>
           <ThemedText type="subtitle">Last Meal:</ThemedText>
           <LastMealDateTimePicker
             value={pickerTime}
@@ -103,8 +106,8 @@ if (fastStartRef) {
         </View>
       )}
 
-      <View style={styles.container2}>
-        <View style={styles.topText}>
+      <View style={fastingStyles.container2}>
+        <View style={fastingStyles.topText}>
           <ThemedText type="subtitle">{isFasting ? "Fasted For" : "Time Until Fast"}</ThemedText>
           <ThemedText type="subtitle">{timerText}</ThemedText>
         </View>
@@ -117,21 +120,21 @@ if (fastStartRef) {
         />
 
         {!isFasting ? (
-          <TouchableOpacity style={styles.button} onPress={() => handleStartFast(pickerTime)}>
-            <ThemedText style={styles.buttonText}>Start Fast</ThemedText>
+          <TouchableOpacity style={fastingStyles.button} onPress={() => handleStartFast(pickerTime)}>
+            <ThemedText style={fastingStyles.buttonText}>Start Fast</ThemedText>
           </TouchableOpacity>
         ) : (
-          <TouchableOpacity style={styles.button} onPress={() => setShowEndPicker(true)}>
-            <ThemedText style={styles.buttonText}>End Fast</ThemedText>
+          <TouchableOpacity style={fastingStyles.button} onPress={() => setShowEndPicker(true)}>
+            <ThemedText style={fastingStyles.buttonText}>End Fast</ThemedText>
           </TouchableOpacity>
         )}
 
         <Modal visible={showEndPicker} transparent animationType="fade">
           <TouchableWithoutFeedback onPress={() => setShowEndPicker(false)}>
-            <View style={styles.modalBackground}>
+            <View style={fastingStyles.modalBackground}>
               <TouchableWithoutFeedback>
-                <View style={styles.modalContent}>
-                  <ThemedText type="default" style={styles.modalText}>Select fast end time</ThemedText>
+                <View style={fastingStyles.modalContent}>
+                  <ThemedText type="default" style={fastingStyles.modalText}>Select fast end time</ThemedText>
 
                   <DateTimePicker
                     value={endTempTime}
@@ -143,13 +146,13 @@ if (fastStartRef) {
                   />
 
                   <TouchableOpacity
-                    style={[styles.button, styles.modalButton]}
+                    style={[fastingStyles.button, fastingStyles.modalButton]}
                     onPress={() => {
                       handleEndFast(endTempTime);
                       setShowEndPicker(false);
                     }}
                   >
-                    <ThemedText style={styles.buttonText}>End</ThemedText>
+                    <ThemedText style={fastingStyles.buttonText}>End</ThemedText>
                   </TouchableOpacity>
                 </View>
               </TouchableWithoutFeedback>

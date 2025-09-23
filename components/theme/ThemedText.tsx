@@ -1,5 +1,9 @@
-import { Colors } from '@/constants/Colors';
+//general
 import { StyleSheet, Text, type TextProps } from 'react-native';
+
+//theme
+import { Colors } from '@/components/theme/Colors';
+
 
 export type ThemedTextProps = TextProps & {
   lightColor?: string;

@@ -1,24 +1,18 @@
-// WaterScreen.tsx
-import { useWater } from "@/components/context/WaterContext";
-import { ThemedText } from "@/components/theme/ThemedText";
-import { Colors } from "@/constants/Colors";
+//general
 import dayjs from "dayjs";
 import React, { useRef, useState } from "react";
-import {
-  FlatList,
-  Modal,
-  StyleSheet,
-  TextInput,
-  TouchableOpacity,
-  TouchableWithoutFeedback,
-  View,
-} from "react-native";
+import { FlatList, Modal, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 
-type DailyIntake = {
-  water: number;
-  soda: number;
-};
+//styles
+import { waterStyles } from "@/components/styles/_water.styles";
+
+//context
+import { useWater } from "@/components/context/WaterContext";
+
+//theme
+import { Colors } from "@/components/theme/Colors";
+import { ThemedText } from "@/components/theme/ThemedText";
 
 export default function WaterScreen() {
   const { log, addWater, addSoda, updateIntake, getTodayIntake } = useWater();
@@ -99,31 +93,31 @@ export default function WaterScreen() {
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <View style={styles.container}>
+      <View style={waterStyles.container}>
         {/* <ThemedText type="title">Water Tracker</ThemedText> */}
 
-        <View style={styles.totalContainer}>
-          <ThemedText style={styles.totalTitle}>Total Today:</ThemedText>
-          <View style={styles.totalRow}>
-            <ThemedText style={[styles.totalValue, { color: Colors.light.purple }]}>
+        <View style={waterStyles.totalContainer}>
+          <ThemedText style={waterStyles.totalTitle}>Total Today:</ThemedText>
+          <View style={waterStyles.totalRow}>
+            <ThemedText style={[waterStyles.totalValue, { color: Colors.light.purple }]}>
               Soda: {todayIntake.soda}oz
             </ThemedText>
-            <ThemedText style={styles.totalSeparator}> | </ThemedText>
-            <ThemedText style={[styles.totalValue, { color: Colors.light.blue }]}>
+            <ThemedText style={waterStyles.totalSeparator}> | </ThemedText>
+            <ThemedText style={[waterStyles.totalValue, { color: Colors.light.blue }]}>
               Water: {todayIntake.water}oz
             </ThemedText>
           </View>
         </View>
 
         {/* Middle content */}
-        <View style={styles.middleContent}>
-          <ThemedText style={styles.header}>Soda</ThemedText>
-          <View style={styles.buttonRow}>
+        <View style={waterStyles.middleContent}>
+          <ThemedText style={waterStyles.header}>Soda</ThemedText>
+          <View style={waterStyles.buttonRow}>
             {sodaOptions.map((item) => (
               <TouchableOpacity
                 key={item.name}
                 style={[
-                  styles.button,
+                  waterStyles.button,
                   {
                     backgroundColor:
                       selectedSoda === item.oz ? Colors.light.purple : "transparent",
@@ -139,13 +133,13 @@ export default function WaterScreen() {
             ))}
           </View>
 
-          <ThemedText style={styles.header}>Water</ThemedText>
-          <View style={styles.buttonRow}>
+          <ThemedText style={waterStyles.header}>Water</ThemedText>
+          <View style={waterStyles.buttonRow}>
             {waterOptions.map((oz) => (
               <TouchableOpacity
                 key={oz}
                 style={[
-                  styles.button,
+                  waterStyles.button,
                   {
                     backgroundColor:
                       selectedWater === oz ? Colors.light.blue : "transparent",
@@ -159,18 +153,18 @@ export default function WaterScreen() {
             ))}
           </View>
 
-          <TouchableOpacity style={styles.confirmButton} onPress={confirmSelection}>
-            <ThemedText style={styles.confirmText}>Confirm</ThemedText>
+          <TouchableOpacity style={waterStyles.confirmButton} onPress={confirmSelection}>
+            <ThemedText style={waterStyles.confirmText}>Confirm</ThemedText>
           </TouchableOpacity>
         </View>
 
         {/* Calendar */}
-        <View style={styles.container3}>
-          <View style={styles.header}>
+        <View style={waterStyles.container3}>
+          <View style={waterStyles.header}>
             <ThemedText type="title">{currentMonth}</ThemedText>
             {showTodayButton && (
               <TouchableOpacity onPress={scrollToToday}>
-                <ThemedText style={styles.todayButton}>Today</ThemedText>
+                <ThemedText style={waterStyles.todayButton}>Today</ThemedText>
               </TouchableOpacity>
             )}
           </View>
@@ -202,11 +196,11 @@ export default function WaterScreen() {
                   }}
                   disabled={isFuture}
                 >
-                  <View style={[styles.item, isToday && styles.todayItem, isFuture && styles.futureItem]}>
-                    <ThemedText style={styles.itemText}>
+                  <View style={[waterStyles.item, isToday && waterStyles.todayItem, isFuture && waterStyles.futureItem]}>
+                    <ThemedText style={waterStyles.itemText}>
                       {item.format("ddd")} {item.format("D")}
                     </ThemedText>
-                    <ThemedText style={styles.itemoz}>
+                    <ThemedText style={waterStyles.itemoz}>
                       {dayLog.soda > 0 && (
                         <ThemedText style={{ color: isToday ? Colors.dark.purple : Colors.light.purple }}>
                           {dayLog.soda}
@@ -229,41 +223,41 @@ export default function WaterScreen() {
         {/* Edit Modal */}
         <Modal visible={showEditModal} transparent animationType="fade">
           <TouchableWithoutFeedback onPress={() => setShowEditModal(false)}>
-            <View style={styles.modalBackground}>
+            <View style={waterStyles.modalBackground}>
               <TouchableWithoutFeedback>
-                <View style={styles.modalContent}>
-                  <ThemedText type="default" style={styles.modalText}>
+                <View style={waterStyles.modalContent}>
+                  <ThemedText type="default" style={waterStyles.modalText}>
                     {editingDate
                       ? `Edit intake on\n${formatDateWithOrdinal(editingDate)}`
                       : "Edit intake"}
                   </ThemedText>
 
-                  <View style={styles.inputRow}>
-                    <ThemedText style={[styles.label, { color: Colors.light.purple }]}>Soda</ThemedText>
+                  <View style={waterStyles.inputRow}>
+                    <ThemedText style={[waterStyles.label, { color: Colors.light.purple }]}>Soda</ThemedText>
                     <TextInput
                       keyboardType="decimal-pad"
                       value={editingSoda}
                       onChangeText={setEditingSoda}
-                      style={[styles.editInput, { borderColor: Colors.light.purple }]}
+                      style={[waterStyles.editInput, { borderColor: Colors.light.purple }]}
                       placeholder="soda ounces"
                       placeholderTextColor={Colors.dark.text}
                     />
                   </View>
 
-                  <View style={styles.inputRow}>
-                    <ThemedText style={[styles.label, { color: Colors.light.blue }]}>Water</ThemedText>
+                  <View style={waterStyles.inputRow}>
+                    <ThemedText style={[waterStyles.label, { color: Colors.light.blue }]}>Water</ThemedText>
                     <TextInput
                       keyboardType="decimal-pad"
                       value={editingWater}
                       onChangeText={setEditingWater}
-                      style={[styles.editInput, { borderColor: Colors.light.blue }]}
+                      style={[waterStyles.editInput, { borderColor: Colors.light.blue }]}
                       placeholder="water ounces"
                       placeholderTextColor={Colors.dark.text}                      
                     />
                   </View>
 
-                  <TouchableOpacity style={[styles.button, styles.modalButton]} onPress={saveEditedIntake}>
-                    <ThemedText style={styles.buttonText}>Save</ThemedText>
+                  <TouchableOpacity style={[waterStyles.button, waterStyles.modalButton]} onPress={saveEditedIntake}>
+                    <ThemedText style={waterStyles.buttonText}>Save</ThemedText>
                   </TouchableOpacity>
                 </View>
               </TouchableWithoutFeedback>
@@ -274,41 +268,3 @@ export default function WaterScreen() {
     </GestureHandlerRootView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: { flex: 2, padding: 20, justifyContent: 'center' },
-
-  // Total Today
-  totalContainer: { alignItems: "center", justifyContent: 'center', marginBottom: 30, },
-  totalTitle: { fontSize: 22, fontWeight: "bold", marginBottom: 8, },
-  totalRow: { flexDirection: "row", justifyContent: "center", alignItems: "center", flexWrap: "wrap", },
-  totalValue: { fontSize: 20, fontWeight: "600", marginHorizontal: 10, },
-  totalSeparator: { fontSize: 20, fontWeight: "bold", color: Colors.light.text, },
-
-  // Buttons
-  middleContent: { justifyContent: "center", marginBottom: 150,},
-  buttonRow: { flexDirection: "row", flexWrap: "wrap", gap:5 },
-  button: { padding: 12, borderWidth: 1, borderRadius: 8, margin: 5 },
-  confirmButton: { backgroundColor: Colors.light.purple, borderColor: Colors.light.purple, padding: 12, borderRadius: 8, alignItems: "center", marginTop: 10 },
-  confirmText: { fontWeight: "bold", color: "#fff", fontSize: 16, },
-
-  // Calendar
-  container3: { paddingVertical: 20, position: "absolute", bottom: 50, left: 0, right: 0 },
-  header: { flexDirection: "row", justifyContent: "space-between", paddingHorizontal: 10, marginTop:10 },
-  todayButton: { color: Colors.light.purple, fontWeight: "bold" },
-  item: { width: 85, height: 90, marginHorizontal: 5, borderRadius: 8, padding: 10, paddingTop: 15, alignItems: "center", borderWidth: 1, borderColor: Colors.light.borderGray },
-  todayItem: { backgroundColor: Colors.light.purple, borderWidth: 0 },
-  futureItem: { opacity: 0.6 },
-  itemText: { fontWeight: "bold" },
-  itemoz: { marginTop: 5, fontWeight: "bold" },
-
-  // Modal
-  modalBackground: { flex: 1, backgroundColor: "rgba(0,0,0,0.5)", justifyContent: "center", alignItems: "center" },
-  modalContent: { backgroundColor: Colors.light.background, padding: 20, borderRadius: 12, width: "80%", alignItems: "center" },
-  modalText: { marginBottom: 10, color: Colors.dark.text, textAlign: "center" },
-  inputRow: { flexDirection: "row", alignItems: "center", marginVertical: 8, width: "100%", justifyContent: "space-between", },
-  label: { fontWeight: "bold", fontSize: 16, marginRight: 10, width: 50, textAlign: "right", },
-  editInput: { borderWidth: 1, padding: 10, width: "75%", textAlign: "center", borderRadius: 8, marginVertical: 5 },
-  modalButton: { marginTop: 20, backgroundColor: Colors.light.purple, borderColor: Colors.light.purple, width: 100},
-  buttonText: { fontWeight: "bold", textAlign: "center" },
-});

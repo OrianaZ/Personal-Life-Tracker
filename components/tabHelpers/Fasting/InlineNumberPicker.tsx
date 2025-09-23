@@ -1,6 +1,10 @@
-import { Colors } from "@/constants/Colors";
+//general
 import { FlatList, TouchableOpacity, View } from "react-native";
-import { ThemedText } from "../../theme/ThemedText";
+
+//theme
+import { Colors } from "@/components/theme/Colors";
+import { ThemedText } from "@/components/theme/ThemedText";
+
 
 export default function InlineNumberPicker({ 
   type, data, value, onChange, visible,

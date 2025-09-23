@@ -1,5 +1,7 @@
+//general
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { createContext, ReactNode, useEffect, useState } from 'react';
+
 
 const STORAGE_KEYS = { MEALS: 'MEALS_DATA' };
 const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];

@@ -1,6 +1,8 @@
+//general
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import dayjs from "dayjs";
 import React, { createContext, useContext, useEffect, useState } from "react";
+
 
 type DailyIntake = {
   water: number;

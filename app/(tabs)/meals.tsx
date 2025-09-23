@@ -1,21 +1,26 @@
+//general
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
-import {
-  Alert, InteractionManager, Keyboard, KeyboardAvoidingView, Modal,
-  Platform, ScrollView, StyleSheet,
-  TextInput, TouchableOpacity,
-  View
-} from 'react-native';
+import { Alert, InteractionManager, Keyboard, KeyboardAvoidingView, Modal, Platform, ScrollView, TextInput, TouchableOpacity, View } from 'react-native';
 import { RenderItemParams } from 'react-native-draggable-flatlist';
 import type { FlatList } from "react-native-gesture-handler";
 import { TabBar, TabView } from 'react-native-tab-view';
 
+//styles
+import { mealsStyles } from '@/components/styles/_meals.styles';
+
+//context
 import { MealsContext } from '@/components/context/MealsContext';
+
+//theme
+import { Colors } from '@/components/theme/Colors';
+import { ThemedText } from '@/components/theme/ThemedText';
+
+//functions
 import GroceryScene from '@/components/tabHelpers/Meals/GroceryScene';
 import ScanScene from '@/components/tabHelpers/Meals/scanScene';
-import { ThemedText } from '@/components/theme/ThemedText';
-import { Colors } from '@/constants/Colors';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 const STORAGE_KEY = 'GROCERY_ITEMS';
 
@@ -71,8 +76,8 @@ const RenderGroceryItem = React.memo(
     };
 
     return (
-      <View style={[styles.groceryItemContainer, isActive && styles.activeItem, { alignItems: "center" }]}>
-        <TouchableOpacity onLongPress={drag} onPressIn={drag} delayLongPress={150} style={styles.dragHandle}>
+      <View style={[mealsStyles.groceryItemContainer, isActive && mealsStyles.activeItem, { alignItems: "center" }]}>
+        <TouchableOpacity onLongPress={drag} onPressIn={drag} delayLongPress={150} style={mealsStyles.dragHandle}>
           <MaterialCommunityIcons name="drag" size={20} color={Colors.light.gray} />
         </TouchableOpacity>
 
@@ -87,7 +92,7 @@ const RenderGroceryItem = React.memo(
         {isEditing ? (
           <TextInput
             ref={inputRef}
-            style={[styles.groceryItemText, { flex: 1 }]}
+            style={[mealsStyles.groceryItemText, { flex: 1 }]}
             value={editText}
             onChangeText={setEditText}
             onBlur={saveEdit}
@@ -104,14 +109,14 @@ const RenderGroceryItem = React.memo(
               requestAnimationFrame(() => setIsEditing(true));
             }}
           >
-            <ThemedText style={[styles.groceryItemText, item.checked && styles.checkedText]}>
+            <ThemedText style={[mealsStyles.groceryItemText, item.checked && mealsStyles.checkedText]}>
               {item.text}
             </ThemedText>
           </TouchableOpacity>
         )}
 
         <TextInput
-          style={styles.quantityInput}
+          style={mealsStyles.quantityInput}
           keyboardType="number-pad"
           value={localQuantity}
           onChangeText={setLocalQuantity}
@@ -254,19 +259,19 @@ export default function MealsScreen() {
   }, []);
 
   const MealsScene = useCallback(() => (
-    <ScrollView contentContainerStyle={styles.scrollContainer} keyboardShouldPersistTaps="handled">
+    <ScrollView contentContainerStyle={mealsStyles.scrollContainer} keyboardShouldPersistTaps="handled">
       {daysOfWeek.map(day => (
-        <TouchableOpacity key={day} style={styles.dayContainer} onPress={() => openMealModal(day)}>
-          <View style={styles.dayHeader}>
-            <ThemedText type="subtitle" style={styles.WeekDay}>{day}</ThemedText>
-            {mealData[day]?.out ? <ThemedText style={styles.Out}>{mealData[day]?.out}</ThemedText> : null}
+        <TouchableOpacity key={day} style={mealsStyles.dayContainer} onPress={() => openMealModal(day)}>
+          <View style={mealsStyles.dayHeader}>
+            <ThemedText type="subtitle" style={mealsStyles.WeekDay}>{day}</ThemedText>
+            {mealData[day]?.out ? <ThemedText style={mealsStyles.Out}>{mealData[day]?.out}</ThemedText> : null}
           </View>
-          {mealData[day]?.main ? <ThemedText style={styles.Main}>{mealData[day]?.main}</ThemedText> : null}
-          {mealData[day]?.side ? <ThemedText style={styles.Side}>{mealData[day]?.side}</ThemedText> : null}
+          {mealData[day]?.main ? <ThemedText style={mealsStyles.Main}>{mealData[day]?.main}</ThemedText> : null}
+          {mealData[day]?.side ? <ThemedText style={mealsStyles.Side}>{mealData[day]?.side}</ThemedText> : null}
         </TouchableOpacity>
       ))}
-      <TouchableOpacity style={[styles.button, { backgroundColor: Colors.light.red, marginBottom: 80 }]} onPress={clearAllMeals}>
-        <ThemedText style={styles.buttonText}>Clear All Meals</ThemedText>
+      <TouchableOpacity style={[mealsStyles.button, { backgroundColor: Colors.light.red, marginBottom: 80 }]} onPress={clearAllMeals}>
+        <ThemedText style={mealsStyles.buttonText}>Clear All Meals</ThemedText>
       </TouchableOpacity>
     </ScrollView>
   ), [mealData]);
@@ -309,7 +314,7 @@ export default function MealsScreen() {
   return (
     <>
       <TabView
-        style={styles.tabContainer}
+        style={mealsStyles.tabContainer}
         navigationState={{ index, routes }}
         renderScene={renderScene}
         onIndexChange={setIndex}
@@ -326,11 +331,11 @@ export default function MealsScreen() {
 
       {/* Meals Modal */}
       <Modal visible={mealModalVisible} transparent animationType="slide">
-        <KeyboardAvoidingView style={styles.modalContainer} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
-          <View style={styles.modalContent}>
+        <KeyboardAvoidingView style={mealsStyles.modalContainer} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+          <View style={mealsStyles.modalContent}>
             <ThemedText style={{ fontWeight: 'bold', marginBottom: 10 }}>{selectedDay}</ThemedText>
             <TextInput
-              style={styles.modalInput}
+              style={mealsStyles.modalInput}
               placeholder="Out"
               placeholderTextColor={Colors.light.placeholder}
               value={tempMeal.out}
@@ -339,25 +344,25 @@ export default function MealsScreen() {
             />
             <TextInput
               ref={mainInputRef}
-              style={styles.modalInput}
+              style={mealsStyles.modalInput}
               placeholder="Main"
               placeholderTextColor={Colors.light.placeholder}
               value={tempMeal.main}
               onChangeText={val => setTempMeal(prev => ({ ...prev, main: val }))}
             />
             <TextInput
-              style={styles.modalInput}
+              style={mealsStyles.modalInput}
               placeholder="w/"
               placeholderTextColor={Colors.light.placeholder}
               value={tempMeal.side}
               onChangeText={val => setTempMeal(prev => ({ ...prev, side: val }))}
             />
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 12 }}>
-              <TouchableOpacity style={[styles.button, { backgroundColor: 'gray' }]} onPress={cancelMealModal}>
-                <ThemedText style={styles.buttonText}>Cancel</ThemedText>
+              <TouchableOpacity style={[mealsStyles.button, { backgroundColor: 'gray' }]} onPress={cancelMealModal}>
+                <ThemedText style={mealsStyles.buttonText}>Cancel</ThemedText>
               </TouchableOpacity>
-              <TouchableOpacity style={[styles.button, { backgroundColor: Colors.light.purple }]} onPress={saveMealModal}>
-                <ThemedText style={styles.buttonText}>Save</ThemedText>
+              <TouchableOpacity style={[mealsStyles.button, { backgroundColor: Colors.light.purple }]} onPress={saveMealModal}>
+                <ThemedText style={mealsStyles.buttonText}>Save</ThemedText>
               </TouchableOpacity>
             </View>
           </View>
@@ -366,34 +371,3 @@ export default function MealsScreen() {
     </>
   );
 }
-
-const styles = StyleSheet.create({
-  tabContainer: { marginBottom: 0 },
-  scrollContainer: { padding: 20 },
-
-  // Meals
-  dayContainer: { marginBottom: 20, padding: 12, borderWidth: 1, borderColor: Colors.dark.borderGray, borderRadius: 10 },
-  dayHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 },
-  WeekDay: { fontWeight: "bold", textDecorationLine: "underline", fontSize: 18, color: Colors.light.purple },
-  Out: { fontStyle: "italic", color: Colors.light.gray, fontSize: 14 },
-  Main: { fontWeight: "bold", fontSize: 16, marginBottom: 2 },
-  Side: { fontStyle: "italic", color: Colors.light.gray, fontSize: 14, marginLeft: 12 },
-
-  // Meals Modal
-  modalContainer: { flex: 1, backgroundColor: Colors.dark.backgroundOpacity, justifyContent: 'center', alignItems: 'center' },
-  modalContent: { width: '80%', backgroundColor: Colors.dark.gray, padding: 20, borderRadius: 10 },
-  modalInput: { borderBottomWidth: 1, borderBottomColor: Colors.dark.borderGray, color: Colors.light.text, marginBottom: 12, fontSize: 16, paddingVertical: 4 },
-
-  // Buttons
-  button: { padding: 12, borderRadius: 8, alignItems: 'center' },
-  buttonText: { fontWeight: 'bold' },
-
-  // Grocery
-  groceryItemContainer: { flexDirection: "row", alignItems: "center", justifyContent: 'center', paddingHorizontal: 12, paddingVertical: 7, height: 50 },
-  activeItem: { backgroundColor: Colors.dark.gray },
-  groceryItemText: { fontSize: 16, color: Colors.light.text, borderBottomColor: Colors.light.borderGray, borderBottomWidth: 1, padding:5, marginHorizontal: 10},
-  checkedText: { textDecorationLine: "line-through", color: Colors.light.placeholder },
-  quantityInput: { width: 50, height: 36, backgroundColor: Colors.dark.gray, borderRadius: 6, textAlign: "center", color: Colors.light.text },
-
-  dragHandle: { justifyContent: "center", alignItems: "center", marginRight: 8 },
-});

@@ -1,13 +1,18 @@
+//general
+import { Ionicons } from '@expo/vector-icons';
 import { Tabs } from 'expo-router';
 import React from 'react';
 import { Platform } from 'react-native';
-
-import { HapticTab } from '@/components/functional/HapticTab';
-import ScreenWrapper from "@/components/tabHelpers/screenWrapper";
-import TabBarBackground from '@/components/theme/TabBarBackground';
-import { Colors } from '@/constants/Colors';
-import { Ionicons } from '@expo/vector-icons';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+
+//theme
+import { HapticTab } from '@/components/functional/HapticTab';
+import { Colors } from '@/components/theme/Colors';
+import TabBarBackground from '@/components/theme/TabBarBackground';
+
+//functions
+import ScreenWrapper from "@/components/theme/screenWrapper";
+
 
 export default function TabLayout() {
 

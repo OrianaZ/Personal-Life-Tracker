@@ -1,13 +1,22 @@
-import { useFasting } from '@/components/context/FastingContext';
-import { useWater } from '@/components/context/WaterContext';
-import { ThemedText } from '@/components/theme/ThemedText';
-import { Colors } from '@/constants/Colors';
+//general
 import dayjs from 'dayjs';
 import React, { useMemo, useState } from 'react';
-import { Dimensions, ScrollView, StyleSheet, View } from 'react-native';
+import { Dimensions, ScrollView, View } from 'react-native';
 import { LineChart } from 'react-native-chart-kit';
 import Svg, { Line } from 'react-native-svg';
 import { SceneMap, TabBar, TabView } from 'react-native-tab-view';
+
+//styles
+import { overviewStyles } from '@/components/styles/_overview.styles';
+
+//context
+import { useFasting } from '@/components/context/FastingContext';
+import { useWater } from '@/components/context/WaterContext';
+
+//theme
+import { Colors } from '@/components/theme/Colors';
+import { ThemedText } from '@/components/theme/ThemedText';
+
 
 export default function OverviewScreen() {
   const { fastLog } = useFasting();
@@ -149,23 +158,23 @@ export default function OverviewScreen() {
   const DietScene = () => (
     <ScrollView style={{ paddingHorizontal: 20 }}>
       {/* Fasting Chart */}
-      <ThemedText style={[styles.chartTitle, styles.chartTitle1]}>Fasting</ThemedText>
+      <ThemedText style={[overviewStyles.chartTitle, overviewStyles.chartTitle1]}>Fasting</ThemedText>
 
-      <View style={styles.legendContainer}>
+      <View style={overviewStyles.legendContainer}>
 
-        <View style={styles.legendItem}>
-          <View style={[ styles.legendColorBox, { backgroundColor: Colors.dark.orange },]} />
-          <ThemedText style={styles.legendText}>{today.subtract(1, "month").format("MMM")}:</ThemedText>
+        <View style={overviewStyles.legendItem}>
+          <View style={[ overviewStyles.legendColorBox, { backgroundColor: Colors.dark.orange },]} />
+          <ThemedText style={overviewStyles.legendText}>{today.subtract(1, "month").format("MMM")}:</ThemedText>
         </View>
-        <View style={styles.legendItem}>
-          <View style={[ styles.legendColorBox, { backgroundColor: Colors.light.orange }, ]}/>
-          <ThemedText style={styles.legendText}>{today.format("MMM")}: </ThemedText>
+        <View style={overviewStyles.legendItem}>
+          <View style={[ overviewStyles.legendColorBox, { backgroundColor: Colors.light.orange }, ]}/>
+          <ThemedText style={overviewStyles.legendText}>{today.format("MMM")}: </ThemedText>
         </View>
-        <View style={styles.legendItem}>
+        <View style={overviewStyles.legendItem}>
           <Svg height={12} width={24}>
             <Line x1="0" y1="6" x2="24" y2="6" stroke={Colors.light.red} strokeWidth="2" strokeDasharray="4,4" />
           </Svg>
-          <ThemedText style={styles.legendText}>16h Target</ThemedText>
+          <ThemedText style={overviewStyles.legendText}>16h Target</ThemedText>
         </View>
       </View>
 
@@ -202,40 +211,40 @@ export default function OverviewScreen() {
           propsForLabels: { fontSize: 12, fontWeight: "bold" },
         }}
         bezier
-        style={styles.graph}
+        style={overviewStyles.graph}
       />
       {/* Water & Soda Chart */}
-      <ThemedText style={[styles.chartTitle, styles.chartTitle2]}>Liquids</ThemedText>
+      <ThemedText style={[overviewStyles.chartTitle, overviewStyles.chartTitle2]}>Liquids</ThemedText>
 
-      <View style={styles.legendContainer}>
-        <ThemedText style={styles.legendText}>
+      <View style={overviewStyles.legendContainer}>
+        <ThemedText style={overviewStyles.legendText}>
           {today.subtract(1, "month").format("MMM")}:
         </ThemedText>
-        <View style={styles.legendItem}>
-          <View style={[ styles.legendColorBox, { backgroundColor: Colors.dark.blue }, ]} />
-          <ThemedText style={styles.legendText}>Water</ThemedText>
+        <View style={overviewStyles.legendItem}>
+          <View style={[ overviewStyles.legendColorBox, { backgroundColor: Colors.dark.blue }, ]} />
+          <ThemedText style={overviewStyles.legendText}>Water</ThemedText>
         </View>
-        <View style={styles.legendItem}>
-          <View style={[ styles.legendColorBox, { backgroundColor: Colors.dark.purple }, ]}/>
-          <ThemedText style={styles.legendText}>Soda</ThemedText>
+        <View style={overviewStyles.legendItem}>
+          <View style={[ overviewStyles.legendColorBox, { backgroundColor: Colors.dark.purple }, ]}/>
+          <ThemedText style={overviewStyles.legendText}>Soda</ThemedText>
         </View>
       </View>
-      <View style={styles.legendContainer}>
-        <ThemedText style={styles.legendText}>{today.format("MMM")}: </ThemedText>
-        <View style={styles.legendItem}>
-          <View style={[ styles.legendColorBox, { backgroundColor: Colors.light.blue }, ]}/>
-          <ThemedText style={styles.legendText}>Water</ThemedText>
+      <View style={overviewStyles.legendContainer}>
+        <ThemedText style={overviewStyles.legendText}>{today.format("MMM")}: </ThemedText>
+        <View style={overviewStyles.legendItem}>
+          <View style={[ overviewStyles.legendColorBox, { backgroundColor: Colors.light.blue }, ]}/>
+          <ThemedText style={overviewStyles.legendText}>Water</ThemedText>
         </View>
-        <View style={styles.legendItem}>
-          <View style={[ styles.legendColorBox, { backgroundColor: Colors.light.purple }, ]}/>
-          <ThemedText style={styles.legendText}>Soda</ThemedText>
+        <View style={overviewStyles.legendItem}>
+          <View style={[ overviewStyles.legendColorBox, { backgroundColor: Colors.light.purple }, ]}/>
+          <ThemedText style={overviewStyles.legendText}>Soda</ThemedText>
         </View>
       </View>
 
 
-      <View style={styles.yAxisSoda}>
+      <View style={overviewStyles.yAxisSoda}>
         {[25, 50, 75, 100].reverse().map((v) => (
-          <ThemedText key={v} style={styles.yAxisText}>
+          <ThemedText key={v} style={overviewStyles.yAxisText}>
             {v}
           </ThemedText>
         ))}
@@ -272,43 +281,43 @@ export default function OverviewScreen() {
           propsForLabels: { fontSize: 12, fontWeight: "bold" },
         }}
         bezier
-        style={styles.graph}
+        style={overviewStyles.graph}
       />
     </ScrollView>
   );
 
   const ActivityScene = () => (
     <ScrollView style={{ paddingHorizontal: 20 }}>
-      <ThemedText style={[styles.chartTitle, styles.chartTitle2]}>Activity</ThemedText>
+      <ThemedText style={[overviewStyles.chartTitle, overviewStyles.chartTitle2]}>Activity</ThemedText>
 
-      <View style={styles.legendContainer}>
-        <ThemedText style={styles.legendText}>
+      <View style={overviewStyles.legendContainer}>
+        <ThemedText style={overviewStyles.legendText}>
           {today.subtract(1, "month").format("MMM")}:
         </ThemedText>
-        <View style={styles.legendItem}>
-          <View style={[ styles.legendColorBox, { backgroundColor: Colors.dark.blue }, ]} />
-          <ThemedText style={styles.legendText}>Steps</ThemedText>
+        <View style={overviewStyles.legendItem}>
+          <View style={[ overviewStyles.legendColorBox, { backgroundColor: Colors.dark.blue }, ]} />
+          <ThemedText style={overviewStyles.legendText}>Steps</ThemedText>
         </View>
-        <View style={styles.legendItem}>
-          <View style={[ styles.legendColorBox, { backgroundColor: Colors.dark.purple }, ]}/>
-          <ThemedText style={styles.legendText}>Weight</ThemedText>
+        <View style={overviewStyles.legendItem}>
+          <View style={[ overviewStyles.legendColorBox, { backgroundColor: Colors.dark.purple }, ]}/>
+          <ThemedText style={overviewStyles.legendText}>Weight</ThemedText>
         </View>
       </View>
-      <View style={styles.legendContainer}>
-        <ThemedText style={styles.legendText}>{today.format("MMM")}: </ThemedText>
-        <View style={styles.legendItem}>
-          <View style={[ styles.legendColorBox, { backgroundColor: Colors.light.blue }, ]}/>
-          <ThemedText style={styles.legendText}>Steps</ThemedText>
+      <View style={overviewStyles.legendContainer}>
+        <ThemedText style={overviewStyles.legendText}>{today.format("MMM")}: </ThemedText>
+        <View style={overviewStyles.legendItem}>
+          <View style={[ overviewStyles.legendColorBox, { backgroundColor: Colors.light.blue }, ]}/>
+          <ThemedText style={overviewStyles.legendText}>Steps</ThemedText>
         </View>
-        <View style={styles.legendItem}>
-          <View style={[ styles.legendColorBox, { backgroundColor: Colors.light.purple }, ]}/>
-          <ThemedText style={styles.legendText}>Weight</ThemedText>
+        <View style={overviewStyles.legendItem}>
+          <View style={[ overviewStyles.legendColorBox, { backgroundColor: Colors.light.purple }, ]}/>
+          <ThemedText style={overviewStyles.legendText}>Weight</ThemedText>
         </View>
       </View>
 
-      <View style={styles.yAxisWeight}>
+      <View style={overviewStyles.yAxisWeight}>
         {[140, 155, 170, 185, 200].reverse().map((v) => (
-          <ThemedText key={v} style={styles.yAxisText}>
+          <ThemedText key={v} style={overviewStyles.yAxisText}>
             {v}
           </ThemedText> ))}
       </View>
@@ -346,7 +355,7 @@ export default function OverviewScreen() {
           propsForLabels: { fontSize: 12, fontWeight: 'bold' },
         }}
         bezier
-        style={styles.graph}
+        style={overviewStyles.graph}
       />
     </ScrollView>
   );
@@ -359,7 +368,7 @@ export default function OverviewScreen() {
   return (
     <View style={{ flex: 1 }}>
       <TabView
-        style={styles.tabContainer}
+        style={overviewStyles.tabContainer}
         navigationState={{ index, routes }}
         renderScene={renderScene}
         onIndexChange={setIndex}
@@ -376,20 +385,3 @@ export default function OverviewScreen() {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  tabContainer: { marginBottom: 0 },
-  graph: { borderRadius: 12, marginVertical: 10 },
-  chartTitle: { fontSize: 18, fontWeight: 'bold', color: Colors.light.text, marginVertical: 5, position: 'relative', left: 10,  },
-  chartTitle1: { bottom: -30 },
-  chartTitle2: { bottom: -55,},
-
-  yAxisSoda: { position: 'absolute', bottom: 70, left: 26, zIndex: 10, gap: 17 },
-  yAxisWeight: { position: 'absolute', bottom: 40, left: 26, zIndex: 10, gap: 24 },
-  yAxisText: { fontSize: 12, color: Colors.light.purple, fontStyle: 'italic', textAlign: 'right',},
-
-  legendContainer: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'flex-end', },
-  legendItem: { flexDirection: 'row', alignItems: 'center', marginHorizontal: 5, },
-  legendColorBox: { width: 15, height: 2, marginRight: 5, },
-  legendText: { fontSize: 10, color: Colors.light.text, fontWeight: 'bold', fontStyle: 'italic' },
-});

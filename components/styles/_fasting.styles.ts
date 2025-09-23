@@ -1,8 +1,7 @@
-// FastingCalendar.styles.ts
-import { Colors } from "@/constants/Colors";
+import { Colors } from "@/components/theme/Colors";
 import { StyleSheet } from "react-native";
 
-export const styles = StyleSheet.create({
+export const fastingStyles = StyleSheet.create({
   container: { flex: 1, paddingBottom: 150, justifyContent: 'center',},
 
   // Last Meal Section

@@ -1,8 +1,14 @@
+//general
 import React, { useState } from "react";
 import { Modal, Pressable, TouchableOpacity, View } from "react-native";
-import { ThemedText } from "../../theme/ThemedText";
 
-import { styles } from "@/components/styles/_fasting.styles";
+//styles
+import { fastingStyles } from "@/components/styles/_fasting.styles";
+
+//theme
+import { ThemedText } from "@/components/theme/ThemedText";
+
+//functions
 import InlineNumberPicker from "./InlineNumberPicker";
 
 export default function LastMealDateTimePicker({
@@ -57,7 +63,7 @@ export default function LastMealDateTimePicker({
 
         <View style={{ position: "relative" }}>
           <TouchableOpacity onPress={() => setEditingPart(editingPart === "date" ? null : "date")}>
-            <ThemedText style={styles.inputText}>{value.toLocaleDateString("en-US", { month: "short", day: "numeric" })}</ThemedText>
+            <ThemedText style={fastingStyles.inputText}>{value.toLocaleDateString("en-US", { month: "short", day: "numeric" })}</ThemedText>
           </TouchableOpacity>
           <Modal transparent visible={editingPart === "date"} animationType="fade" onRequestClose={() => setEditingPart(null)}>
             <Pressable style={{ flex: 1, backgroundColor: "rgba(0, 0, 0, 0.3)" }} onPress={() => setEditingPart(null)}>
@@ -83,7 +89,7 @@ export default function LastMealDateTimePicker({
         
         <View style={{ position: "relative" }}>
           <TouchableOpacity onPress={() => setEditingPart(editingPart === "hours" ? null : "hours")}>
-            <ThemedText style={styles.inputText}>{value.getHours().toString().padStart(2, "0")}</ThemedText>
+            <ThemedText style={fastingStyles.inputText}>{value.getHours().toString().padStart(2, "0")}</ThemedText>
           </TouchableOpacity>
           <Modal transparent visible={editingPart === "hours"} animationType="fade" onRequestClose={() => setEditingPart(null)}>
             <Pressable style={{ flex: 1, backgroundColor: "rgba(0, 0, 0, 0.3)" }} onPress={() => setEditingPart(null)}>
@@ -104,7 +110,7 @@ export default function LastMealDateTimePicker({
 
         <View style={{ position: "relative" }}>
           <TouchableOpacity onPress={() => setEditingPart(editingPart === "minutes" ? null : "minutes")}>
-            <ThemedText style={styles.inputText}>{value.getMinutes().toString().padStart(2, "0")}</ThemedText>
+            <ThemedText style={fastingStyles.inputText}>{value.getMinutes().toString().padStart(2, "0")}</ThemedText>
           </TouchableOpacity>
           <Modal transparent visible={editingPart === "minutes"} animationType="fade" onRequestClose={() => setEditingPart(null)}>
             <Pressable style={{ flex: 1, backgroundColor: "rgba(0, 0, 0, 0.3)" }} onPress={() => setEditingPart(null)}>

@@ -1,9 +1,13 @@
-import { Colors } from "@/constants/Colors";
+//general
 import dayjs from "dayjs";
 import { FlatList, Modal, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from "react-native";
-import { ThemedText } from "../../theme/ThemedText";
 
-import { styles } from "@/components/styles/_fasting.styles";
+//styles
+import { fastingStyles } from "@/components/styles/_fasting.styles";
+
+//theme
+import { Colors } from "@/components/theme/Colors";
+import { ThemedText } from "@/components/theme/ThemedText";
 
 
 export default function FastingCalendar({
@@ -14,12 +18,12 @@ export default function FastingCalendar({
   const today = dayjs();
 
   return (
-    <View style={styles.container3}>
-      <View style={styles.header}>
+    <View style={fastingStyles.container3}>
+      <View style={fastingStyles.header}>
         <ThemedText type="title">{currentMonth}</ThemedText>
         {showTodayButton && (
           <TouchableOpacity onPress={scrollToToday}>
-            <ThemedText style={styles.todayButton}>Today</ThemedText>
+            <ThemedText style={fastingStyles.todayButton}>Today</ThemedText>
           </TouchableOpacity>
         )}
       </View>
@@ -55,13 +59,13 @@ export default function FastingCalendar({
               }}
               disabled={isFuture}
             >
-              <View style={[styles.item, isToday && styles.todayItem, isFuture && styles.futureItem]}>
-                <ThemedText style={styles.itemText}>{item.format("ddd")} {item.format("D")}</ThemedText>
+              <View style={[fastingStyles.item, isToday && fastingStyles.todayItem, isFuture && fastingStyles.futureItem]}>
+                <ThemedText style={fastingStyles.itemText}>{item.format("ddd")} {item.format("D")}</ThemedText>
                   <ThemedText
-                    style={[ styles.itemHours,
+                    style={[ fastingStyles.itemHours,
                       isToday
-                        ? hours >= 16 ? styles.todayHours : styles.todayLowFast
-                        : hours >= 16 ? styles.normalHours : styles.lowFastHours
+                        ? hours >= 16 ? fastingStyles.todayHours : fastingStyles.todayLowFast
+                        : hours >= 16 ? fastingStyles.normalHours : fastingStyles.lowFastHours
                     ]}>
                     {fastLog[dateStr] && fastLog[dateStr] > 0
                         ? `${Math.floor(fastLog[dateStr])}h ${Math.round((fastLog[dateStr] - Math.floor(fastLog[dateStr])) * 60)}m` : ""}
@@ -75,39 +79,39 @@ export default function FastingCalendar({
       {/* Edit Modal */}
       <Modal visible={showEditModal} transparent animationType="fade">
         <TouchableWithoutFeedback onPress={() => setShowEditModal(false)}>
-          <View style={styles.modalBackground}>
+          <View style={fastingStyles.modalBackground}>
             <TouchableWithoutFeedback>
-              <View style={styles.modalContent}>
-                <ThemedText type="default" style={styles.modalText}>
+              <View style={fastingStyles.modalContent}>
+                <ThemedText type="default" style={fastingStyles.modalText}>
                   {editingDate ? `How long did you fast on\n${formatDateWithOrdinal(editingDate)}?` : "How long did you fast?"}
                 </ThemedText>
 
-                  <View style={styles.inputRow}>
+                  <View style={fastingStyles.inputRow}>
                     <ThemedText style={{color: Colors.light.purple, fontWeight: 'bold'}}>Hours: </ThemedText>
                     <TextInput
                       keyboardType="decimal-pad"
                       value={editingHours}
                       onChangeText={setEditingHours}
-                      style={styles.editInput}
+                      style={fastingStyles.editInput}
                       placeholder="Hours"
                       placeholderTextColor={Colors.dark.text}
                     />
                   </View>
                   
-                  <View style={styles.inputRow}>
+                  <View style={fastingStyles.inputRow}>
                     <ThemedText style={{color: Colors.light.blue, fontWeight: 'bold'}}>Minutes: </ThemedText>
                     <TextInput
                       keyboardType="decimal-pad"
                       value={editingMinutes}
                       onChangeText={setEditingMinutes}
-                      style={styles.editInput}
+                      style={fastingStyles.editInput}
                       placeholder="Minutes"
                       placeholderTextColor={Colors.dark.text}
                     />
                   </View>
 
-                <TouchableOpacity style={[styles.button, styles.modalButton]} onPress={saveEditedFast}>
-                  <ThemedText style={styles.buttonText}>Save</ThemedText>
+                <TouchableOpacity style={[fastingStyles.button, fastingStyles.modalButton]} onPress={saveEditedFast}>
+                  <ThemedText style={fastingStyles.buttonText}>Save</ThemedText>
                 </TouchableOpacity>
               </View>
             </TouchableWithoutFeedback>

@@ -1,6 +1,8 @@
+//general
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import dayjs, { Dayjs } from "dayjs";
 import React, { createContext, useContext, useEffect, useState } from "react";
+
 
 interface FastingContextType {
   isFasting: boolean;

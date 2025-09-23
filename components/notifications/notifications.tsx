@@ -1,10 +1,13 @@
+//general
+import { useRouter } from 'expo-router';
+import React, { useContext, useEffect } from 'react';
+import { NativeModules, Platform } from 'react-native';
+
+//context
 import { useFasting } from '@/components/context/FastingContext';
 import { MealsContext } from '@/components/context/MealsContext';
 import { useMeds } from '@/components/context/MedsContext';
 import { useWater } from '@/components/context/WaterContext';
-import { useRouter } from 'expo-router';
-import React, { useContext, useEffect } from 'react';
-import { NativeModules, Platform } from 'react-native';
 
 const { LiveActivity } = NativeModules;
 

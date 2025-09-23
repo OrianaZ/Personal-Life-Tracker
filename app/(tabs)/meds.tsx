@@ -1,18 +1,17 @@
-import { useMeds } from "@/components/context/MedsContext";
-import { ThemedText } from "@/components/theme/ThemedText";
-import { Colors } from "@/constants/Colors";
+//general
 import React, { useState } from "react";
-import {
-  Alert,
-  KeyboardAvoidingView,
-  Modal,
-  Platform,
-  ScrollView,
-  StyleSheet,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { Alert, KeyboardAvoidingView, Modal, Platform, ScrollView, TextInput, TouchableOpacity, View } from "react-native";
+
+//styles
+import { medsStyles } from "@/components/styles/_meds.styles";
+
+//context
+import { useMeds } from "@/components/context/MedsContext";
+
+//theme
+import { Colors } from "@/components/theme/Colors";
+import { ThemedText } from "@/components/theme/ThemedText";
+
 
 export default function MedsScreen() {
   const { medications, setMedications, takenTimes, toggleTaken } = useMeds();
@@ -161,19 +160,19 @@ export default function MedsScreen() {
         }
 
         return (
-          <View key={med.id} style={[styles.card, allTaken && { opacity: 0.5 }]}>
+          <View key={med.id} style={[medsStyles.card, allTaken && { opacity: 0.5 }]}>
             {/* LEFT SIDE: edit */}
             <TouchableOpacity style={{ flex: 1 }} onPress={() => openEditModal(med)}>
-              <View style={styles.titleContainer}>
-                <ThemedText style={styles.cardTitle}>{med.name}</ThemedText>
-                <ThemedText style={styles.cardDosage}>
+              <View style={medsStyles.titleContainer}>
+                <ThemedText style={medsStyles.cardTitle}>{med.name}</ThemedText>
+                <ThemedText style={medsStyles.cardDosage}>
                   {med.pills} pills {med.times.length}x day
                 </ThemedText>
               </View>
             </TouchableOpacity>
 
             {/* RIGHT SIDE: times */}
-            <View style={styles.timeContainer}>
+            <View style={medsStyles.timeContainer}>
               {topTime && (
                 <TouchableOpacity
                   onPress={() => toggleTaken(med.id, topTime!.idx)}
@@ -245,30 +244,30 @@ export default function MedsScreen() {
       })}
 
       <TouchableOpacity
-        style={styles.addButton}
+        style={medsStyles.addButton}
         onPress={() => {
           resetModal();
           setModalVisible(true);
         }}
       >
-        <ThemedText style={styles.buttonText}>Add Medication</ThemedText>
+        <ThemedText style={medsStyles.buttonText}>Add Medication</ThemedText>
       </TouchableOpacity>
 
       <Modal visible={modalVisible} animationType="slide">
         <KeyboardAvoidingView
-          style={styles.modalContainer}
+          style={medsStyles.modalContainer}
           behavior={Platform.OS === "ios" ? "padding" : undefined}
         >
-          <View style={styles.form}>
+          <View style={medsStyles.form}>
             <TextInput
-              style={styles.input}
+              style={medsStyles.input}
               placeholder="Medication name"
               placeholderTextColor={Colors.light.placeholder}
               value={name}
               onChangeText={setName}
             />
             <TextInput
-              style={styles.input}
+              style={medsStyles.input}
               placeholder="# of pills"
               placeholderTextColor={Colors.light.placeholder}
               value={pills}
@@ -276,7 +275,7 @@ export default function MedsScreen() {
               onChangeText={setPills}
             />
             <TextInput
-              style={styles.input}
+              style={medsStyles.input}
               placeholder="Times per day"
               placeholderTextColor={Colors.light.placeholder}
               value={timesPerDay}
@@ -285,9 +284,9 @@ export default function MedsScreen() {
             />
 
             {timeInputs.map((t, idx) => (
-              <View key={idx} style={styles.timeRow}>
+              <View key={idx} style={medsStyles.timeRow}>
                 <TextInput
-                  style={[styles.input, { flex: 1 }]}
+                  style={[medsStyles.input, { flex: 1 }]}
                   placeholder={`Time ${idx + 1} (HH:mm)`}
                   placeholderTextColor={Colors.light.placeholder}
                   value={t.time}
@@ -301,24 +300,24 @@ export default function MedsScreen() {
               </View>
             ))}
 
-            <TouchableOpacity style={styles.saveButton} onPress={saveMedication}>
-              <ThemedText style={styles.buttonText}>Save</ThemedText>
+            <TouchableOpacity style={medsStyles.saveButton} onPress={saveMedication}>
+              <ThemedText style={medsStyles.buttonText}>Save</ThemedText>
             </TouchableOpacity>
 
             {editingId && (
-              <TouchableOpacity style={styles.deleteButtonModal} onPress={deleteMedication}>
-                <ThemedText style={styles.buttonText}>Delete</ThemedText>
+              <TouchableOpacity style={medsStyles.deleteButtonModal} onPress={deleteMedication}>
+                <ThemedText style={medsStyles.buttonText}>Delete</ThemedText>
               </TouchableOpacity>
             )}
 
             <TouchableOpacity
-              style={styles.cancelButton}
+              style={medsStyles.cancelButton}
               onPress={() => {
                 resetModal();
                 setModalVisible(false);
               }}
             >
-              <ThemedText style={styles.buttonText}>Cancel</ThemedText>
+              <ThemedText style={medsStyles.buttonText}>Cancel</ThemedText>
             </TouchableOpacity>
           </View>
         </KeyboardAvoidingView>
@@ -326,22 +325,3 @@ export default function MedsScreen() {
     </ScrollView>
   );
 }
-
-const styles = StyleSheet.create({
-  addButton: { backgroundColor: Colors.light.purple, padding: 15, borderRadius: 10, marginTop: 10 },
-  saveButton: { backgroundColor: Colors.light.purple, padding: 15, borderRadius: 10, marginTop: 15, width: "100%", alignItems: "center" },
-  cancelButton: { backgroundColor: "transparent", borderWidth: 1, borderColor: Colors.light.purple, borderRadius: 10, padding: 15, marginTop: 10, width: "100%", alignItems: "center" },
-  deleteButtonModal: { backgroundColor: Colors.light.red, padding: 15, borderRadius: 10, marginTop: 10, width: "100%", alignItems: "center" },
-  buttonText: { fontWeight: "bold" },
-
-  card: { display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center", borderWidth: 1, borderColor: Colors.dark.borderGray, borderRadius: 12, padding: 15, marginVertical: 10, width: "95%" },
-  cardTitle: { fontWeight: "bold", fontSize: 18 },
-  cardDosage: { color: Colors.light.borderGray, fontStyle: "italic", fontSize: 14, marginBottom: 10 },
-  titleContainer: { marginBottom: 0 },
-  timeContainer: { alignItems: "flex-end" },
-
-  modalContainer: { flex: 1, backgroundColor: Colors.dark.gray, padding: 20, justifyContent: "center", alignItems: "center" },
-  form: { width: "100%", maxWidth: 400, alignItems: "center" },
-  input: { borderWidth: 1, borderColor: Colors.dark.borderGray, color: Colors.light.text, padding: 10, marginVertical: 10, borderRadius: 8, width: "100%" },
-  timeRow: { flexDirection: "row", alignItems: "center", width: "100%", marginVertical: 5 },
-});

@@ -1,17 +1,15 @@
-import { ThemedText } from "@/components/theme/ThemedText";
-import { Colors } from "@/constants/Colors";
+//general
 import React, { JSX, useRef } from "react";
-import {
-  InputAccessoryView,
-  Keyboard,
-  Platform,
-  StyleSheet,
-  TextInput,
-  TouchableOpacity,
-  View
-} from "react-native";
+import { InputAccessoryView, Keyboard, Platform, TextInput, TouchableOpacity, View } from "react-native";
 import DraggableFlatList, { RenderItemParams } from "react-native-draggable-flatlist";
 import type { FlatList } from "react-native-gesture-handler";
+
+//styles
+import { mealsStyles } from '@/components/styles/_meals.styles';
+
+//theme
+import { Colors } from "@/components/theme/Colors";
+import { ThemedText } from "@/components/theme/ThemedText";
 
 interface GroceryItem {
   id: string;
@@ -49,10 +47,10 @@ export default function GroceryScene({
 
   return (
     <View  style={{ flex: 1, marginBottom: 90 }}>
-      <View style={styles.inputWrapper}>
+      <View style={mealsStyles.inputWrapper}>
         <TextInput
           ref={groceryInputRef}
-          style={styles.input}
+          style={mealsStyles.input}
           placeholder="Add a grocery item"
           placeholderTextColor={Colors.light.placeholder}          
           value={tempNewItemText}
@@ -62,8 +60,8 @@ export default function GroceryScene({
           blurOnSubmit={false}
           inputAccessoryViewID={accessoryID}
         />
-        <TouchableOpacity style={styles.addButton} onPress={addGroceryItem}>
-          <ThemedText style={styles.addButtonText}>Add</ThemedText>
+        <TouchableOpacity style={mealsStyles.addButton} onPress={addGroceryItem}>
+          <ThemedText style={mealsStyles.addButtonText}>Add</ThemedText>
         </TouchableOpacity>
       </View>
 
@@ -82,16 +80,16 @@ export default function GroceryScene({
         maintainVisibleContentPosition={groceryItems.length > 5 ? { minIndexForVisible: 1 } : undefined}
         ListFooterComponent={
           <View>
-            <View style={styles.totalRow}>
-              <ThemedText style={styles.totalLabel}>Total</ThemedText>
-              <ThemedText style={styles.totalValue}>{total}</ThemedText>
+            <View style={mealsStyles.totalRow}>
+              <ThemedText style={mealsStyles.totalLabel}>Total</ThemedText>
+              <ThemedText style={mealsStyles.totalValue}>{total}</ThemedText>
             </View>
 
             <TouchableOpacity
-              style={styles.deleteButton}
+              style={mealsStyles.deleteButton}
               onPress={deleteCheckedGroceryItems}
             >
-              <ThemedText style={styles.addButtonText}>Delete Selected</ThemedText>
+              <ThemedText style={mealsStyles.addButtonText}>Delete Selected</ThemedText>
             </TouchableOpacity>
           </View>
         }
@@ -99,9 +97,9 @@ export default function GroceryScene({
 
       {Platform.OS === "ios" && (
         <InputAccessoryView nativeID={accessoryID}>
-          <View style={styles.accessoryContainer}>
+          <View style={mealsStyles.accessoryContainer}>
             <TouchableOpacity onPress={() => Keyboard.dismiss()}>
-              <ThemedText style={styles.doneText}>Done</ThemedText>
+              <ThemedText style={mealsStyles.doneText}>Done</ThemedText>
             </TouchableOpacity>
           </View>
         </InputAccessoryView>
@@ -109,19 +107,3 @@ export default function GroceryScene({
     </View >
   );
 }
-
-const styles = StyleSheet.create({
-  inputWrapper: { flexDirection: "row", marginVertical: 20 },
-  input: { flex: 1, borderWidth: 1, borderColor: Colors.light.borderGray, borderRadius: 8, paddingHorizontal: 12, color: Colors.light.text, height: 44, },
-  addButton: { marginLeft: 10, backgroundColor: Colors.light.purple, paddingHorizontal: 16, justifyContent: "center", borderRadius: 8,},
-  addButtonText: { fontWeight: "bold"},
-  
-  totalRow: { flexDirection: "row", justifyContent: "space-between", paddingVertical: 15, paddingHorizontal: 30, borderTopWidth: StyleSheet.hairlineWidth, borderColor: Colors.light.borderGray, marginTop: 10 },
-  totalLabel: { fontWeight: "bold", fontSize: 16 },
-  totalValue: { fontWeight: "bold", fontSize: 16 },
-
-  deleteButton: { alignSelf: "center", backgroundColor: Colors.light.red, paddingVertical: 12, paddingHorizontal: 24, borderRadius: 8, },
-
-  accessoryContainer: { backgroundColor: Colors.dark.gray, paddingVertical: 8, paddingHorizontal: 12, alignItems: "flex-end", },
-  doneText: { color: Colors.light.purple, fontWeight: "600", fontSize: 16, },
-});

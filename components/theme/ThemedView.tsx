@@ -1,5 +1,8 @@
-import { Colors } from '@/constants/Colors';
+//general
 import { View, type ViewProps } from 'react-native';
+
+//theme
+import { Colors } from '@/components/theme/Colors';
 
 
 export type ThemedViewProps = ViewProps & {

@@ -1,8 +1,14 @@
-import { ThemedText } from '@/components/theme/ThemedText';
-import { Colors } from '@/constants/Colors';
+//general
 import { useEffect, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 import AppleHealthKit, { HealthKitPermissions, HealthUnit, HealthValue } from 'react-native-health';
+
+//styles
+import { activityStyles } from '@/components/styles/_activity.styles';
+
+//theme
+import { ThemedText } from '@/components/theme/ThemedText';
+
 
 export default function ActivityScreen() {
   const [steps, setSteps] = useState<number | null>(null);
@@ -58,52 +64,22 @@ export default function ActivityScreen() {
   }, []);
 
   return (
-    <View style={styles.container}>
-      <ThemedText style={styles.title}>Today's Activity</ThemedText>
+    <View style={activityStyles.container}>
+      <ThemedText style={activityStyles.title}>Today's Activity</ThemedText>
 
-      <View style={styles.metricContainer}>
-        <ThemedText style={styles.metricLabel}>Steps</ThemedText>
-        <ThemedText style={styles.metricValue}>
+      <View style={activityStyles.metricContainer}>
+        <ThemedText style={activityStyles.metricLabel}>Steps</ThemedText>
+        <ThemedText style={activityStyles.metricValue}>
           {steps !== null ? steps.toLocaleString() : 'Loading...'}
         </ThemedText>
       </View>
 
-      <View style={styles.metricContainer}>
-        <ThemedText style={styles.metricLabel}>Weight</ThemedText>
-        <ThemedText style={styles.metricValue}>
+      <View style={activityStyles.metricContainer}>
+        <ThemedText style={activityStyles.metricLabel}>Weight</ThemedText>
+        <ThemedText style={activityStyles.metricValue}>
           {weight !== null ? `${weight.toFixed(1)} kg` : 'Loading...'}
         </ThemedText>
       </View>
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingHorizontal: 20,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 32,
-    color: Colors.light.text,
-  },
-  metricContainer: {
-    marginBottom: 24,
-    alignItems: 'center',
-  },
-  metricLabel: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: Colors.light.text,
-    marginBottom: 8,
-  },
-  metricValue: {
-    fontSize: 48,
-    fontWeight: 'bold',
-    color: Colors.light.blue,
-  },
-});

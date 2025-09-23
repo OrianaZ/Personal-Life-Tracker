@@ -1,8 +1,15 @@
-import { ThemedText } from "@/components/theme/ThemedText";
+//general
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as ImagePicker from "expo-image-picker";
 import React, { useEffect, useState } from "react";
-import { Button, Image, StyleSheet, View } from "react-native";
+import { Button, Image, View } from "react-native";
+
+//styles
+import { mealsStyles } from '@/components/styles/_meals.styles';
+
+//theme
+import { ThemedText } from "@/components/theme/ThemedText";
+
 
 const STORAGE_KEY = "GROCERY_CARD_IMAGE";
 
@@ -47,10 +54,10 @@ export default function ScanScene() {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={mealsStyles.container}>
       {selectedImage ? (
-        <View style={styles.imageWrapper}>
-          <Image source={{ uri: selectedImage }} style={styles.image} />
+        <View style={mealsStyles.imageWrapper}>
+          <Image source={{ uri: selectedImage }} style={mealsStyles.image} />
         </View>
       ) : (
         <ThemedText>No grocery card uploaded yet.</ThemedText>
@@ -62,9 +69,3 @@ export default function ScanScene() {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: { flex: 1, alignItems: "center", justifyContent: "center", marginBottom: 50,},
-  imageWrapper: { width: "90%", height: 325, resizeMode: "contain", },
-  image: { width: "100%", aspectRatio: 1.2, overflow: "hidden",  marginBottom: 10, borderRadius: 20,  },
-});
