@@ -15,9 +15,9 @@ import { Colors } from "@/components/theme/Colors";
 import { ThemedText } from "@/components/theme/ThemedText";
 
 //functions
-import FastingCalendar from "@/components/tabHelpers/Fasting/FastingCalendar";
-import LastMealDateTimePicker from "@/components/tabHelpers/Fasting/LastMealDateTimePicker";
-import ProgressBar from "@/components/tabHelpers/Fasting/ProgressBar";
+import FastingCalendar from "@/components/functions/Fasting/FastingCalendar";
+import LastMealDateTimePicker from "@/components/functions/Fasting/LastMealDateTimePicker";
+import ProgressBar from "@/components/functions/Fasting/ProgressBar";
 
 
 export default function FastingScreen() {
