@@ -1,7 +1,7 @@
 //general
 import { useEffect, useState } from 'react';
 import { View } from 'react-native';
-import AppleHealthKit, { HealthKitPermissions, HealthUnit, HealthValue } from 'react-native-health';
+import BrokenHealthKit, { HealthKitPermissions, HealthUnit, HealthValue } from 'react-native-health';
 
 //styles
 import { activityStyles } from '@/components/styles/_activity.styles';
@@ -9,13 +9,17 @@ import { activityStyles } from '@/components/styles/_activity.styles';
 //theme
 import { ThemedText } from '@/components/theme/ThemedText';
 
+const NativeModules = require("react-native").NativeModules;
+const AppleHealthKit = NativeModules.AppleHealthKit as typeof BrokenHealthKit;
+AppleHealthKit.Constants = BrokenHealthKit.Constants;
+
 
 export default function ActivityScreen() {
   const [steps, setSteps] = useState<number | null>(null);
   const [weight, setWeight] = useState<number | null>(null);
 
   // ----- HealthKit permissions -----
-  const permissions = {
+  const permissions: HealthKitPermissions = {
     permissions: {
       read: [
         AppleHealthKit.Constants.Permissions.Steps,
@@ -26,7 +30,7 @@ export default function ActivityScreen() {
         AppleHealthKit.Constants.Permissions.BodyMass,
       ],
     },
-  } as HealthKitPermissions;
+  };
 
   useEffect(() => {
     AppleHealthKit.initHealthKit(permissions, (error: string) => {

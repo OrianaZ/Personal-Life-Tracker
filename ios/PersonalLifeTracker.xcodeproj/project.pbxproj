@@ -7,49 +7,77 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		02F0F6F54298485986ECD129 /* PersonalLifeTrackerLiveActivity.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = EA6EF66D479141D6BE059B27 /* PersonalLifeTrackerLiveActivity.appex */; };
+		0377A15F15DF443A9DA6FEA8 /* View+applyIfPresent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 603C96C164994A98BE0167EB /* View+applyIfPresent.swift */; };
+		10EABB6995274C8C80FB06AB /* Image+dynamic.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0D502398B51446AB32D7D5B /* Image+dynamic.swift */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
+		167B5A2307B84719A5DF46A7 /* Date+toTimerInterval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 645BE070116A41A6B1BD68FF /* Date+toTimerInterval.swift */; };
+		230AFBE4695C4304B51F7EE2 /* LiveActivityWidgetBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BC0722BF89147709CBE824E /* LiveActivityWidgetBundle.swift */; };
+		2B67011FCA6E4935A8C9FF70 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5DFE292D84A749C291DE43CD /* Assets.xcassets */; };
 		3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */; };
+		4CCC702B9ADC6F0367EAE7D6 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 567C5A5D1A413F03879C9FEF /* PrivacyInfo.xcprivacy */; };
+		713D4BD2E685B5935581D6C7 /* libPods-PersonalLifeTracker.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E2F3D0F351E59D7DF671009 /* libPods-PersonalLifeTracker.a */; };
+		8E1BA317DE3D4DEBA74881BE /* Color+hex.swift in Sources */ = {isa = PBXBuildFile; fileRef = D15F024E889D4606AC7C856F /* Color+hex.swift */; };
+		9B787FEC81C22F025B6E4FB5 /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E94463DDD5DBC2DC9737345 /* ExpoModulesProvider.swift */; };
+		A50813A6B23D42BBAF429C6E /* LiveActivityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1754636C41DD467BAFB70CC0 /* LiveActivityView.swift */; };
 		BB2F792D24A3F905000567C9 /* Expo.plist in Resources */ = {isa = PBXBuildFile; fileRef = BB2F792C24A3F905000567C9 /* Expo.plist */; };
+		D81C37D7C46A4A2BB4DC37CE /* View+applyWidgetURL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24EA70A9A3374F1BBCC251AA /* View+applyWidgetURL.swift */; };
+		ECEE0DAEBBF1419E8F104939 /* ViewHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24A34028FAD0454E9AE70ECA /* ViewHelpers.swift */; };
 		F11748422D0307B40044C1D9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F11748412D0307B40044C1D9 /* AppDelegate.swift */; };
-		C13B45055CD64820A21A0849 /* Color+hex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3280E4640F784295A40A98B4 /* Color+hex.swift */; };
-		627D779207CB4D58AC19B5F4 /* Date+toTimerInterval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48C0489433934D33B3370898 /* Date+toTimerInterval.swift */; };
-		C76DF04542084554A686982F /* Image+dynamic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2856ACA0B1A94CAFADDB2F71 /* Image+dynamic.swift */; };
-		D201018B54254C36AC2CC69B /* LiveActivityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36DE9F57546846519C1BDF1C /* LiveActivityView.swift */; };
-		9481F763BF514875A231F2FF /* LiveActivityWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CCC875CA1834A58957FAF1E /* LiveActivityWidget.swift */; };
-		F82DDFF891504A7D80139AD3 /* LiveActivityWidgetBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C21AE04E8E4608811CAAA0 /* LiveActivityWidgetBundle.swift */; };
-		C3720FF926A944B797F3D062 /* View+applyIfPresent.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC074581BE3C4BBABF47BE0C /* View+applyIfPresent.swift */; };
-		84738F8535F34ECD9AD62E45 /* View+applyWidgetURL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63167D8571254F7CAC8B5EC1 /* View+applyWidgetURL.swift */; };
-		ABB66189A7DA4B5783D3D3EF /* ViewHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 524A9A31F9D247BAB0FB2899 /* ViewHelpers.swift */; };
-		85AB214C3D684ED88F9B1570 /* PersonalLifeTrackerLiveActivity.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 6E1EE1C817FD411CA4676A94 /* PersonalLifeTrackerLiveActivity.appex */; };
-		8F49DDCE90284A4786B69DCF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CE7703F8FFB2469A8FC72A80 /* Assets.xcassets */; };
-		319E34038EC14C8FA41816CC /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7857CB78139B4E9BA12513E8 /* Info.plist */; };
-		E0F65B1731054429B6B422F0 /* PersonalLifeTrackerLiveActivity.entitlements in Resources */ = {isa = PBXBuildFile; fileRef = 5933EABECC434D3FA3DF796F /* PersonalLifeTrackerLiveActivity.entitlements */; };
-		A1B8390188BD4A28AFCD90AB /* PersonalLifeTrackerLiveActivity.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 863C5D33EBFB4726AA788446 /* PersonalLifeTrackerLiveActivity.appex */; };
+		F75DFA39610540CFB75CD2B2 /* LiveActivityWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 117B301D99464153913B0E7A /* LiveActivityWidget.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		789AC93AD24A4E53B291734F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 83CBB9F71A601CBA00E9B192 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 11CD3840CDB64A02B52E3FED;
+			remoteInfo = PersonalLifeTrackerLiveActivity;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		B8C7C4938D5A49A496C1E417 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				02F0F6F54298485986ECD129 /* PersonalLifeTrackerLiveActivity.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		117B301D99464153913B0E7A /* LiveActivityWidget.swift */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.swift; path = LiveActivityWidget.swift; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* PersonalLifeTracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PersonalLifeTracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = PersonalLifeTracker/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = PersonalLifeTracker/Info.plist; sourceTree = "<group>"; };
+		1754636C41DD467BAFB70CC0 /* LiveActivityView.swift */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.swift; path = LiveActivityView.swift; sourceTree = "<group>"; };
+		1E2F3D0F351E59D7DF671009 /* libPods-PersonalLifeTracker.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-PersonalLifeTracker.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		24A34028FAD0454E9AE70ECA /* ViewHelpers.swift */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.swift; path = ViewHelpers.swift; sourceTree = "<group>"; };
+		24EA70A9A3374F1BBCC251AA /* View+applyWidgetURL.swift */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.swift; path = "View+applyWidgetURL.swift"; sourceTree = "<group>"; };
+		3E94463DDD5DBC2DC9737345 /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-PersonalLifeTracker/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
+		567C5A5D1A413F03879C9FEF /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xml; name = PrivacyInfo.xcprivacy; path = PersonalLifeTracker/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		5DFE292D84A749C291DE43CD /* Assets.xcassets */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		603C96C164994A98BE0167EB /* View+applyIfPresent.swift */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.swift; path = "View+applyIfPresent.swift"; sourceTree = "<group>"; };
+		645BE070116A41A6B1BD68FF /* Date+toTimerInterval.swift */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.swift; path = "Date+toTimerInterval.swift"; sourceTree = "<group>"; };
+		6BC0722BF89147709CBE824E /* LiveActivityWidgetBundle.swift */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.swift; path = LiveActivityWidgetBundle.swift; sourceTree = "<group>"; };
+		A94BCC279CFB40868E5E19B9 /* Info.plist */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = SplashScreen.storyboard; path = PersonalLifeTracker/SplashScreen.storyboard; sourceTree = "<group>"; };
 		BB2F792C24A3F905000567C9 /* Expo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Expo.plist; sourceTree = "<group>"; };
+		C5D38792F0D6E9EEF6C565E0 /* Pods-PersonalLifeTracker.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PersonalLifeTracker.release.xcconfig"; path = "Target Support Files/Pods-PersonalLifeTracker/Pods-PersonalLifeTracker.release.xcconfig"; sourceTree = "<group>"; };
+		D15F024E889D4606AC7C856F /* Color+hex.swift */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.swift; path = "Color+hex.swift"; sourceTree = "<group>"; };
+		DCA16A8CBDFB0456E0051531 /* Pods-PersonalLifeTracker.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PersonalLifeTracker.debug.xcconfig"; path = "Target Support Files/Pods-PersonalLifeTracker/Pods-PersonalLifeTracker.debug.xcconfig"; sourceTree = "<group>"; };
+		DE3B2D3ED39F48479C83E42B /* PersonalLifeTrackerLiveActivity.entitlements */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; path = PersonalLifeTrackerLiveActivity.entitlements; sourceTree = "<group>"; };
+		EA6EF66D479141D6BE059B27 /* PersonalLifeTrackerLiveActivity.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; fileEncoding = 9; includeInIndex = 0; path = PersonalLifeTrackerLiveActivity.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
+		F0D502398B51446AB32D7D5B /* Image+dynamic.swift */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.swift; path = "Image+dynamic.swift"; sourceTree = "<group>"; };
 		F11748412D0307B40044C1D9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = PersonalLifeTracker/AppDelegate.swift; sourceTree = "<group>"; };
 		F11748442D0722820044C1D9 /* PersonalLifeTracker-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "PersonalLifeTracker-Bridging-Header.h"; path = "PersonalLifeTracker/PersonalLifeTracker-Bridging-Header.h"; sourceTree = "<group>"; };
-		6E1EE1C817FD411CA4676A94 /* PersonalLifeTrackerLiveActivity.appex */ = {isa = PBXFileReference; name = "PersonalLifeTrackerLiveActivity.appex"; path = "PersonalLifeTrackerLiveActivity.appex"; sourceTree = BUILT_PRODUCTS_DIR; fileEncoding = undefined; lastKnownFileType = undefined; explicitFileType = wrapper.app-extension; includeInIndex = 0; };
-		3280E4640F784295A40A98B4 /* Color+hex.swift */ = {isa = PBXFileReference; name = "Color+hex.swift"; path = "Color+hex.swift"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.swift; explicitFileType = undefined; includeInIndex = 0; };
-		48C0489433934D33B3370898 /* Date+toTimerInterval.swift */ = {isa = PBXFileReference; name = "Date+toTimerInterval.swift"; path = "Date+toTimerInterval.swift"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.swift; explicitFileType = undefined; includeInIndex = 0; };
-		2856ACA0B1A94CAFADDB2F71 /* Image+dynamic.swift */ = {isa = PBXFileReference; name = "Image+dynamic.swift"; path = "Image+dynamic.swift"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.swift; explicitFileType = undefined; includeInIndex = 0; };
-		36DE9F57546846519C1BDF1C /* LiveActivityView.swift */ = {isa = PBXFileReference; name = "LiveActivityView.swift"; path = "LiveActivityView.swift"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.swift; explicitFileType = undefined; includeInIndex = 0; };
-		3CCC875CA1834A58957FAF1E /* LiveActivityWidget.swift */ = {isa = PBXFileReference; name = "LiveActivityWidget.swift"; path = "LiveActivityWidget.swift"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.swift; explicitFileType = undefined; includeInIndex = 0; };
-		55C21AE04E8E4608811CAAA0 /* LiveActivityWidgetBundle.swift */ = {isa = PBXFileReference; name = "LiveActivityWidgetBundle.swift"; path = "LiveActivityWidgetBundle.swift"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.swift; explicitFileType = undefined; includeInIndex = 0; };
-		BC074581BE3C4BBABF47BE0C /* View+applyIfPresent.swift */ = {isa = PBXFileReference; name = "View+applyIfPresent.swift"; path = "View+applyIfPresent.swift"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.swift; explicitFileType = undefined; includeInIndex = 0; };
-		63167D8571254F7CAC8B5EC1 /* View+applyWidgetURL.swift */ = {isa = PBXFileReference; name = "View+applyWidgetURL.swift"; path = "View+applyWidgetURL.swift"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.swift; explicitFileType = undefined; includeInIndex = 0; };
-		524A9A31F9D247BAB0FB2899 /* ViewHelpers.swift */ = {isa = PBXFileReference; name = "ViewHelpers.swift"; path = "ViewHelpers.swift"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.swift; explicitFileType = undefined; includeInIndex = 0; };
-		CE7703F8FFB2469A8FC72A80 /* Assets.xcassets */ = {isa = PBXFileReference; name = "Assets.xcassets"; path = "Assets.xcassets"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = folder.assetcatalog; explicitFileType = undefined; includeInIndex = 0; };
-		7857CB78139B4E9BA12513E8 /* Info.plist */ = {isa = PBXFileReference; name = "Info.plist"; path = "Info.plist"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = text.plist.xml; explicitFileType = undefined; includeInIndex = 0; };
-		5933EABECC434D3FA3DF796F /* PersonalLifeTrackerLiveActivity.entitlements */ = {isa = PBXFileReference; name = "PersonalLifeTrackerLiveActivity.entitlements"; path = "PersonalLifeTrackerLiveActivity.entitlements"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		863C5D33EBFB4726AA788446 /* PersonalLifeTrackerLiveActivity.appex */ = {isa = PBXFileReference; name = "PersonalLifeTrackerLiveActivity.appex"; path = "PersonalLifeTrackerLiveActivity.appex"; sourceTree = BUILT_PRODUCTS_DIR; fileEncoding = undefined; lastKnownFileType = undefined; explicitFileType = wrapper.app-extension; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,17 +85,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				713D4BD2E685B5935581D6C7 /* libPods-PersonalLifeTracker.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		A0A82E6397724B3F88FE4BF7 /* Embed Foundation Extensions */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		B75008966AFB436BB7575496 /* Embed Foundation Extensions */ = {
+		1C0847E3A0084853A0EA6575 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -86,6 +108,7 @@
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */,
+				567C5A5D1A413F03879C9FEF /* PrivacyInfo.xcprivacy */,
 			);
 			name = PersonalLifeTracker;
 			sourceTree = "<group>";
@@ -94,8 +117,34 @@
 			isa = PBXGroup;
 			children = (
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
+				1E2F3D0F351E59D7DF671009 /* libPods-PersonalLifeTracker.a */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		2EE9BD729D3B796F150A0151 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				DCA16A8CBDFB0456E0051531 /* Pods-PersonalLifeTracker.debug.xcconfig */,
+				C5D38792F0D6E9EEF6C565E0 /* Pods-PersonalLifeTracker.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
+		3995AC3D2C4C9A62C5EF5B1E /* ExpoModulesProviders */ = {
+			isa = PBXGroup;
+			children = (
+				3D8BCFF90ABE7A0E09E2840A /* PersonalLifeTracker */,
+			);
+			name = ExpoModulesProviders;
+			sourceTree = "<group>";
+		};
+		3D8BCFF90ABE7A0E09E2840A /* PersonalLifeTracker */ = {
+			isa = PBXGroup;
+			children = (
+				3E94463DDD5DBC2DC9737345 /* ExpoModulesProvider.swift */,
+			);
+			name = PersonalLifeTracker;
 			sourceTree = "<group>";
 		};
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
@@ -112,8 +161,9 @@
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
-				1B434A594B0D4437A71DC4D9 /* PersonalLifeTrackerLiveActivity */,
-				03911198E8704065ADA51590 /* PersonalLifeTrackerLiveActivity */,
+				B666ED5F71E5487E9B838BE1 /* PersonalLifeTrackerLiveActivity */,
+				2EE9BD729D3B796F150A0151 /* Pods */,
+				3995AC3D2C4C9A62C5EF5B1E /* ExpoModulesProviders */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -124,10 +174,28 @@
 			isa = PBXGroup;
 			children = (
 				13B07F961A680F5B00A75B9A /* PersonalLifeTracker.app */,
-				6E1EE1C817FD411CA4676A94 /* PersonalLifeTrackerLiveActivity.appex */,
-				863C5D33EBFB4726AA788446 /* PersonalLifeTrackerLiveActivity.appex */,
+				EA6EF66D479141D6BE059B27 /* PersonalLifeTrackerLiveActivity.appex */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		B666ED5F71E5487E9B838BE1 /* PersonalLifeTrackerLiveActivity */ = {
+			isa = PBXGroup;
+			children = (
+				D15F024E889D4606AC7C856F /* Color+hex.swift */,
+				645BE070116A41A6B1BD68FF /* Date+toTimerInterval.swift */,
+				F0D502398B51446AB32D7D5B /* Image+dynamic.swift */,
+				1754636C41DD467BAFB70CC0 /* LiveActivityView.swift */,
+				117B301D99464153913B0E7A /* LiveActivityWidget.swift */,
+				6BC0722BF89147709CBE824E /* LiveActivityWidgetBundle.swift */,
+				603C96C164994A98BE0167EB /* View+applyIfPresent.swift */,
+				24EA70A9A3374F1BBCC251AA /* View+applyWidgetURL.swift */,
+				24A34028FAD0454E9AE70ECA /* ViewHelpers.swift */,
+				A94BCC279CFB40868E5E19B9 /* Info.plist */,
+				5DFE292D84A749C291DE43CD /* Assets.xcassets */,
+				DE3B2D3ED39F48479C83E42B /* PersonalLifeTrackerLiveActivity.entitlements */,
+			);
+			path = PersonalLifeTrackerLiveActivity;
 			sourceTree = "<group>";
 		};
 		BB2F792B24A3F905000567C9 /* Supporting */ = {
@@ -139,106 +207,49 @@
 			path = PersonalLifeTracker/Supporting;
 			sourceTree = "<group>";
 		};
-		1B434A594B0D4437A71DC4D9 /* PersonalLifeTrackerLiveActivity */ = {
-			isa = PBXGroup;
-			children = (
-				3280E4640F784295A40A98B4 /* Color+hex.swift */,
-				48C0489433934D33B3370898 /* Date+toTimerInterval.swift */,
-				2856ACA0B1A94CAFADDB2F71 /* Image+dynamic.swift */,
-				36DE9F57546846519C1BDF1C /* LiveActivityView.swift */,
-				3CCC875CA1834A58957FAF1E /* LiveActivityWidget.swift */,
-				55C21AE04E8E4608811CAAA0 /* LiveActivityWidgetBundle.swift */,
-				BC074581BE3C4BBABF47BE0C /* View+applyIfPresent.swift */,
-				63167D8571254F7CAC8B5EC1 /* View+applyWidgetURL.swift */,
-				524A9A31F9D247BAB0FB2899 /* ViewHelpers.swift */,
-				7857CB78139B4E9BA12513E8 /* Info.plist */,
-				CE7703F8FFB2469A8FC72A80 /* Assets.xcassets */,
-				5933EABECC434D3FA3DF796F /* PersonalLifeTrackerLiveActivity.entitlements */,
-			);
-			name = PersonalLifeTrackerLiveActivity;
-			path = PersonalLifeTrackerLiveActivity;
-			sourceTree = "<group>";
-		};
-		03911198E8704065ADA51590 /* PersonalLifeTrackerLiveActivity */ = {
-			isa = PBXGroup;
-			children = (
-				3280E4640F784295A40A98B4 /* Color+hex.swift */,
-				48C0489433934D33B3370898 /* Date+toTimerInterval.swift */,
-				2856ACA0B1A94CAFADDB2F71 /* Image+dynamic.swift */,
-				36DE9F57546846519C1BDF1C /* LiveActivityView.swift */,
-				3CCC875CA1834A58957FAF1E /* LiveActivityWidget.swift */,
-				55C21AE04E8E4608811CAAA0 /* LiveActivityWidgetBundle.swift */,
-				BC074581BE3C4BBABF47BE0C /* View+applyIfPresent.swift */,
-				63167D8571254F7CAC8B5EC1 /* View+applyWidgetURL.swift */,
-				524A9A31F9D247BAB0FB2899 /* ViewHelpers.swift */,
-				7857CB78139B4E9BA12513E8 /* Info.plist */,
-				CE7703F8FFB2469A8FC72A80 /* Assets.xcassets */,
-				5933EABECC434D3FA3DF796F /* PersonalLifeTrackerLiveActivity.entitlements */,
-			);
-			name = PersonalLifeTrackerLiveActivity;
-			path = PersonalLifeTrackerLiveActivity;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		11CD3840CDB64A02B52E3FED /* PersonalLifeTrackerLiveActivity */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 0F92DAF1D8484AD8AE313C46 /* Build configuration list for PBXNativeTarget "PersonalLifeTrackerLiveActivity" */;
+			buildPhases = (
+				E4B75AEE8A9C4A9EBF0BB13A /* Sources */,
+				1C0847E3A0084853A0EA6575 /* Frameworks */,
+				EB7B7C3B32F848CBB21A4D2B /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = PersonalLifeTrackerLiveActivity;
+			productName = PersonalLifeTrackerLiveActivity;
+			productReference = EA6EF66D479141D6BE059B27 /* PersonalLifeTrackerLiveActivity.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 		13B07F861A680F5B00A75B9A /* PersonalLifeTracker */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "PersonalLifeTracker" */;
 			buildPhases = (
 				08A4A3CD28434E44B6B9DE2E /* [CP] Check Pods Manifest.lock */,
+				839ABB3AB7F3F9F1B6584DEB /* [Expo] Configure project */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
 				800E24972A6A228C8D4807E9 /* [CP] Copy Pods Resources */,
-				47E86EB1141F48A882AB1F7D /* Embed Foundation Extensions */,
-				859F453E77F447639978FD7B /* Embed Foundation Extensions */,
+				B8C7C4938D5A49A496C1E417 /* Embed Foundation Extensions */,
+				ADA69F955B63D48AB54C44D3 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				224240139A4F424AAE246790 /* PBXTargetDependency */,
-				5B03D0497B1C4F6D8CAECECB /* PBXTargetDependency */,
+				0EF972BE2AF84C819A7F6F4C /* PBXTargetDependency */,
 			);
 			name = PersonalLifeTracker;
 			productName = PersonalLifeTracker;
 			productReference = 13B07F961A680F5B00A75B9A /* PersonalLifeTracker.app */;
 			productType = "com.apple.product-type.application";
-		};
-		4F11A5E4801544B591E754E5 /* PersonalLifeTrackerLiveActivity */ = {
-			isa = PBXNativeTarget;
-			name = PersonalLifeTrackerLiveActivity;
-			productName = PersonalLifeTrackerLiveActivity;
-			productReference = 6E1EE1C817FD411CA4676A94;
-			productType = "com.apple.product-type.app-extension";
-			buildConfigurationList = 850EEF09A8BC4F6087E1812E;
-			buildPhases = (
-				6C39BAB83B71485CB65E85AA /* Embed Foundation Extensions */,
-				A0A82E6397724B3F88FE4BF7 /* Embed Foundation Extensions */,
-				63D4AE0A5D634DD59196CBBE /* Embed Foundation Extensions */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-		};
-		C8217CF415474C11BDE86775 /* PersonalLifeTrackerLiveActivity */ = {
-			isa = PBXNativeTarget;
-			name = PersonalLifeTrackerLiveActivity;
-			productName = PersonalLifeTrackerLiveActivity;
-			productReference = 863C5D33EBFB4726AA788446;
-			productType = "com.apple.product-type.app-extension";
-			buildConfigurationList = 2075B5C89782417AA4776C50;
-			buildPhases = (
-				220740FBD3F644998BB1AAE6 /* Embed Foundation Extensions */,
-				B75008966AFB436BB7575496 /* Embed Foundation Extensions */,
-				D4E6BB8970E64DF6AAA15300 /* Embed Foundation Extensions */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
 		};
 /* End PBXNativeTarget section */
 
@@ -248,13 +259,10 @@
 			attributes = {
 				LastUpgradeCheck = 1130;
 				TargetAttributes = {
+					11CD3840CDB64A02B52E3FED = {
+						LastSwiftMigration = 1250;
+					};
 					13B07F861A680F5B00A75B9A = {
-						LastSwiftMigration = 1250;
-					};
-					4F11A5E4801544B591E754E5 = {
-						LastSwiftMigration = 1250;
-					};
-					C8217CF415474C11BDE86775 = {
 						LastSwiftMigration = 1250;
 					};
 				};
@@ -273,8 +281,7 @@
 			projectRoot = "";
 			targets = (
 				13B07F861A680F5B00A75B9A /* PersonalLifeTracker */,
-				4F11A5E4801544B591E754E5 /* PersonalLifeTrackerLiveActivity */,
-				C8217CF415474C11BDE86775 /* PersonalLifeTrackerLiveActivity */,
+				11CD3840CDB64A02B52E3FED /* PersonalLifeTrackerLiveActivity */,
 			);
 		};
 /* End PBXProject section */
@@ -287,22 +294,15 @@
 				BB2F792D24A3F905000567C9 /* Expo.plist in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */,
+				4CCC702B9ADC6F0367EAE7D6 /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		63D4AE0A5D634DD59196CBBE /* Embed Foundation Extensions */ = {
+		EB7B7C3B32F848CBB21A4D2B /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8F49DDCE90284A4786B69DCF /* Assets.xcassets in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		D4E6BB8970E64DF6AAA15300 /* Embed Foundation Extensions */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				8F49DDCE90284A4786B69DCF /* "Assets.xcassets" in Resources */,
+				2B67011FCA6E4935A8C9FF70 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -355,19 +355,85 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PersonalLifeTracker/Pods-PersonalLifeTracker-resources.sh",
+				"${PODS_CONFIGURATION_BUILD_DIR}/EXApplication/ExpoApplication_privacy.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/EXConstants/EXConstants.bundle",
-				"${PODS_CONFIGURATION_BUILD_DIR}/EXUpdates/EXUpdates.bundle",
-				"${PODS_CONFIGURATION_BUILD_DIR}/React-Core/RCTI18nStrings.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/EXConstants/ExpoConstants_privacy.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/EXNotifications/ExpoNotifications_privacy.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/EXTaskManager/ExpoTaskManager_privacy.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/ExpoFileSystem/ExpoFileSystem_privacy.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/ExpoSystemUI/ExpoSystemUI_privacy.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/RNCAsyncStorage/RNCAsyncStorage_resources.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/RNSVG/RNSVGFilters.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/React-Core/React-Core_privacy.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/React-cxxreact/React-cxxreact_privacy.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/expo-dev-launcher/EXDevLauncher.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/expo-dev-menu/EXDevMenu.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/ExpoApplication_privacy.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/EXConstants.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/EXUpdates.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/RCTI18nStrings.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/ExpoConstants_privacy.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/ExpoNotifications_privacy.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/ExpoTaskManager_privacy.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/ExpoFileSystem_privacy.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/ExpoSystemUI_privacy.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/RNCAsyncStorage_resources.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/RNSVGFilters.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/React-Core_privacy.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/React-cxxreact_privacy.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/EXDevLauncher.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/EXDevMenu.bundle",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-PersonalLifeTracker/Pods-PersonalLifeTracker-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		839ABB3AB7F3F9F1B6584DEB /* [Expo] Configure project */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/.xcode.env",
+				"$(SRCROOT)/.xcode.env.local",
+				"$(SRCROOT)/PersonalLifeTracker/PersonalLifeTracker.entitlements",
+				"$(SRCROOT)/Pods/Target Support Files/Pods-PersonalLifeTracker/expo-configure-project.sh",
+			);
+			name = "[Expo] Configure project";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(SRCROOT)/Pods/Target Support Files/Pods-PersonalLifeTracker/ExpoModulesProvider.swift",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# This script configures Expo modules and generates the modules provider file.\nbash -l -c \"./Pods/Target\\ Support\\ Files/Pods-PersonalLifeTracker/expo-configure-project.sh\"\n";
+		};
+		ADA69F955B63D48AB54C44D3 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-PersonalLifeTracker/Pods-PersonalLifeTracker-frameworks.sh",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/React-Core-prebuilt/React.framework/React",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/ReactNativeDependencies/ReactNativeDependencies.framework/ReactNativeDependencies",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/hermes-engine/Pre-built/hermes.framework/hermes",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/React.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ReactNativeDependencies.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/hermes.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-PersonalLifeTracker/Pods-PersonalLifeTracker-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -378,49 +444,44 @@
 			buildActionMask = 2147483647;
 			files = (
 				F11748422D0307B40044C1D9 /* AppDelegate.swift in Sources */,
+				9B787FEC81C22F025B6E4FB5 /* ExpoModulesProvider.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		6C39BAB83B71485CB65E85AA /* Embed Foundation Extensions */ = {
+		E4B75AEE8A9C4A9EBF0BB13A /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C13B45055CD64820A21A0849 /* Color+hex.swift in Sources */,
-				627D779207CB4D58AC19B5F4 /* Date+toTimerInterval.swift in Sources */,
-				C76DF04542084554A686982F /* Image+dynamic.swift in Sources */,
-				D201018B54254C36AC2CC69B /* LiveActivityView.swift in Sources */,
-				9481F763BF514875A231F2FF /* LiveActivityWidget.swift in Sources */,
-				F82DDFF891504A7D80139AD3 /* LiveActivityWidgetBundle.swift in Sources */,
-				C3720FF926A944B797F3D062 /* View+applyIfPresent.swift in Sources */,
-				84738F8535F34ECD9AD62E45 /* View+applyWidgetURL.swift in Sources */,
-				ABB66189A7DA4B5783D3D3EF /* ViewHelpers.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		220740FBD3F644998BB1AAE6 /* Embed Foundation Extensions */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				C13B45055CD64820A21A0849 /* "Color+hex.swift" in Sources */,
-				627D779207CB4D58AC19B5F4 /* "Date+toTimerInterval.swift" in Sources */,
-				C76DF04542084554A686982F /* "Image+dynamic.swift" in Sources */,
-				D201018B54254C36AC2CC69B /* "LiveActivityView.swift" in Sources */,
-				9481F763BF514875A231F2FF /* "LiveActivityWidget.swift" in Sources */,
-				F82DDFF891504A7D80139AD3 /* "LiveActivityWidgetBundle.swift" in Sources */,
-				C3720FF926A944B797F3D062 /* "View+applyIfPresent.swift" in Sources */,
-				84738F8535F34ECD9AD62E45 /* "View+applyWidgetURL.swift" in Sources */,
-				ABB66189A7DA4B5783D3D3EF /* "ViewHelpers.swift" in Sources */,
+				8E1BA317DE3D4DEBA74881BE /* Color+hex.swift in Sources */,
+				167B5A2307B84719A5DF46A7 /* Date+toTimerInterval.swift in Sources */,
+				10EABB6995274C8C80FB06AB /* Image+dynamic.swift in Sources */,
+				A50813A6B23D42BBAF429C6E /* LiveActivityView.swift in Sources */,
+				F75DFA39610540CFB75CD2B2 /* LiveActivityWidget.swift in Sources */,
+				230AFBE4695C4304B51F7EE2 /* LiveActivityWidgetBundle.swift in Sources */,
+				0377A15F15DF443A9DA6FEA8 /* View+applyIfPresent.swift in Sources */,
+				D81C37D7C46A4A2BB4DC37CE /* View+applyWidgetURL.swift in Sources */,
+				ECEE0DAEBBF1419E8F104939 /* ViewHelpers.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		0EF972BE2AF84C819A7F6F4C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 11CD3840CDB64A02B52E3FED /* PersonalLifeTrackerLiveActivity */;
+			targetProxy = 789AC93AD24A4E53B291734F /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = DCA16A8CBDFB0456E0051531 /* Pods-PersonalLifeTracker.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = PersonalLifeTracker/PersonalLifeTracker.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_BITCODE = NO;
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -439,22 +500,24 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.PersonalLifeTracker.prod";
-				PRODUCT_NAME = "PersonalLifeTracker";
+				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_DEBUG";
+				PRODUCT_BUNDLE_IDENTIFIER = com.PersonalLifeTracker.prod;
+				PRODUCT_NAME = PersonalLifeTracker;
 				SWIFT_OBJC_BRIDGING_HEADER = "PersonalLifeTracker/PersonalLifeTracker-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
-				VERSIONING_SYSTEM = "apple-generic";
 				TARGETED_DEVICE_FAMILY = "1,2";
-				CODE_SIGN_ENTITLEMENTS = PersonalLifeTracker/PersonalLifeTracker.entitlements;
+				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C5D38792F0D6E9EEF6C565E0 /* Pods-PersonalLifeTracker.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = PersonalLifeTracker/PersonalLifeTracker.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
 				INFOPLIST_FILE = PersonalLifeTracker/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.1;
@@ -468,15 +531,36 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.PersonalLifeTracker.prod";
-				PRODUCT_NAME = "PersonalLifeTracker";
+				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_RELEASE";
+				PRODUCT_BUNDLE_IDENTIFIER = com.PersonalLifeTracker.prod;
+				PRODUCT_NAME = PersonalLifeTracker;
 				SWIFT_OBJC_BRIDGING_HEADER = "PersonalLifeTracker/PersonalLifeTracker-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
-				VERSIONING_SYSTEM = "apple-generic";
 				TARGETED_DEVICE_FAMILY = "1,2";
-				CODE_SIGN_ENTITLEMENTS = PersonalLifeTracker/PersonalLifeTracker.entitlements;
+				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;
+		};
+		3A23C87BB17B4DBA989D2B02 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_ENTITLEMENTS = PersonalLifeTrackerLiveActivity/PersonalLifeTrackerLiveActivity.entitlements;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = PersonalLifeTrackerLiveActivity/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = PersonalLifeTrackerLiveActivity;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
+				MARKETING_VERSION = 1.0.0;
+				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_DEBUG";
+				PRODUCT_BUNDLE_IDENTIFIER = com.PersonalLifeTracker.prod.PersonalLifeTrackerLiveActivity;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
 		};
 		83CBBA201A601CBA00E9B192 /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -530,10 +614,14 @@
 					/usr/lib/swift,
 					"$(inherited)",
 				);
-				LIBRARY_SEARCH_PATHS = "\"$(inherited)\"";
+				LIBRARY_SEARCH_PATHS = "$(SDKROOT)/usr/lib/swift\"$(inherited)\"";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
+				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
+				SWIFT_ENABLE_EXPLICIT_MODULES = NO;
+				USE_HERMES = true;
 			};
 			name = Debug;
 		};
@@ -582,96 +670,49 @@
 					/usr/lib/swift,
 					"$(inherited)",
 				);
-				LIBRARY_SEARCH_PATHS = "\"$(inherited)\"";
+				LIBRARY_SEARCH_PATHS = "$(SDKROOT)/usr/lib/swift\"$(inherited)\"";
 				MTL_ENABLE_DEBUG_INFO = NO;
+				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
+				SWIFT_ENABLE_EXPLICIT_MODULES = NO;
+				USE_HERMES = true;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
 		};
-		8C94F624799D4E83B2E8B4BC /* Debug */ = {
-			name = Debug;
+		E529CFCEF65547ECB176C5BE /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_ENTITLEMENTS = PersonalLifeTrackerLiveActivity/PersonalLifeTrackerLiveActivity.entitlements;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = PersonalLifeTrackerLiveActivity/Info.plist;
-				CURRENT_PROJECT_VERSION = "1";
-				IPHONEOS_DEPLOYMENT_TARGET = "16.2";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.PersonalLifeTracker.prod.PersonalLifeTrackerLiveActivity";
-				GENERATE_INFOPLIST_FILE = "YES";
 				INFOPLIST_KEY_CFBundleDisplayName = PersonalLifeTrackerLiveActivity;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				MARKETING_VERSION = "1.0.0";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
+				MARKETING_VERSION = 1.0.0;
+				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_RELEASE";
+				PRODUCT_BUNDLE_IDENTIFIER = com.PersonalLifeTracker.prod.PersonalLifeTrackerLiveActivity;
+				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				CODE_SIGN_ENTITLEMENTS = "PersonalLifeTrackerLiveActivity/PersonalLifeTrackerLiveActivity.entitlements";
-				APPLICATION_EXTENSION_API_ONLY = "YES";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
-		};
-		D83A1E4CFC53456CA45E5F96 /* Release */ = {
 			name = Release;
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				INFOPLIST_FILE = PersonalLifeTrackerLiveActivity/Info.plist;
-				CURRENT_PROJECT_VERSION = "1";
-				IPHONEOS_DEPLOYMENT_TARGET = "16.2";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.PersonalLifeTracker.prod.PersonalLifeTrackerLiveActivity";
-				GENERATE_INFOPLIST_FILE = "YES";
-				INFOPLIST_KEY_CFBundleDisplayName = PersonalLifeTrackerLiveActivity;
-				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				MARKETING_VERSION = "1.0.0";
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				CODE_SIGN_ENTITLEMENTS = "PersonalLifeTrackerLiveActivity/PersonalLifeTrackerLiveActivity.entitlements";
-				APPLICATION_EXTENSION_API_ONLY = "YES";
-			};
-		};
-		9AD9CF65F0E7468EA49CBAAD /* Debug */ = {
-			name = Debug;
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				INFOPLIST_FILE = PersonalLifeTrackerLiveActivity/Info.plist;
-				CURRENT_PROJECT_VERSION = "1";
-				IPHONEOS_DEPLOYMENT_TARGET = "16.2";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.PersonalLifeTracker.prod.PersonalLifeTrackerLiveActivity";
-				GENERATE_INFOPLIST_FILE = "YES";
-				INFOPLIST_KEY_CFBundleDisplayName = PersonalLifeTrackerLiveActivity;
-				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				MARKETING_VERSION = "1.0.0";
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				CODE_SIGN_ENTITLEMENTS = "PersonalLifeTrackerLiveActivity/PersonalLifeTrackerLiveActivity.entitlements";
-				APPLICATION_EXTENSION_API_ONLY = "YES";
-			};
-		};
-		CB20DDD2A7594386A836C013 /* Release */ = {
-			name = Release;
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				INFOPLIST_FILE = PersonalLifeTrackerLiveActivity/Info.plist;
-				CURRENT_PROJECT_VERSION = "1";
-				IPHONEOS_DEPLOYMENT_TARGET = "16.2";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.PersonalLifeTracker.prod.PersonalLifeTrackerLiveActivity";
-				GENERATE_INFOPLIST_FILE = "YES";
-				INFOPLIST_KEY_CFBundleDisplayName = PersonalLifeTrackerLiveActivity;
-				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				MARKETING_VERSION = "1.0.0";
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				CODE_SIGN_ENTITLEMENTS = "PersonalLifeTrackerLiveActivity/PersonalLifeTrackerLiveActivity.entitlements";
-				APPLICATION_EXTENSION_API_ONLY = "YES";
-			};
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		0F92DAF1D8484AD8AE313C46 /* Build configuration list for PBXNativeTarget "PersonalLifeTrackerLiveActivity" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3A23C87BB17B4DBA989D2B02 /* Debug */,
+				E529CFCEF65547ECB176C5BE /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "PersonalLifeTracker" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -690,80 +731,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		850EEF09A8BC4F6087E1812E /* Build configuration list for PBXNativeTarget "PersonalLifeTrackerLiveActivity" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				8C94F624799D4E83B2E8B4BC /* Debug */,
-				D83A1E4CFC53456CA45E5F96 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		2075B5C89782417AA4776C50 /* Build configuration list for PBXNativeTarget "PersonalLifeTrackerLiveActivity" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				9AD9CF65F0E7468EA49CBAAD /* Debug */,
-				CB20DDD2A7594386A836C013 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
 /* End XCConfigurationList section */
-
-/* Begin PBXTargetDependency section */
-		224240139A4F424AAE246790 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 4F11A5E4801544B591E754E5 /* PersonalLifeTrackerLiveActivity */;
-			targetProxy = EA3DFD3395B04559A8B012F1 /* PBXContainerItemProxy */;
-		};
-		5B03D0497B1C4F6D8CAECECB /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = C8217CF415474C11BDE86775 /* PersonalLifeTrackerLiveActivity */;
-			targetProxy = 34DC091F479040B69C817A7C /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
-
-/* Begin PBXContainerItemProxy section */
-		EA3DFD3395B04559A8B012F1 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 83CBB9F71A601CBA00E9B192 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 4F11A5E4801544B591E754E5;
-			remoteInfo = PersonalLifeTrackerLiveActivity;
-		};
-		34DC091F479040B69C817A7C /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 83CBB9F71A601CBA00E9B192 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = C8217CF415474C11BDE86775;
-			remoteInfo = PersonalLifeTrackerLiveActivity;
-		};
-/* End PBXContainerItemProxy section */
-
-/* Begin PBXCopyFilesBuildPhase section */
-		47E86EB1141F48A882AB1F7D /* Embed Foundation Extensions */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				85AB214C3D684ED88F9B1570 /* PersonalLifeTrackerLiveActivity.appex in Embed Foundation Extensions */,
-				A1B8390188BD4A28AFCD90AB /* PersonalLifeTrackerLiveActivity.appex in Embed Foundation Extensions */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			name = "Embed Foundation Extensions";
-			dstPath = "";
-			dstSubfolderSpec = 13;
-		};
-		859F453E77F447639978FD7B /* Embed Foundation Extensions */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			name = "Embed Foundation Extensions";
-			dstPath = "";
-			dstSubfolderSpec = 13;
-		};
-/* End PBXCopyFilesBuildPhase section */
 	};
 	rootObject = 83CBB9F71A601CBA00E9B192 /* Project object */;
 }
