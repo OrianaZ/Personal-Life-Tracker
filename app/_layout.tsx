@@ -10,6 +10,7 @@ import { FastingProvider } from '@/components/context/FastingContext';
 import { MealsProvider } from '@/components/context/MealsContext';
 import { MedsProvider } from '@/components/context/MedsContext';
 import { WaterProvider } from '@/components/context/WaterContext';
+import { ActivityProvider } from "@/components/context/ActivityContext";
 
 
 export default function RootLayout() {
@@ -28,14 +29,15 @@ export default function RootLayout() {
         <MealsProvider>
           <MedsProvider>
             <WaterProvider>
+              <ActivityProvider>
 
-              <Stack>
-                <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-                <Stack.Screen name="+not-found" />
-              </Stack>
-              <StatusBar style="auto" />
-              {/* <NotificationsManager /> */}
-
+                  <Stack>
+                    <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+                    <Stack.Screen name="+not-found" />
+                  </Stack>
+                  <StatusBar style="auto" />
+                  {/* <NotificationsManager /> */}
+              </ActivityProvider>
             </WaterProvider>
           </MedsProvider>
         </MealsProvider>
