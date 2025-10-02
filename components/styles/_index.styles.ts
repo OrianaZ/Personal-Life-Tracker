@@ -19,4 +19,9 @@ export const indexStyles = StyleSheet.create({
   sodawater:{ flexDirection: "row", justifyContent: "space-around", alignItems: "center", flexWrap: "wrap", marginTop:5, },
   soda:{ color: Colors.light.purple, fontSize: 16},
   water:{ color: Colors.light.blue, fontSize: 16},
+    
+    activityContainer: { marginHorizontal: 20, padding: 12, borderWidth: 1, borderColor: Colors.dark.borderGray, borderRadius: 10,},
+    stepsWeight:{ flexDirection: "row", justifyContent: "space-around", alignItems: "center", flexWrap: "wrap", marginTop:5, },
+    steps:{ color: Colors.light.purple, fontSize: 16},
+    weight:{ color: Colors.light.blue, fontSize: 16},
 });

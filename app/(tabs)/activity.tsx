@@ -1,10 +1,19 @@
-// screens/ActivityScreen.tsx
+// general
 import React, { useState } from "react";
-import { View, Button, Modal, TextInput } from "react-native";
+import { View, Button, Modal,TouchableOpacity, TextInput } from "react-native";
+
+//styles
 import { activityStyles } from "@/components/styles/_activity.styles";
-import { ThemedText } from "@/components/theme/ThemedText";
-import { StepsProgress } from "@/components/functions/activity/StepsProgress";
+
+//context
 import { useHealth } from "@/components/context/ActivityContext";
+
+//theme
+import { ThemedText } from "@/components/theme/ThemedText";
+
+//functions
+import { StepsProgress } from "@/components/functions/activity/StepsProgress";
+
 
 export default function ActivityScreen() {
   const { steps, weightEntries, addWeight } = useHealth();
@@ -16,24 +25,24 @@ export default function ActivityScreen() {
 
       {steps !== null && <StepsProgress steps={steps} max={12000} />}
 
-          <View style={activityStyles.metricContainer}>
-            <ThemedText style={activityStyles.metricLabel}>Weight</ThemedText>
+          <View style={activityStyles.weightContainer}>
+            <ThemedText style={activityStyles.weightText}>Weight</ThemedText>
 
             {weightEntries[0] ? (
-              <View style={{ flexDirection: "row", justifyContent: "space-between", width: 140 }}>
-                <ThemedText style={{ fontSize: 14, color: "white" }}>
+              <View style={activityStyles.weightRow}>
+                <ThemedText>
                   {weightEntries[0].weight.toFixed(1)} lbs
                 </ThemedText>
-                <ThemedText style={{ fontSize: 14, color: "white" }}>
+                <ThemedText>
                   {new Date(weightEntries[0].date).toLocaleDateString()}
                 </ThemedText>
               </View>
             ) : (
-              <ThemedText style={{ fontSize: 14 }}>Loading...</ThemedText>
+              <ThemedText>Loading...</ThemedText>
             )}
 
             <ThemedText
-              style={{ fontSize: 14, marginTop: 4, color: "#4DA6FF" }}
+              style={activityStyles.reportWeight}
               onPress={() => setModalVisible(true)}
             >
               Report Weight
@@ -42,8 +51,8 @@ export default function ActivityScreen() {
 
       {/* Modal for weight input */}
       <Modal visible={modalVisible} transparent animationType="slide">
-        <View style={{ flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: "#00000077" }}>
-          <View style={{ backgroundColor: "white", padding: 20, borderRadius: 12 }}>
+        <View style={activityStyles.modalBackground}>
+          <View style={activityStyles.modalContent}>
             <TextInput
               placeholder="Enter weight (lbs)"
               keyboardType="numeric"
@@ -51,17 +60,23 @@ export default function ActivityScreen() {
               onChangeText={setInputWeight}
               style={{ borderBottomWidth: 1, marginBottom: 10 }}
             />
-            <Button
-              title="Save"
-              onPress={() => {
-                if (inputWeight) {
-                  addWeight(parseFloat(inputWeight));
-                  setInputWeight("");
-                  setModalVisible(false);
-                }
-              }}
-            />
-            <Button title="Cancel" onPress={() => setModalVisible(false)} />
+          
+          <View style={activityStyles.buttonRow}>
+                <TouchableOpacity style={activityStyles.cancel} onPress={() => setModalVisible(false)}>
+                    <ThemedText style={activityStyles.buttonText}>Cancel</ThemedText>
+                </TouchableOpacity>
+              <TouchableOpacity style={activityStyles.save}
+                    onPress={() => {
+                      if (inputWeight) {
+                        addWeight(parseFloat(inputWeight));
+                        setInputWeight("");
+                        setModalVisible(false);
+                      }
+                    }}
+                  >
+                  <ThemedText style={activityStyles.buttonText}>Save</ThemedText>
+              </TouchableOpacity>
+          </View>
           </View>
         </View>
       </Modal>

@@ -13,6 +13,7 @@ import { overviewStyles } from '@/components/styles/_overview.styles';
 //context
 import { useFasting } from '@/components/context/FastingContext';
 import { useWater } from '@/components/context/WaterContext';
+import { useHealth } from '@/components/context/ActivityContext';
 
 //theme
 import { Colors } from '@/components/theme/Colors';
@@ -100,52 +101,54 @@ export default function OverviewScreen() {
   }
 
   // Activity
-  const stepsData = useMemo(() => [
-    5000, 7000, 6500, 8000, 9000, 10000, 12000, 11000, 7500, 8500,
-    9000, 9500, 10000, 10500, 11000, 11500, 12000, 13000, 12500, 14000,
-    14500, 15000, 12000, 11000, 9000, 8000, 7500, 7000, 6500, 6000,
-  ], []);
+    const { steps, weightEntries } = useHealth(); // get actual data
 
-  const stepsDataPrev = useMemo(() => [
-    5200, 6800, 7200, 7900, 8800, 9700, 11500, 10800, 7600, 8300,
-    9100, 9400, 10200, 10700, 11300, 11800, 12100, 12900, 12400, 13800,
-    14600, 14900, 11900, 11200, 9200, 8100, 7700, 7100, 6600, 6100,
-  ], []);
+    // --- helper to generate daily arrays from HealthKit ---
+    const generateDailySteps = (currentMonth: dayjs.Dayjs, daysInMonth: number) => {
+      const arr: number[] = [];
+      let lastValue = 0; // fallback if no step data
+      for (let i = 0; i < daysInMonth; i++) {
+        const dateStr = currentMonth.add(i, 'day').format('YYYY-MM-DD');
+        // HealthKit currently only gives us total steps today, not historical
+        // So fill current day with actual steps, others fallback
+        if (dateStr === dayjs().format('YYYY-MM-DD') && steps != null) {
+          lastValue = steps;
+          arr.push(steps);
+        } else {
+          arr.push(lastValue);
+        }
+      }
+      return arr;
+    };
 
-  const weightDataRaw = useMemo(() => [
-    180, 0, 0, 0, 0, 0, 178, 179, 0, 0,
-    177, 176, 0, 0, 0, 175, 174, 0, 0, 0,
-    173, 172, 0, 0, 0, 171, 170, 0, 0, 165
-  ], []);
+    const generateDailyWeight = (monthStart: dayjs.Dayjs, daysInMonth: number) => {
+      const arr: number[] = [];
+      let lastValue = weightEntries.length ? weightEntries[weightEntries.length - 1].weight : 0; // use latest weight
+      for (let i = 0; i < daysInMonth; i++) {
+        const dateStr = monthStart.add(i, 'day').format('YYYY-MM-DD');
+        const entry = weightEntries.find(e => e.date.startsWith(dateStr));
+        if (entry) lastValue = entry.weight;
+        arr.push(lastValue);
+      }
+      return arr;
+    };
 
-  const weightData: number[] = [];
-  let lastValidWeight = 180;
-  for (let i = 0; i < weightDataRaw.length; i++) {
-    const value = weightDataRaw[i];
-    if (value === 0) weightData.push(lastValidWeight);
-    else { weightData.push(value); lastValidWeight = value; }
-  }
 
-  const weightDataRawPrev = useMemo(() => [
-    190, 0, 0, 0, 0, 0, 188, 189, 0, 0,
-    187, 186, 0, 0, 0, 185, 184, 0, 0, 0,
-    183, 182, 0, 0, 0, 181, 0 , 0, 0, 180
-  ], []);
+    const stepsData = generateDailySteps(startOfMonth, daysInMonth);
+    const stepsDataPrev = generateDailySteps(startOfPrevMonth, daysInMonth);
 
-  const weightDataPrev: number[] = [];
-  let lastValidWeightPrev = 180;
-  for (let i = 0; i < weightDataRawPrev.length; i++) {
-    const value = weightDataRawPrev[i];
-    if (value === 0) weightDataPrev.push(lastValidWeightPrev);
-    else { weightDataPrev.push(value); lastValidWeightPrev = value; }
-  }
+    const weightData = useMemo(() => generateDailyWeight(startOfMonth, daysInMonth), [weightEntries]);
+    const weightDataPrev = generateDailyWeight(startOfPrevMonth, daysInMonth);
+    
+    const weightMin = 140;
+    const weightMax = 200;
+    const stepsMin = Math.min(...stepsData, ...stepsDataPrev);
+    const stepsMax = Math.max(...stepsData, ...stepsDataPrev);
 
-  const weightMin = 140;
-  const weightMax = 200;
-  const stepsMin = Math.min(...stepsData, ...stepsDataPrev);
-  const stepsMax = Math.max(...stepsData, ...stepsDataPrev);
-  const weightNormalized = weightData.map(w => ((w - weightMin) / (weightMax - weightMin)) * (stepsMax - stepsMin) + stepsMin);
-  const weightNormalizedPrev = weightDataPrev.map(w => ((w - weightMin) / (weightMax - weightMin)) * (stepsMax - stepsMin) + stepsMin);
+    // normalize weight for chart
+    const weightNormalized = weightData.map(w => ((w - weightMin) / (weightMax - weightMin)) * (stepsMax - stepsMin) + stepsMin);
+    const weightNormalizedPrev = weightDataPrev.map(w => ((w - weightMin) / (weightMax - weightMin)) * (stepsMax - stepsMin) + stepsMin);
+
 
   // ---------- Tab View ----------
   const [index, setIndex] = useState(0);

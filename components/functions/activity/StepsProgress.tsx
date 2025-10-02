@@ -1,10 +1,14 @@
 // components/SemiCircleProgress.tsx
 import React from "react";
-import { View, Text } from "react-native";
+import { View } from "react-native";
 import Svg, { Circle, Text as SvgText } from "react-native-svg";
+
+//styles
+import { activityStyles } from "@/components/styles/_activity.styles";
 
 //theme
 import { Colors } from "@/components/theme/Colors";
+import { ThemedText } from "@/components/theme/ThemedText";
 
 type Props = {
   steps: number;
@@ -17,14 +21,13 @@ export const StepsProgress: React.FC<Props> = ({
   max,
   markers = [3000, 6000, 9000, 12000],
 }) => {
-    steps = 6000
   const radius = 125;
   const strokeWidth = 12;
   const circumference = Math.PI * radius;
   const progress = Math.min((Math.max(steps,1)) / max, 1) * circumference;
 
   return (
-    <View style={{ alignItems: "center", justifyContent: "center" }}>
+    <View style={activityStyles.stepsContainer}>
           <Svg width={radius * 2 + strokeWidth} height={radius + strokeWidth / 2}>
             <Circle
               cx={radius + strokeWidth / 2}
@@ -57,17 +60,9 @@ export const StepsProgress: React.FC<Props> = ({
           </Svg>
           
           {/* step number in center */}
-               <Text
-                 style={{
-                   position: "absolute",
-                   top: radius / 2.5,
-                   fontSize: 18,
-                   fontWeight: "600",
-                   color: "white",
-                 }}
-               >
+               <ThemedText style={activityStyles.stepsText}>
                  {steps.toLocaleString()}
-               </Text>
+               </ThemedText>
           
     </View>
   );

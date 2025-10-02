@@ -25,6 +25,7 @@
 		ECEE0DAEBBF1419E8F104939 /* ViewHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24A34028FAD0454E9AE70ECA /* ViewHelpers.swift */; };
 		F11748422D0307B40044C1D9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F11748412D0307B40044C1D9 /* AppDelegate.swift */; };
 		F75DFA39610540CFB75CD2B2 /* LiveActivityWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 117B301D99464153913B0E7A /* LiveActivityWidget.swift */; };
+		27F2D6D49DB44130AB2FC1E5 /* PersonalLifeTrackerLiveActivity.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = FD30EAD3952F4BFFA2593CA1 /* PersonalLifeTrackerLiveActivity.appex */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -33,6 +34,13 @@
 			containerPortal = 83CBB9F71A601CBA00E9B192 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 11CD3840CDB64A02B52E3FED;
+			remoteInfo = PersonalLifeTrackerLiveActivity;
+		};
+		E82619523D844D2690EEDBA7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 83CBB9F71A601CBA00E9B192 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4A4176540ACD4DEA834099BE;
 			remoteInfo = PersonalLifeTrackerLiveActivity;
 		};
 /* End PBXContainerItemProxy section */
@@ -45,9 +53,20 @@
 			dstSubfolderSpec = 13;
 			files = (
 				02F0F6F54298485986ECD129 /* PersonalLifeTrackerLiveActivity.appex in Embed Foundation Extensions */,
+				27F2D6D49DB44130AB2FC1E5 /* PersonalLifeTrackerLiveActivity.appex in Embed Foundation Extensions */,
 			);
 			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D4A0214580AA4E658F1D91CA /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			name = "Embed Foundation Extensions";
+			dstPath = "";
+			dstSubfolderSpec = 13;
 		};
 /* End PBXCopyFilesBuildPhase section */
 
@@ -78,6 +97,7 @@
 		F0D502398B51446AB32D7D5B /* Image+dynamic.swift */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.swift; path = "Image+dynamic.swift"; sourceTree = "<group>"; };
 		F11748412D0307B40044C1D9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = PersonalLifeTracker/AppDelegate.swift; sourceTree = "<group>"; };
 		F11748442D0722820044C1D9 /* PersonalLifeTracker-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "PersonalLifeTracker-Bridging-Header.h"; path = "PersonalLifeTracker/PersonalLifeTracker-Bridging-Header.h"; sourceTree = "<group>"; };
+		FD30EAD3952F4BFFA2593CA1 /* PersonalLifeTrackerLiveActivity.appex */ = {isa = PBXFileReference; name = "PersonalLifeTrackerLiveActivity.appex"; path = "PersonalLifeTrackerLiveActivity.appex"; sourceTree = BUILT_PRODUCTS_DIR; fileEncoding = undefined; lastKnownFileType = undefined; explicitFileType = wrapper.app-extension; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -90,6 +110,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		1C0847E3A0084853A0EA6575 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E8F75DC51E384D57972BA30D /* Embed Foundation Extensions */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -164,6 +191,7 @@
 				B666ED5F71E5487E9B838BE1 /* PersonalLifeTrackerLiveActivity */,
 				2EE9BD729D3B796F150A0151 /* Pods */,
 				3995AC3D2C4C9A62C5EF5B1E /* ExpoModulesProviders */,
+				ECDF179E97314E5C81DD48BF /* PersonalLifeTrackerLiveActivity */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -175,6 +203,7 @@
 			children = (
 				13B07F961A680F5B00A75B9A /* PersonalLifeTracker.app */,
 				EA6EF66D479141D6BE059B27 /* PersonalLifeTrackerLiveActivity.appex */,
+				FD30EAD3952F4BFFA2593CA1 /* PersonalLifeTrackerLiveActivity.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -205,6 +234,26 @@
 			);
 			name = Supporting;
 			path = PersonalLifeTracker/Supporting;
+			sourceTree = "<group>";
+		};
+		ECDF179E97314E5C81DD48BF /* PersonalLifeTrackerLiveActivity */ = {
+			isa = PBXGroup;
+			children = (
+				D15F024E889D4606AC7C856F /* Color+hex.swift */,
+				645BE070116A41A6B1BD68FF /* Date+toTimerInterval.swift */,
+				F0D502398B51446AB32D7D5B /* Image+dynamic.swift */,
+				1754636C41DD467BAFB70CC0 /* LiveActivityView.swift */,
+				117B301D99464153913B0E7A /* LiveActivityWidget.swift */,
+				6BC0722BF89147709CBE824E /* LiveActivityWidgetBundle.swift */,
+				603C96C164994A98BE0167EB /* View+applyIfPresent.swift */,
+				24EA70A9A3374F1BBCC251AA /* View+applyWidgetURL.swift */,
+				24A34028FAD0454E9AE70ECA /* ViewHelpers.swift */,
+				A94BCC279CFB40868E5E19B9 /* Info.plist */,
+				5DFE292D84A749C291DE43CD /* Assets.xcassets */,
+				DE3B2D3ED39F48479C83E42B /* PersonalLifeTrackerLiveActivity.entitlements */,
+			);
+			name = PersonalLifeTrackerLiveActivity;
+			path = PersonalLifeTrackerLiveActivity;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -240,16 +289,35 @@
 				800E24972A6A228C8D4807E9 /* [CP] Copy Pods Resources */,
 				B8C7C4938D5A49A496C1E417 /* Embed Foundation Extensions */,
 				ADA69F955B63D48AB54C44D3 /* [CP] Embed Pods Frameworks */,
+				D4A0214580AA4E658F1D91CA /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 				0EF972BE2AF84C819A7F6F4C /* PBXTargetDependency */,
+				FD0B2A837E3F45D28F95F8B9 /* PBXTargetDependency */,
 			);
 			name = PersonalLifeTracker;
 			productName = PersonalLifeTracker;
 			productReference = 13B07F961A680F5B00A75B9A /* PersonalLifeTracker.app */;
 			productType = "com.apple.product-type.application";
+		};
+		4A4176540ACD4DEA834099BE /* PersonalLifeTrackerLiveActivity */ = {
+			isa = PBXNativeTarget;
+			name = PersonalLifeTrackerLiveActivity;
+			productName = PersonalLifeTrackerLiveActivity;
+			productReference = FD30EAD3952F4BFFA2593CA1;
+			productType = "com.apple.product-type.app-extension";
+			buildConfigurationList = 2EB21EBC6A6E4D188839A6BE;
+			buildPhases = (
+				E9E2740136894327A191F000 /* Embed Foundation Extensions */,
+				E8F75DC51E384D57972BA30D /* Embed Foundation Extensions */,
+				5A34BAE181FD46BE9AA92DE7 /* Embed Foundation Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
 		};
 /* End PBXNativeTarget section */
 
@@ -263,6 +331,9 @@
 						LastSwiftMigration = 1250;
 					};
 					13B07F861A680F5B00A75B9A = {
+						LastSwiftMigration = 1250;
+					};
+					4A4176540ACD4DEA834099BE = {
 						LastSwiftMigration = 1250;
 					};
 				};
@@ -282,6 +353,7 @@
 			targets = (
 				13B07F861A680F5B00A75B9A /* PersonalLifeTracker */,
 				11CD3840CDB64A02B52E3FED /* PersonalLifeTrackerLiveActivity */,
+				4A4176540ACD4DEA834099BE /* PersonalLifeTrackerLiveActivity */,
 			);
 		};
 /* End PBXProject section */
@@ -299,6 +371,14 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		EB7B7C3B32F848CBB21A4D2B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2B67011FCA6E4935A8C9FF70 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5A34BAE181FD46BE9AA92DE7 /* Embed Foundation Extensions */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -464,6 +544,22 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		E9E2740136894327A191F000 /* Embed Foundation Extensions */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8E1BA317DE3D4DEBA74881BE /* "Color+hex.swift" in Sources */,
+				167B5A2307B84719A5DF46A7 /* "Date+toTimerInterval.swift" in Sources */,
+				10EABB6995274C8C80FB06AB /* "Image+dynamic.swift" in Sources */,
+				A50813A6B23D42BBAF429C6E /* LiveActivityView.swift in Sources */,
+				F75DFA39610540CFB75CD2B2 /* LiveActivityWidget.swift in Sources */,
+				230AFBE4695C4304B51F7EE2 /* LiveActivityWidgetBundle.swift in Sources */,
+				0377A15F15DF443A9DA6FEA8 /* "View+applyIfPresent.swift" in Sources */,
+				D81C37D7C46A4A2BB4DC37CE /* "View+applyWidgetURL.swift" in Sources */,
+				ECEE0DAEBBF1419E8F104939 /* ViewHelpers.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -471,6 +567,11 @@
 			isa = PBXTargetDependency;
 			target = 11CD3840CDB64A02B52E3FED /* PersonalLifeTrackerLiveActivity */;
 			targetProxy = 789AC93AD24A4E53B291734F /* PBXContainerItemProxy */;
+		};
+		FD0B2A837E3F45D28F95F8B9 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4A4176540ACD4DEA834099BE /* PersonalLifeTrackerLiveActivity */;
+			targetProxy = E82619523D844D2690EEDBA7 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -502,7 +603,7 @@
 				);
 				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_DEBUG";
 				PRODUCT_BUNDLE_IDENTIFIER = com.PersonalLifeTracker.prod;
-				PRODUCT_NAME = PersonalLifeTracker;
+				PRODUCT_NAME = "PersonalLifeTracker";
 				SWIFT_OBJC_BRIDGING_HEADER = "PersonalLifeTracker/PersonalLifeTracker-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -533,7 +634,7 @@
 				);
 				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_RELEASE";
 				PRODUCT_BUNDLE_IDENTIFIER = com.PersonalLifeTracker.prod;
-				PRODUCT_NAME = PersonalLifeTracker;
+				PRODUCT_NAME = "PersonalLifeTracker";
 				SWIFT_OBJC_BRIDGING_HEADER = "PersonalLifeTracker/PersonalLifeTracker-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -701,6 +802,46 @@
 			};
 			name = Release;
 		};
+		2F815AA3C2AE4CB592FE969A /* Debug */ = {
+			name = Debug;
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				INFOPLIST_FILE = PersonalLifeTrackerLiveActivity/Info.plist;
+				CURRENT_PROJECT_VERSION = "1";
+				IPHONEOS_DEPLOYMENT_TARGET = "16.2";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.PersonalLifeTracker.prod.PersonalLifeTrackerLiveActivity";
+				GENERATE_INFOPLIST_FILE = "YES";
+				INFOPLIST_KEY_CFBundleDisplayName = PersonalLifeTrackerLiveActivity;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				MARKETING_VERSION = "1.0.0";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				CODE_SIGN_ENTITLEMENTS = "PersonalLifeTrackerLiveActivity/PersonalLifeTrackerLiveActivity.entitlements";
+				APPLICATION_EXTENSION_API_ONLY = "YES";
+			};
+		};
+		65920A5CBAF24651AEEB4513 /* Release */ = {
+			name = Release;
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				INFOPLIST_FILE = PersonalLifeTrackerLiveActivity/Info.plist;
+				CURRENT_PROJECT_VERSION = "1";
+				IPHONEOS_DEPLOYMENT_TARGET = "16.2";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.PersonalLifeTracker.prod.PersonalLifeTrackerLiveActivity";
+				GENERATE_INFOPLIST_FILE = "YES";
+				INFOPLIST_KEY_CFBundleDisplayName = PersonalLifeTrackerLiveActivity;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				MARKETING_VERSION = "1.0.0";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				CODE_SIGN_ENTITLEMENTS = "PersonalLifeTrackerLiveActivity/PersonalLifeTrackerLiveActivity.entitlements";
+				APPLICATION_EXTENSION_API_ONLY = "YES";
+			};
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -727,6 +868,15 @@
 			buildConfigurations = (
 				83CBBA201A601CBA00E9B192 /* Debug */,
 				83CBBA211A601CBA00E9B192 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		2EB21EBC6A6E4D188839A6BE /* Build configuration list for PBXNativeTarget "PersonalLifeTrackerLiveActivity" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2F815AA3C2AE4CB592FE969A /* Debug */,
+				65920A5CBAF24651AEEB4513 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

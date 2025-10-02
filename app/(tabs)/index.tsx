@@ -11,6 +11,7 @@ import { useFasting } from "@/components/context/FastingContext";
 import { MealsContext } from '@/components/context/MealsContext';
 import { useMeds } from "@/components/context/MedsContext";
 import { useWater } from '@/components/context/WaterContext';
+import { useHealth } from '@/components/context/ActivityContext';
 
 //theme
 import { Colors } from '@/components/theme/Colors';
@@ -31,6 +32,9 @@ export default function HomeScreen() {
 
     const { getTodayIntake } = useWater();
     const todayIntake = getTodayIntake();
+    
+    const { steps, weightEntries } = useHealth();
+    const latestWeight = weightEntries[0]?.weight ?? null;
 
   return (
     <View  style={indexStyles.homePage}>
@@ -79,6 +83,19 @@ export default function HomeScreen() {
             </ThemedText>
           </View>
         </TouchableOpacity>
+          
+          {/* Steps + Weight*/}
+        <TouchableOpacity style={indexStyles.activityContainer} onPress={() => router.push('/activity')}>
+          <ThemedText style={{ fontWeight: "bold" }}>Today’s Activity:</ThemedText>
+            <View style={indexStyles.stepsWeight}>
+              <ThemedText style={indexStyles.steps}>
+                Steps: {steps ?? 0}
+              </ThemedText>
+              <ThemedText style={indexStyles.weight}>
+                Weight: {latestWeight ? `${latestWeight.toFixed(1)} lb` : "N/A"}
+              </ThemedText>
+            </View>
+      </TouchableOpacity>
     </View>
   );
 }
