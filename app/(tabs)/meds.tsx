@@ -43,16 +43,19 @@ export default function MedsScreen() {
     setName(med.name);
     setPills(med.pills);
     setTimesPerDay(med.times.length.toString());
+
     setTimeInputs(
       med.times.map((t: string) => {
-        const [hh, mm] = t.split(":").map(Number);
-        const d = new Date();
-        d.setHours(hh, mm, 0, 0);
+        const d = new Date(t); // handles ISO
+        if (isNaN(d.getTime())) {
+        return { time: "" };
+      }
         return {
-            time: d.toLocaleTimeString([], { hour12: false, hour: "2-digit", minute: "2-digit" }),
+          time: d.toLocaleTimeString([], { hour12: false, hour: "2-digit", minute: "2-digit" }),
         };
       })
     );
+
     setEditingId(med.id);
     setModalVisible(true);
   };

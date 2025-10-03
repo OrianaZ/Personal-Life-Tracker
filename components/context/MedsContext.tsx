@@ -41,6 +41,19 @@ export const MedsProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   // Helper to get today's Date from HH:mm
   const getTodayTime = (isoString: string) => new Date(isoString);
+    const isoToToday = (isoString: string): Date => {
+      const parsed = new Date(isoString);
+      if (isNaN(parsed.getTime())) {
+        const f = new Date();
+        f.setHours(0, 0, 0, 0);
+        return f;
+      }
+      const today = new Date();
+      today.setHours(parsed.getHours(), parsed.getMinutes(), 0, 0);
+      today.setSeconds(0, 0);
+      today.setMilliseconds(0);
+      return today;
+    };
 
   // Load medications + takenTimes
   useEffect(() => {
@@ -157,7 +170,7 @@ export const MedsProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const taken = takenTimes[med.id] || Array(med.times.length).fill(false);
 
       med.times.forEach((timeStr, idx) => {
-        const medTime = getTodayTime(timeStr);
+        const medTime = isoToToday(timeStr);
 
         if (!taken[idx]) {
           if (!nextMedTime || medTime < nextMedTime) {

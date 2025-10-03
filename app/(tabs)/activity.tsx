@@ -10,18 +10,28 @@ import { useHealth } from "@/components/context/ActivityContext";
 
 //theme
 import { ThemedText } from "@/components/theme/ThemedText";
+import { Colors } from "@/components/theme/Colors";
 
 //functions
 import { StepsProgress } from "@/components/functions/activity/StepsProgress";
 
 
 export default function ActivityScreen() {
-  const { steps, weightEntries, addWeight } = useHealth();
+  const { steps, weightEntries, addWeight, fetchSteps } = useHealth();
+
   const [modalVisible, setModalVisible] = useState(false);
   const [inputWeight, setInputWeight] = useState("");
 
   return (
     <View style={activityStyles.container}>
+          
+          {/* Refresh Steps Button */}
+          <TouchableOpacity
+          style={activityStyles.refresh}
+            onPress={() => fetchSteps && fetchSteps()}
+          >
+            <ThemedText style={{ color: '#fff' }}>Refresh Steps</ThemedText>
+          </TouchableOpacity>
 
       {steps !== null && <StepsProgress steps={steps} max={12000} />}
 

@@ -28,6 +28,27 @@ export const ActivityProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       write: [AppleHealthKit.Constants.Permissions.BodyMass],
     },
   };
+    
+    const fetchSteps = () => {
+        const today = new Date().toISOString();
+        AppleHealthKit.getStepCount(
+          { date: today, includeManuallyAdded: false },
+          (err: Object, results: HealthValue) => {
+            if (!err && results?.value != null) {
+              setSteps(Math.round(results.value));
+            }
+          }
+        );
+      };
+    
+    const fetchLatestWeight = () => {
+      AppleHealthKit.getLatestWeight({ unit: "lb" as HealthUnit }, (err: Object, result: HealthValue) => {
+        if (!err && result?.value) {
+          const entry: WeightEntry = { date: new Date().toISOString(), weight: result.value };
+          setWeightEntries([entry]);
+        }
+      });
+    };
 
   useEffect(() => {
     AppleHealthKit.initHealthKit(permissions, (error: string) => {
@@ -38,18 +59,8 @@ export const ActivityProvider: React.FC<{ children: React.ReactNode }> = ({ chil
 
       const today = new Date().toISOString();
 
-      // steps
-      AppleHealthKit.getStepCount({ date: today, includeManuallyAdded: false }, (err: Object, results: HealthValue) => {
-        if (!err) setSteps(results.value);
-      });
-
-      // latest weight
-      AppleHealthKit.getLatestWeight({ unit: "lb" as HealthUnit }, (err: Object, result: HealthValue) => {
-        if (!err && result?.value) {
-          const entry: WeightEntry = { date: new Date().toISOString(), weight: result.value };
-          setWeightEntries([entry]);
-        }
-      });
+        fetchSteps();
+        fetchLatestWeight();
     });
   }, []);
 
@@ -62,7 +73,7 @@ export const ActivityProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   };
 
   return (
-    <ActivityContext.Provider value={{ steps, weightEntries, addWeight }}>
+    <ActivityContext.Provider value={{ steps, weightEntries, addWeight, fetchSteps }}>
       {children}
     </ActivityContext.Provider>
   );

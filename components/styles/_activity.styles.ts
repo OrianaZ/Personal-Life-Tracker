@@ -11,6 +11,8 @@ export const activityStyles = StyleSheet.create({
     weightText: { fontSize: 18, fontWeight: 'bold', color: Colors.light.text, marginBottom: 8, },
     weightRow: {flexDirection: "row", justifyContent: "space-between", width: 180 },
     reportWeight:{paddingVertical: 8, paddingHorizontal:10, borderRadius: 8, alignItems: 'center', backgroundColor: Colors.light.blue, color:Colors.dark.text, marginTop:10},
+    refresh:{paddingVertical: 8, paddingHorizontal:10, borderRadius: 8, alignItems: 'center', backgroundColor: Colors.light.purple, marginBottom:15,},
+
 
     modalBackground: { flex: 1, backgroundColor: "rgba(0,0,0,0.5)", justifyContent: "center", alignItems: "center" },
     modalContent: { backgroundColor: Colors.light.background, padding: 20, borderRadius: 12, width: 200, alignItems: "center", justifyContent: 'center',},

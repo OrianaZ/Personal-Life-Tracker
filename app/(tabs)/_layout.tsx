@@ -28,8 +28,6 @@ export default function TabLayout() {
             tabBarStyle: Platform.select({
               ios: {
                 position: 'absolute',
-                  height: 65,
-                  paddingTop: 5,
               },
               default: {},
             }),
@@ -37,7 +35,7 @@ export default function TabLayout() {
           <Tabs.Screen
             name="index"
             options={{
-              title: "",
+              title: "Home",
                 tabBarIcon: ({ color, size }) => (
                 <Ionicons name="home" size={size} color={color} />
               ),
@@ -47,7 +45,7 @@ export default function TabLayout() {
           <Tabs.Screen
             name="fasting"
             options={{
-              title: "",
+              title: "Fasting",
               tabBarIcon: ({ color, size }) => (
                 <Ionicons name="time-outline" size={size} color={color} />
               ),
@@ -57,7 +55,7 @@ export default function TabLayout() {
           <Tabs.Screen
             name="meals"
             options={{
-              title: "",
+              title: "Meals",
               tabBarIcon: ({ color, size }) => (
                 <Ionicons name="restaurant-outline" size={size} color={color} />
               ),
@@ -66,7 +64,7 @@ export default function TabLayout() {
           <Tabs.Screen
             name="water"
             options={{
-              title: "",
+              title: "Intake",
               tabBarIcon: ({ color, size }) => (
                 <Ionicons name="water" size={size} color={color} />
               ),
@@ -75,7 +73,7 @@ export default function TabLayout() {
           <Tabs.Screen
             name="activity"
             options={{
-              title: "",
+              title: "Health",
               tabBarIcon: ({ color, size }) => (
                 <Ionicons name="walk-outline" size={size} color={color} />
               ),
@@ -84,18 +82,9 @@ export default function TabLayout() {
           <Tabs.Screen
             name="meds"
             options={{
-              title: "",
+              title: "Meds",
               tabBarIcon: ({ color, size }) => (
                 <Ionicons name="medkit" size={size} color={color} />
-              ),
-            }}
-          />
-          <Tabs.Screen
-            name="overview"
-            options={{
-              title: "",
-              tabBarIcon: ({ color, size }) => (
-                <Ionicons name="bar-chart-outline" size={size} color={color} />
               ),
             }}
           />
