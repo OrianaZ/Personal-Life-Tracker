@@ -117,37 +117,47 @@ export const MedsProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, [takenTimes]);
 
   // Reset takenTimes at local midnight
-  useEffect(() => {
-    const checkMidnight = () => {
-      const todayKey = new Date().toDateString();
-      if (currentDayKey !== todayKey) {
-        const resetTaken = medications.reduce((acc, med) => {
-          acc[med.id] = med.times.map(() => false);
-          return acc;
-        }, {} as { [medId: string]: boolean[] });
+    useEffect(() => {
+      const checkMidnight = () => {
+        const todayKey = new Date().toDateString();
+        if (currentDayKey !== todayKey) {
+          // 1️⃣ Regenerate today's ISO times for all meds
+          const updatedMeds = medications.map((med) => {
+            const newTimes = med.times.map((timeStr) => {
+              const old = new Date(timeStr);
+              const today = new Date();
+              today.setHours(old.getHours(), old.getMinutes(), 0, 0);
+              return today.toISOString();
+            });
+            return { ...med, times: newTimes };
+          });
 
-        setTakenTimes(resetTaken);
-        setCurrentDayKey(todayKey);
-      }
-    };
-    checkMidnight();
+          setMedications(updatedMeds);
 
-    const now = new Date();
-    const msUntilMidnight =
-      new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1).getTime() - now.getTime();
+          // 2️⃣ Reset taken states
+          const resetTaken = updatedMeds.reduce((acc, med) => {
+            acc[med.id] = med.times.map(() => false);
+            return acc;
+          }, {} as { [medId: string]: boolean[] });
 
-    const timeout = setTimeout(() => {
-      const resetTaken = medications.reduce((acc, med) => {
-        acc[med.id] = med.times.map(() => false);
-        return acc;
-      }, {} as { [medId: string]: boolean[] });
+          setTakenTimes(resetTaken);
+          setCurrentDayKey(todayKey);
+        }
+      };
 
-      setTakenTimes(resetTaken);
-      setCurrentDayKey(new Date().toDateString());
-    }, msUntilMidnight);
+      checkMidnight();
 
-    return () => clearTimeout(timeout);
-  }, [medications]);
+      const now = new Date();
+      const msUntilMidnight =
+        new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1).getTime() - now.getTime();
+
+      const timeout = setTimeout(() => {
+        checkMidnight();
+      }, msUntilMidnight);
+
+      return () => clearTimeout(timeout);
+    }, [medications, currentDayKey]);
+
 
   const toggleTaken = (medId: string, idx: number) => {
     setTakenTimes((prev) => {

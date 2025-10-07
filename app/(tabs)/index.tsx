@@ -83,7 +83,7 @@ export default function HomeScreen() {
     const router = useRouter();
 
     const { isFasting, timerText } = useFasting();
-    const { steps, weightEntries } = useHealth();
+    const { steps, weightEntries, log } = useHealth();
     
     const { meals: mealData } = useContext(MealsContext);
     const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
@@ -333,65 +333,65 @@ export default function HomeScreen() {
     
     
     // Activity
-  const generateDailySteps = (currentMonth: dayjs.Dayjs, daysInMonth: number) => {
-    const arr: number[] = [];
-    let lastValue = 0; // fallback if no step data
-    for (let i = 0; i < daysInMonth; i++) {
-      const dateStr = currentMonth.add(i, 'day').format('YYYY-MM-DD');
-      // HealthKit currently only gives us total steps today, not historical
-      // So fill current day with actual steps, others fallback
-      if (dateStr === dayjs().format('YYYY-MM-DD') && steps != null) {
-        lastValue = steps;
-        arr.push(steps);
-      } else {
-        arr.push(lastValue);
+    const generateDailySteps = (monthStart: dayjs.Dayjs, daysInMonth: number, log: Record<string, any>) => {
+      const arr: (number | null)[] = [];
+
+      for (let i = 0; i < daysInMonth; i++) {
+        const dateStr = monthStart.add(i, 'day').format('YYYY-MM-DD');
+        const entry = log[dateStr]?.steps;
+        arr.push(typeof entry === 'number' ? entry : null);
       }
-    }
-    return arr;
-  };
 
-  const generateDailyWeight = (monthStart: dayjs.Dayjs, daysInMonth: number) => {
-    const arr: number[] = [];
-    let lastValue = weightEntries.length ? weightEntries[weightEntries.length - 1].weight : 0; // use latest weight
-    for (let i = 0; i < daysInMonth; i++) {
-      const dateStr = monthStart.add(i, 'day').format('YYYY-MM-DD');
-      const entry = weightEntries.find(e => e.date.startsWith(dateStr));
-      if (entry) lastValue = entry.weight;
-      arr.push(lastValue);
-    }
-    return arr;
-  };
+      return arr;
+    };
 
+    const generateDailyWeight = (monthStart: dayjs.Dayjs, daysInMonth: number, log: Record<string, any>) => {
+      const arr: (number | null)[] = [];
 
-  const stepsData = generateDailySteps(startOfMonth, daysInMonth);
-  const stepsDataPrev = generateDailySteps(startOfPrevMonth, daysInMonth);
+      let lastValue: number | null = null;
+      for (let i = 0; i < daysInMonth; i++) {
+        const dateStr = monthStart.add(i, 'day').format('YYYY-MM-DD');
+        const entry = log[dateStr]?.weight;
 
-  const weightData = useMemo(() => generateDailyWeight(startOfMonth, daysInMonth), [weightEntries]);
-  const weightDataPrev = generateDailyWeight(startOfPrevMonth, daysInMonth);
-  
-  const weightMin = 140;
-  const weightMax = 200;
-  const stepsMin = Math.min(...stepsData, ...stepsDataPrev);
-  const stepsMax = Math.max(...stepsData, ...stepsDataPrev);
+        if (typeof entry === 'number') {
+          lastValue = entry;
+          arr.push(entry);
+        } else {
+          // Keep previous known value for continuity (optional)
+          arr.push(lastValue);
+        }
+      }
 
-  // normalize weight for chart
-  const weightNormalized = weightData.map(w => ((w - weightMin) / (weightMax - weightMin)) * (stepsMax - stepsMin) + stepsMin);
-  const weightNormalizedPrev = weightDataPrev.map(w => ((w - weightMin) / (weightMax - weightMin)) * (stepsMax - stepsMin) + stepsMin);
+      return arr;
+    };
 
+    const stepsData = generateDailySteps(startOfMonth, daysInMonth, log);
+    const stepsDataPrev = generateDailySteps(startOfPrevMonth, daysInMonth, log);
+
+    const weightData = generateDailyWeight(startOfMonth, daysInMonth, log);
+    const weightDataPrev = generateDailyWeight(startOfPrevMonth, daysInMonth, log);
+
+    // --- Activity (Health) Section ---
     const ActivityScene = () => (
-      <TouchableOpacity activeOpacity={1} onPress={() => router.push('/activity')}>
-        <ScrollView style={{ paddingHorizontal: 20 }}>
-
-          {/* Steps Chart */}
+      <ScrollView style={{ paddingHorizontal: 20 }}>
+        
+        {/* Steps Chart */}
+        <TouchableOpacity activeOpacity={1} onPress={() => router.push('/activity')}>
           <ThemedText style={[indexStyles.chartTitle, indexStyles.chartTitle1]}>Steps</ThemedText>
-          <View style={indexStyles.legendContainer}>
 
+          <View style={indexStyles.legendContainer}>
             <View style={indexStyles.legendItem}>
-              <View style={[ indexStyles.legendColorBox, { backgroundColor: Colors.light.blue },]} />
-              <ThemedText style={indexStyles.legendText}>{today.format("MMM")}</ThemedText>
+              <View style={[indexStyles.legendColorBox, { backgroundColor: Colors.dark.blue }]} />
+              <ThemedText style={indexStyles.legendText}>
+                {today.subtract(1, 'month').format('MMM')}
+              </ThemedText>
+            </View>
+            <View style={indexStyles.legendItem}>
+              <View style={[indexStyles.legendColorBox, { backgroundColor: Colors.light.blue }]} />
+              <ThemedText style={indexStyles.legendText}>{today.format('MMM')}</ThemedText>
             </View>
           </View>
-                                 
+
           <LineChart
             data={{
               labels: xLabels,
@@ -401,33 +401,47 @@ export default function HomeScreen() {
               ],
             }}
             width={screenWidth}
-            height={200}
+            height={220}
             withDots={false}
             withShadow={false}
             withInnerLines={false}
             withOuterLines={false}
+            yAxisSuffix=""
             yLabelsOffset={15}
+            formatYLabel={(yValue) => {
+              const num = Number(yValue);
+              return Number.isNaN(num) ? '' : Math.round(num).toString();
+            }}
             chartConfig={{
               backgroundColor: 'transparent',
               backgroundGradientFrom: Colors.dark.borderGray,
               backgroundGradientTo: Colors.dark.borderGray,
-              color: (opacity = 1) => Colors.light.text,
+              color: () => Colors.light.text,
               labelColor: () => Colors.light.text,
               propsForLabels: { fontSize: 12, fontWeight: 'bold' },
             }}
             bezier
             style={indexStyles.graph}
           />
+        </TouchableOpacity>
 
-          {/* Weight Chart */}
+        {/* Weight Chart */}
+        <TouchableOpacity activeOpacity={1} onPress={() => router.push('/activity')}>
           <ThemedText style={[indexStyles.chartTitle, indexStyles.chartTitle1]}>Weight</ThemedText>
+
           <View style={indexStyles.legendContainer}>
             <View style={indexStyles.legendItem}>
-              <View style={[ indexStyles.legendColorBox, { backgroundColor: Colors.light.purple },]} />
-              <ThemedText style={indexStyles.legendText}>{today.format("MMM")}</ThemedText>
+              <View style={[indexStyles.legendColorBox, { backgroundColor: Colors.dark.purple }]} />
+              <ThemedText style={indexStyles.legendText}>
+                {today.subtract(1, 'month').format('MMM')}
+              </ThemedText>
+            </View>
+            <View style={indexStyles.legendItem}>
+              <View style={[indexStyles.legendColorBox, { backgroundColor: Colors.light.purple }]} />
+              <ThemedText style={indexStyles.legendText}>{today.format('MMM')}</ThemedText>
             </View>
           </View>
-                                 
+
           <LineChart
             data={{
               labels: xLabels,
@@ -437,25 +451,30 @@ export default function HomeScreen() {
               ],
             }}
             width={screenWidth}
-            height={200}
+            height={220}
             withDots={false}
             withShadow={false}
             withInnerLines={false}
             withOuterLines={false}
+            yAxisSuffix=""
             yLabelsOffset={15}
+            formatYLabel={(yValue) => {
+              const num = Number(yValue);
+              return Number.isNaN(num) ? '' : Math.round(num).toString();
+            }}
             chartConfig={{
               backgroundColor: 'transparent',
               backgroundGradientFrom: Colors.dark.borderGray,
               backgroundGradientTo: Colors.dark.borderGray,
-              color: (opacity = 1) => Colors.light.text,
+              color: () => Colors.light.text,
               labelColor: () => Colors.light.text,
               propsForLabels: { fontSize: 12, fontWeight: 'bold' },
             }}
             bezier
             style={indexStyles.graph}
           />
-        </ScrollView>
-      </TouchableOpacity>
+        </TouchableOpacity>
+      </ScrollView>
     );
 
 

@@ -32,12 +32,23 @@ export default function TabLayout() {
               default: {},
             }),
           }}>
+          
           <Tabs.Screen
             name="index"
             options={{
               title: "Home",
                 tabBarIcon: ({ color, size }) => (
                 <Ionicons name="home" size={size} color={color} />
+              ),
+            }}
+          />
+          
+          <Tabs.Screen
+            name="meals"
+            options={{
+              title: "Meals",
+              tabBarIcon: ({ color, size }) => (
+                <Ionicons name="restaurant-outline" size={size} color={color} />
               ),
             }}
           />
@@ -53,15 +64,6 @@ export default function TabLayout() {
           />
 
           <Tabs.Screen
-            name="meals"
-            options={{
-              title: "Meals",
-              tabBarIcon: ({ color, size }) => (
-                <Ionicons name="restaurant-outline" size={size} color={color} />
-              ),
-            }}
-          />
-          <Tabs.Screen
             name="water"
             options={{
               title: "Intake",
@@ -70,6 +72,7 @@ export default function TabLayout() {
               ),
             }}
           />
+          
           <Tabs.Screen
             name="activity"
             options={{
@@ -79,6 +82,7 @@ export default function TabLayout() {
               ),
             }}
           />
+
           <Tabs.Screen
             name="meds"
             options={{

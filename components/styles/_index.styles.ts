@@ -2,7 +2,7 @@ import { Colors } from "@/components/theme/Colors";
 import { StyleSheet } from "react-native";
 
 export const indexStyles = StyleSheet.create({
-  homePage: {flex: 1, justifyContent: "center", marginBottom: 50},
+  homePage: {flex: 1, marginTop: 50},
   
   FastingContainer: { marginHorizontal: 20, flexDirection: 'row', alignItems: 'center', gap: 8, padding: 12, borderWidth: 1, borderColor: Colors.dark.borderGray, borderRadius: 10,},
 
