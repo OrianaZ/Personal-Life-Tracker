@@ -5,29 +5,27 @@ import { Modal, Pressable, TouchableOpacity, View } from "react-native";
 //styles
 import { fastingStyles } from "@/components/styles/_fasting.styles";
 
+//context
+import { useFasting } from "@/components/context/FastingContext";
+
 //theme
 import { ThemedText } from "@/components/theme/ThemedText";
 
 //functions
 import InlineNumberPicker from "./InlineNumberPicker";
 
-export default function LastMealDateTimePicker({
-  value,
-  setTempTime,
-  setLastMealTime,
-}: { 
-  value: Date,
-  setTempTime: (d: Date) => void;
-  setLastMealTime?: (d: Date) => void;
-
-}) {
+export default function LastMealDateTimePicker() {
+  const { lastMealTime, setLastMealTime } = useFasting();
   const [editingPart, setEditingPart] = useState<"hours" | "minutes" | "date" | null>(null);
 
+  const value = lastMealTime ? new Date(lastMealTime) : new Date();
+
+  // ---- HANDLERS ----
   const handleHourChange = (val: string | number) => {
     if (typeof val === "number") {
       const newTime = new Date(value);
       newTime.setHours(val);
-      setTempTime(newTime);
+      setLastMealTime(newTime);
       setEditingPart(null);
     }
   };
@@ -36,35 +34,47 @@ export default function LastMealDateTimePicker({
     if (typeof val === "number") {
       const newTime = new Date(value);
       newTime.setMinutes(val);
-      setTempTime(newTime);
+      setLastMealTime(newTime);
       setEditingPart(null);
     }
   };
 
-  const today = new Date()
-  const temptoday = new Date();
-  temptoday.setDate(temptoday.getDate() + 1);
-  const start = new Date(temptoday);
+  const handleDateChange = (date: Date) => {
+    const newTime = new Date(value);
+    newTime.setFullYear(date.getFullYear(), date.getMonth(), date.getDate());
+    setLastMealTime(newTime);
+    setEditingPart(null);
+  };
+
+  // ---- DATE ARRAY ----
+  const today = new Date();
+  const start = new Date(today);
+  start.setFullYear(start.getFullYear() - 1);
 
   const dateArray: { date: Date; label: string }[] = [];
-  let curr = new Date(start.setFullYear(start.getFullYear() - 1));
+  const cursor = new Date(start);
 
-  while (curr <= today) {
+  while (cursor <= today) {
     dateArray.push({
-      date: new Date(curr),
-      label: curr.toLocaleDateString("en-US", { month: "short", day: "numeric" }),
+      date: new Date(cursor),
+      label: cursor.toLocaleDateString("en-US", { month: "short", day: "numeric" }),
     });
-      curr.setDate(curr.getDate() + 1);
+    cursor.setDate(cursor.getDate() + 1);
   }
 
+  // ---- UI ----
   return (
     <View style={{ alignItems: "center", position: "relative" }}>
       <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
 
+        {/* Date Picker */}
         <View style={{ position: "relative" }}>
           <TouchableOpacity onPress={() => setEditingPart(editingPart === "date" ? null : "date")}>
-            <ThemedText style={fastingStyles.inputText}>{value.toLocaleDateString("en-US", { month: "short", day: "numeric" })}</ThemedText>
+            <ThemedText style={fastingStyles.inputText}>
+              {value.toLocaleDateString("en-US", { month: "short", day: "numeric" })}
+            </ThemedText>
           </TouchableOpacity>
+
           <Modal transparent visible={editingPart === "date"} animationType="fade" onRequestClose={() => setEditingPart(null)}>
             <Pressable style={{ flex: 1, backgroundColor: "rgba(0, 0, 0, 0.3)" }} onPress={() => setEditingPart(null)}>
               <View style={{ position: "absolute", top: 250, left: 240 }}>
@@ -74,8 +84,7 @@ export default function LastMealDateTimePicker({
                   value={value}
                   onChange={(item) => {
                     if (typeof item === "object" && item.date instanceof Date) {
-                      setTempTime(item.date);
-                      setEditingPart(null);
+                      handleDateChange(item.date);
                     }
                   }}
                   visible={editingPart === "date"}
@@ -84,13 +93,17 @@ export default function LastMealDateTimePicker({
             </Pressable>
           </Modal>
         </View>
-        
-        <ThemedText style={{fontSize: 18 }}>,</ThemedText>        
-        
+
+        <ThemedText style={{ fontSize: 18 }}>,</ThemedText>
+
+        {/* Hours Picker */}
         <View style={{ position: "relative" }}>
           <TouchableOpacity onPress={() => setEditingPart(editingPart === "hours" ? null : "hours")}>
-            <ThemedText style={fastingStyles.inputText}>{value.getHours().toString().padStart(2, "0")}</ThemedText>
+            <ThemedText style={fastingStyles.inputText}>
+              {value.getHours().toString().padStart(2, "0")}
+            </ThemedText>
           </TouchableOpacity>
+
           <Modal transparent visible={editingPart === "hours"} animationType="fade" onRequestClose={() => setEditingPart(null)}>
             <Pressable style={{ flex: 1, backgroundColor: "rgba(0, 0, 0, 0.3)" }} onPress={() => setEditingPart(null)}>
               <View style={{ position: "absolute", top: 250, left: 280 }}>
@@ -106,12 +119,16 @@ export default function LastMealDateTimePicker({
           </Modal>
         </View>
 
-        <ThemedText style={{fontSize: 18 }}>:</ThemedText>
+        <ThemedText style={{ fontSize: 18 }}>:</ThemedText>
 
+        {/* Minutes Picker */}
         <View style={{ position: "relative" }}>
           <TouchableOpacity onPress={() => setEditingPart(editingPart === "minutes" ? null : "minutes")}>
-            <ThemedText style={fastingStyles.inputText}>{value.getMinutes().toString().padStart(2, "0")}</ThemedText>
+            <ThemedText style={fastingStyles.inputText}>
+              {value.getMinutes().toString().padStart(2, "0")}
+            </ThemedText>
           </TouchableOpacity>
+
           <Modal transparent visible={editingPart === "minutes"} animationType="fade" onRequestClose={() => setEditingPart(null)}>
             <Pressable style={{ flex: 1, backgroundColor: "rgba(0, 0, 0, 0.3)" }} onPress={() => setEditingPart(null)}>
               <View style={{ position: "absolute", top: 250, left: 320 }}>

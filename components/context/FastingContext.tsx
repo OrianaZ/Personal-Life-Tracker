@@ -8,17 +8,17 @@ interface FastingContextType {
   isFasting: boolean;
   timerText: string;
   fastStart: Dayjs | null;
+  fastEnd: Dayjs | null;
   lastMealTime: Dayjs | null;
   fastLog: { [date: string]: number };
-  pickerTime: Date;
   editingDate: string | null;
   editingHours: string;
   editingMinutes: string;
   showEditModal: boolean;
   setFastStart: (d: Dayjs | null) => void;
+  setFastEnd: (d: Dayjs | null) => void;
   setLastMealTime: (d: Dayjs | null) => void;
   setIsFasting: (b: boolean) => void;
-  setPickerTime: (d: Date) => void;
   setEditingDate: (s: string | null) => void;
   setEditingHours: (s: string) => void;
   setEditingMinutes: (s: string) => void;
@@ -35,12 +35,12 @@ export const useFasting = () => useContext(FastingContext);
 export const FastingProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   // ---------- State ----------
   const [fastStart, setFastStart] = useState<Dayjs | null>(null);
+  const [fastEnd, setFastEnd] = useState<Dayjs | null>(null);
   const [lastMealTime, setLastMealTime] = useState<Dayjs | null>(null);
   const [isFasting, setIsFasting] = useState(false);
   const [now, setNow] = useState(dayjs());
   const [timerText, setTimerText] = useState("00:00:00");
 
-  const [pickerTime, setPickerTime] = useState<Date>(new Date());
   const [fastLog, setFastLog] = useState<{ [date: string]: number }>({});
 
   const [editingDate, setEditingDate] = useState<string | null>(null);
@@ -51,8 +51,8 @@ export const FastingProvider: React.FC<{ children: React.ReactNode }> = ({ child
   // ---------- Storage Keys ----------
   const STORAGE_KEYS = {
     FAST_START: "FAST_START",
+    FAST_END: "FAST_END",
     IS_FASTING: "IS_FASTING",
-    PICKER_TIME: "PICKER_TIME",
     FAST_LOG: "FAST_LOG",
     LAST_MEAL: "LAST_MEAL",
   };
@@ -66,6 +66,13 @@ export const FastingProvider: React.FC<{ children: React.ReactNode }> = ({ child
   useEffect(() => {
     loadStorageData();
   }, []);
+    
+  useEffect(() => {
+    if (lastMealTime) {
+      AsyncStorage.setItem(STORAGE_KEYS.LAST_MEAL, lastMealTime.toISOString());
+    }
+  }, [lastMealTime]);
+
 
   useEffect(() => {
     let elapsed = 0;
@@ -91,18 +98,18 @@ export const FastingProvider: React.FC<{ children: React.ReactNode }> = ({ child
   // ---------- Persistence ----------
   const loadStorageData = async () => {
     try {
-      const [savedFastStart, savedIsFasting, savedPickerTime, savedLog, savedLastMeal] =
+      const [savedFastStart, savedFastEnd, savedIsFasting, savedLog, savedLastMeal] =
         await Promise.all([
           AsyncStorage.getItem(STORAGE_KEYS.FAST_START),
+          AsyncStorage.getItem(STORAGE_KEYS.FAST_END),
           AsyncStorage.getItem(STORAGE_KEYS.IS_FASTING),
-          AsyncStorage.getItem(STORAGE_KEYS.PICKER_TIME),
           AsyncStorage.getItem(STORAGE_KEYS.FAST_LOG),
           AsyncStorage.getItem(STORAGE_KEYS.LAST_MEAL),
         ]);
 
       if (savedFastStart) setFastStart(dayjs(savedFastStart));
+      if (savedFastEnd) setFastEnd(dayjs(savedFastEnd));
       if (savedIsFasting) setIsFasting(savedIsFasting === "true");
-      if (savedPickerTime) setPickerTime(new Date(savedPickerTime));
       if (savedLog) setFastLog(JSON.parse(savedLog));
       if (savedLastMeal) setLastMealTime(dayjs(savedLastMeal));
     } catch (e) {
@@ -114,15 +121,16 @@ export const FastingProvider: React.FC<{ children: React.ReactNode }> = ({ child
   const handleStartFast = async (fromTime: Date) => {
     const dayjsTime = dayjs(fromTime);
     setFastStart(dayjsTime);
+    setFastEnd(null);
     setIsFasting(true);
-    setPickerTime(fromTime);
     setLastMealTime(dayjsTime);
 
+      
     try {
       await Promise.all([
         AsyncStorage.setItem(STORAGE_KEYS.FAST_START, dayjsTime.toISOString()),
+        AsyncStorage.removeItem(STORAGE_KEYS.FAST_END),
         AsyncStorage.setItem(STORAGE_KEYS.IS_FASTING, "true"),
-        AsyncStorage.setItem(STORAGE_KEYS.PICKER_TIME, fromTime.toISOString()),
         AsyncStorage.setItem(STORAGE_KEYS.LAST_MEAL, dayjsTime.toISOString()),
       ]);
     } catch (e) {
@@ -131,28 +139,33 @@ export const FastingProvider: React.FC<{ children: React.ReactNode }> = ({ child
   };
 
   const handleEndFast = async (endTime: Date) => {
+    const endDayjs = dayjs(endTime);
+
     if (fastStart) {
-      const elapsedSeconds = dayjs(endTime).diff(fastStart, "second");
+      const elapsedSeconds = endDayjs.diff(fastStart, "second");
       const elapsedHours = +(elapsedSeconds / 3600).toFixed(2);
 
-      const endDateStr = dayjs(endTime).format("YYYY-MM-DD");
+      const endDateStr = endDayjs.format("YYYY-MM-DD");
       const updatedLog = { ...fastLog, [endDateStr]: (fastLog[endDateStr] || 0) + elapsedHours };
       setFastLog(updatedLog);
 
       try {
-        await AsyncStorage.setItem(STORAGE_KEYS.FAST_LOG, JSON.stringify(updatedLog));
-        await AsyncStorage.removeItem(STORAGE_KEYS.FAST_START);
-        await AsyncStorage.setItem(STORAGE_KEYS.IS_FASTING, "false");
-        await AsyncStorage.setItem(STORAGE_KEYS.LAST_MEAL, dayjs(endTime).toISOString());
+        await Promise.all([
+          AsyncStorage.setItem(STORAGE_KEYS.FAST_LOG, JSON.stringify(updatedLog)),
+          AsyncStorage.setItem(STORAGE_KEYS.FAST_END, endDayjs.toISOString()),
+          AsyncStorage.setItem(STORAGE_KEYS.LAST_MEAL, endDayjs.toISOString()),
+          AsyncStorage.setItem(STORAGE_KEYS.IS_FASTING, "false"),
+          AsyncStorage.removeItem(STORAGE_KEYS.FAST_START),
+        ]);
       } catch (e) {
         console.log("Error saving end fast", e);
       }
     }
 
     setFastStart(null);
+    setFastEnd(endDayjs);
     setIsFasting(false);
-    setLastMealTime(dayjs(endTime));
-    setPickerTime(endTime);
+    setLastMealTime(endDayjs);
   };
 
   const saveEditedFast = async () => {
@@ -182,17 +195,17 @@ export const FastingProvider: React.FC<{ children: React.ReactNode }> = ({ child
         isFasting,
         timerText,
         fastStart,
+        fastEnd,
         lastMealTime,
         fastLog,
-        pickerTime,
         editingDate,
         editingHours,
         editingMinutes,
         showEditModal,
         setFastStart,
+        setFastEnd,
         setLastMealTime,
         setIsFasting,
-        setPickerTime,
         setEditingDate,
         setEditingHours,
         setEditingMinutes,

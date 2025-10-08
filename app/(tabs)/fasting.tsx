@@ -22,9 +22,9 @@ import ProgressBar from "@/components/functions/fasting/ProgressBar";
 
 export default function FastingScreen() {
   const {
-    isFasting, timerText, fastStart, lastMealTime, fastLog, pickerTime,
+    isFasting, timerText, fastStart, fastEnd, lastMealTime, fastLog,
     editingDate, editingHours, editingMinutes, showEditModal,
-    setLastMealTime, setPickerTime, setEditingDate, setEditingHours, setEditingMinutes, setShowEditModal,
+    setLastMealTime, setEditingDate, setEditingHours, setEditingMinutes, setShowEditModal,
     handleStartFast, handleEndFast, saveEditedFast
   } = useFasting();
 
@@ -98,11 +98,8 @@ if (fastStartRef) {
       {!isFasting && (
         <View style={fastingStyles.lastMealContainer}>
           <ThemedText type="subtitle">Last Meal:</ThemedText>
-          <LastMealDateTimePicker
-            value={pickerTime}
-            setTempTime={setPickerTime}
-            setLastMealTime={(d: Date) => setLastMealTime(dayjs(d))}
-          />
+                      <LastMealDateTimePicker />
+
         </View>
       )}
 
@@ -115,12 +112,13 @@ if (fastStartRef) {
         <ProgressBar
           progress={progress}
           isFasting={isFasting}
-          lastMealTime={(fastStartRef ?? dayjs()).toDate()}
+          fastStart={fastStartRef}
+          fastEnd={fastEnd}
           formatTime={formatTime}
         />
 
         {!isFasting ? (
-          <TouchableOpacity style={fastingStyles.button} onPress={() => handleStartFast(pickerTime)}>
+          <TouchableOpacity style={fastingStyles.button} onPress={() => handleStartFast(lastMealTime)}>
             <ThemedText style={fastingStyles.buttonText}>Start Fast</ThemedText>
           </TouchableOpacity>
         ) : (

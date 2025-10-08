@@ -10,7 +10,10 @@ import { Colors } from "@/components/theme/Colors";
 import { ThemedText } from "../../theme/ThemedText";
 
 
-export default function ProgressBar({ progress, isFasting, lastMealTime, formatTime }: any) {
+export default function ProgressBar({ progress, isFasting, fastStart, fastEnd, formatTime }: any) {
+  const startTime = fastStart ? new Date(fastStart) : new Date();
+  const emdTime = fastEnd ? new Date(fastEnd) : new Date();
+
   return (
     <View style={fastingStyles.progressContainer}>
       {/* Start Icon */}
@@ -18,12 +21,12 @@ export default function ProgressBar({ progress, isFasting, lastMealTime, formatT
         {isFasting ? (
           <>
             <MaterialCommunityIcons name="clock-outline" size={24} color={Colors.light.blue} />
-            <ThemedText style={fastingStyles.iconTime}>{formatTime(lastMealTime)}</ThemedText>
+            <ThemedText style={fastingStyles.iconTime}>{formatTime(startTime)}</ThemedText>
           </>
         ) : (
           <>
             <MaterialCommunityIcons name="silverware-fork-knife" size={24} color={Colors.light.orange} />
-            <ThemedText style={fastingStyles.iconTime}>{formatTime(lastMealTime)}</ThemedText>
+            <ThemedText style={fastingStyles.iconTime}>{formatTime(emdTime)}</ThemedText>
           </>
         )}
       </View>
@@ -40,7 +43,7 @@ export default function ProgressBar({ progress, isFasting, lastMealTime, formatT
           <>
             <MaterialCommunityIcons name="silverware-fork-knife" size={24} color={Colors.light.orange} />
             <ThemedText style={fastingStyles.iconTime}>
-              {formatTime(new Date(lastMealTime.getTime() + 16 * 60 * 60 * 1000))}
+              {formatTime(new Date(startTime.getTime() + 16 * 60 * 60 * 1000))}
             </ThemedText>
           </>
         ) : (
