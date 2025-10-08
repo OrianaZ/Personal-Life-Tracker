@@ -27,6 +27,7 @@ export const activityStyles = StyleSheet.create({
     buttonText: { fontWeight: 'bold' },
     save:{paddingVertical: 8, paddingHorizontal:10, borderRadius: 8, alignItems: 'center', backgroundColor: Colors.light.purple},
     cancel:{paddingVertical: 8, paddingHorizontal:10, borderRadius: 8, alignItems: 'center', backgroundColor: Colors.light.placeholder },
+    input: {borderBottomWidth: 1, marginBottom: 10, minWidth:120, textAlign: 'center'},
     
     
     // Calendar

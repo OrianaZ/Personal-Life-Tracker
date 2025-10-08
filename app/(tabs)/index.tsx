@@ -153,7 +153,7 @@ export default function HomeScreen() {
                  Steps: {steps ?? 0}
                </ThemedText>
                <ThemedText style={indexStyles.weight}>
-                 Weight: {latestWeight ? `${latestWeight.toFixed(1)} lb` : "N/A"}
+                  Weight: {latestWeight != null ? `${Number(latestWeight).toFixed(1)} lb` : "N/A"}
                </ThemedText>
              </View>
        </TouchableOpacity>
@@ -370,6 +370,11 @@ export default function HomeScreen() {
 
     const weightData = generateDailyWeight(startOfMonth, daysInMonth, log);
     const weightDataPrev = generateDailyWeight(startOfPrevMonth, daysInMonth, log);
+    
+    const safeWeightData = (weightData ?? []).map(v => (typeof v === 'number' && isFinite(v) ? v : 0));
+    const safeWeightDataPrev = (weightDataPrev ?? []).map(v => (typeof v === 'number' && isFinite(v) ? v : 0));
+    const safeStepsData = (stepsData ?? []).map(v => (typeof v === 'number' && isFinite(v) ? v : 0));
+    const safeStepsDataPrev = (stepsDataPrev ?? []).map(v => (typeof v === 'number' && isFinite(v) ? v : 0));
 
     // --- Activity (Health) Section ---
     const ActivityScene = () => (
@@ -396,8 +401,8 @@ export default function HomeScreen() {
             data={{
               labels: xLabels,
               datasets: [
-                { data: stepsDataPrev, color: () => Colors.dark.blue, strokeWidth: 1 },
-                { data: stepsData, color: () => Colors.light.blue, strokeWidth: 2 },
+                { data: safeStepsDataPrev, color: () => Colors.dark.blue, strokeWidth: 1 },
+                { data: safeStepsData, color: () => Colors.light.blue, strokeWidth: 2 },
               ],
             }}
             width={screenWidth}
@@ -446,8 +451,8 @@ export default function HomeScreen() {
             data={{
               labels: xLabels,
               datasets: [
-                { data: weightDataPrev, color: () => Colors.dark.purple, strokeWidth: 1 },
-                { data: weightData, color: () => Colors.light.purple, strokeWidth: 2 },
+                { data: safeWeightDataPrev, color: () => Colors.dark.purple, strokeWidth: 1 },
+                { data: safeWeightData, color: () => Colors.light.purple, strokeWidth: 2 },
               ],
             }}
             width={screenWidth}

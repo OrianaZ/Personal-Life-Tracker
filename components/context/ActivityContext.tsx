@@ -53,29 +53,39 @@ export const ActivityProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   // ----------------------
   // Fetch single-day steps
   // ----------------------
-  const fetchSteps = () => {
-    const today = new Date().toISOString();
-    AppleHealthKit.getStepCount(
-      { date: today, includeManuallyAdded: true },
-      (err: Object, results: HealthValue) => {
-        if (!err && results?.value != null) {
+    const fetchSteps = () => {
+      const today = new Date().toISOString();
+      AppleHealthKit.getStepCount(
+        { date: today, includeManuallyAdded: true },
+        (err: Object, results: HealthValue) => {
+          if (err || !results || results.value == null) {
+            console.log("No steps found for today");
+            setSteps(0);
+            return;
+          }
           setSteps(Math.round(results.value));
         }
-      }
-    );
-  };
+      );
+    };
 
   // ----------------------
   // Fetch latest weight
   // ----------------------
-  const fetchLatestWeight = () => {
-      AppleHealthKit.getLatestWeight({ unit: "lb" as HealthUnit }, (err: Object, result: HealthValue) => {
-        if (!err && result?.value && result?.startDate) {
+    const fetchLatestWeight = () => {
+      AppleHealthKit.getLatestWeight(
+        { unit: "lb" as HealthUnit },
+        (err: Object, result: HealthValue) => {
+          if (err || !result?.value) {
+            console.log("No weight found in HealthKit");
+            setWeightEntries([]);
+            return;
+          }
+
           const entry: WeightEntry = { date: result.startDate, weight: result.value };
           setWeightEntries([entry]);
         }
-      });
-  };
+      );
+    };
 
   // ---------------------------------------
   // Fetch historical steps + weight (1 year)

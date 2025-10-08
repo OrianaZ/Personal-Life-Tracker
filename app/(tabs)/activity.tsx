@@ -63,7 +63,7 @@ export default function ActivityScreen() {
           {/* Refresh Steps Button */}
           {steps !== null && <StepsProgress steps={steps} max={12000} />}
           <TouchableOpacity style={activityStyles.refresh} onPress={() => fetchSteps && refreshData()}>
-            <ThemedText style={{ color: '#fff' }}>Refresh Steps</ThemedText>
+            <ThemedText style={{ color: '#fff' }}>Refresh</ThemedText>
           </TouchableOpacity>
 
           <View style={activityStyles.weightContainer}>
@@ -79,7 +79,7 @@ export default function ActivityScreen() {
                 </ThemedText>
               </View>
             ) : (
-              <ThemedText>Loading...</ThemedText>
+              <ThemedText>Allow Health Permission or add weight Data</ThemedText>
             )}
 
             <ThemedText
@@ -97,10 +97,11 @@ export default function ActivityScreen() {
           <View style={activityStyles.modalContent}>
             <TextInput
               placeholder="Enter weight (lbs)"
+          placeholderTextColor={Colors.light.placeholder}
               keyboardType="numeric"
               value={inputWeight}
               onChangeText={setInputWeight}
-              style={{ borderBottomWidth: 1, marginBottom: 10 }}
+              style={activityStyles.input}
             />
           
           <View style={activityStyles.buttonRow}>
