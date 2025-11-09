@@ -7,6 +7,7 @@ import BrokenHealthKit, {
   HealthUnit,
   HealthValue,
 } from "react-native-health";
+import dayjs from "dayjs";
 
 const AppleHealthKit = NativeModules.AppleHealthKit as typeof BrokenHealthKit;
 AppleHealthKit.Constants = BrokenHealthKit.Constants;
@@ -54,19 +55,32 @@ export const ActivityProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   // Fetch single-day steps
   // ----------------------
     const fetchSteps = () => {
-      const today = new Date().toISOString();
+      const today = dayjs().format("YYYY-MM-DD");
       AppleHealthKit.getStepCount(
-        { date: today, includeManuallyAdded: true },
-        (err: Object, results: HealthValue) => {
-          if (err || !results || results.value == null) {
-            console.log("No steps found for today");
-            setSteps(0);
-            return;
-          }
-          setSteps(Math.round(results.value));
+        { date: new Date().toISOString(), includeManuallyAdded: true },
+        (err, results) => {
+          const todaySteps = err || !results?.value ? 0 : Math.round(results.value);
+          setSteps(todaySteps);
+
+          // update log
+          setLog((prev) => ({
+            ...prev,
+            [today]: { ...prev[today], steps: todaySteps },
+          }));
+
+          AsyncStorage.getItem(STORAGE_KEYS.ACTIVITY_LOG).then((cached) => {
+            const existingLog = cached ? JSON.parse(cached) : {};
+            const updatedLog = {
+              ...existingLog,
+              [today]: { ...existingLog[today], steps: todaySteps },
+            };
+            AsyncStorage.setItem(STORAGE_KEYS.ACTIVITY_LOG, JSON.stringify(updatedLog));
+          });
+
         }
       );
     };
+
 
   // ----------------------
   // Fetch latest weight
@@ -90,83 +104,68 @@ export const ActivityProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   // ---------------------------------------
   // Fetch historical steps + weight (1 year)
   // ---------------------------------------
-  const fetchHistoricalData = async (): Promise<void> => {
-    const endDate = new Date();
-    const startDate = new Date();
-    startDate.setFullYear(endDate.getFullYear() - 1);
+    const fetchHistoricalData = async (): Promise<void> => {
+      const endDate = new Date();
+      const startDate = new Date();
+      startDate.setFullYear(endDate.getFullYear() - 1);
 
-    return new Promise<void>((resolve) => {
-      AppleHealthKit.getSamples(
-        {
-          startDate: startDate.toISOString(),
-          endDate: endDate.toISOString(),
-          type: "StepCount",
-          unit: "count",
-          includeManuallyAdded: true,
-        },
-                                
-        (err: Object, results: HealthValue[]) => {
-          if (err || !results) {
-            console.log("Error fetching step samples", err);
-            resolve();
-            return;
-          }
-            
-          const logData: ActivityLog = {};
-            
-          results.forEach((r) => {
-              if (!r.start) return;
-              const dateObj = new Date(r.start);
-              if (isNaN(dateObj.getTime())) return;
-              const dateStr = dateObj.toISOString().split("T")[0];
-              if (!logData[dateStr]) logData[dateStr] = { steps: 0 };
-              logData[dateStr].steps = (logData[dateStr].steps || 0) + r.quantity;
-          });
+      try {
+        const cached = await AsyncStorage.getItem(STORAGE_KEYS.ACTIVITY_LOG);
+        const existingLog: ActivityLog = cached ? JSON.parse(cached) : {};
+        const logData: ActivityLog = { ...existingLog };
+        const today = dayjs().format("YYYY-MM-DD");
+        let changed = false;
 
-        // Fetch historical weights
-        AppleHealthKit.getWeightSamples(
+        // ---- Steps ----
+        const stepResults: HealthValue[] = await new Promise((resolve, reject) => {
+          AppleHealthKit.getDailyStepCountSamples(
             {
               startDate: startDate.toISOString(),
-              endDate: endDate.toISOString(),
-              unit: "lb",
+              endDate: dayjs().subtract(1, "day").endOf("day").toISOString(),
+              includeManuallyAdded: true,
             },
-            
-            (err2: Object, results2: HealthValue[]) => {
-                if (err2 || !results2) {
-                  console.log("Error fetching weight samples", err2);
-                  resolve();
-                  return;
-                }
-                
-                results2.forEach((r) => {
-                      if (!r.startDate) return;
-
-                      const dateObj = new Date(r.startDate);
-                      if (isNaN(dateObj.getTime())) return;
-
-                      const dateStr = dateObj.toISOString().split("T")[0];
-
-                      // Keep the most recent entry per day
-                      const existing = logData[dateStr]?.weightDate;
-                      const currentTimestamp = dateObj.getTime();
-
-                      if (!existing || currentTimestamp > existing) {
-                        if (!logData[dateStr]) logData[dateStr] = {};
-                        logData[dateStr].weight = r.value;
-                        logData[dateStr].weightDate = currentTimestamp; // store timestamp for comparison
-                      }
-                    });
-                
-
-            AsyncStorage.setItem(STORAGE_KEYS.ACTIVITY_LOG, JSON.stringify(logData));
-              setLog(logData);
-              resolve();
-            }
+            (err, results) => (err ? reject(err) : resolve(results || []))
           );
+        });
+
+        stepResults.forEach((r) => {
+          const dateStr = r.startDate.split("T")[0];
+          const steps = Math.round(r.value);
+          if (!logData[dateStr] || steps > (logData[dateStr].steps ?? 0)) {
+            logData[dateStr] = { ...logData[dateStr], steps };
+            changed = true;
+          }
+        });
+
+        // ---- Weight ----
+        const weightResults: HealthValue[] = await new Promise((resolve, reject) => {
+          AppleHealthKit.getWeightSamples(
+            { startDate: startDate.toISOString(), endDate: endDate.toISOString(), unit: "lb" },
+            (err, results) => (err ? reject(err) : resolve(results || []))
+          );
+        });
+
+        weightResults.forEach((r) => {
+          if (!r.startDate) return;
+          const dateStr = r.startDate.split("T")[0];
+          const weight = r.value;
+          if (!logData[dateStr] || weight !== logData[dateStr].weight) {
+            logData[dateStr] = { ...logData[dateStr], weight };
+            changed = true;
+          }
+        });
+
+        // ---- Save ----
+        if (changed) {
+          await AsyncStorage.setItem(STORAGE_KEYS.ACTIVITY_LOG, JSON.stringify(logData));
+          setLog(logData);
         }
-      );
-    });
-  };
+      } catch (e) {
+        console.log("Error fetching historical data", e);
+      }
+    };
+
+
 
   // ----------------------
   // Add + save new weight
@@ -177,34 +176,24 @@ export const ActivityProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       const entry: WeightEntry = { date: new Date().toISOString(), weight };
       setWeightEntries((prev) => [entry, ...prev]);
 
-      setLog((prev) => ({
-        ...prev,
-        [entryDate]: {
-          ...(prev[entryDate] || {}),
-          weight,
-        },
-      }));
-
       AppleHealthKit.saveWeight({ value: weight, unit: "lb" as HealthUnit }, (err: Object) => {
         if (err) console.log("[ERROR] saving weight", err);
       });
 
-      AsyncStorage.setItem(
-        STORAGE_KEYS.ACTIVITY_LOG,
-        JSON.stringify({
-          ...log,
-          [entryDate]: { ...(log[entryDate] || {}), weight },
-        })
-      );
+      setLog((prevLog) => {
+        const updatedLog = { ...prevLog, [entryDate]: { ...prevLog[entryDate], weight } };
+        AsyncStorage.setItem(STORAGE_KEYS.ACTIVITY_LOG, JSON.stringify(updatedLog));
+        return updatedLog;
+      });
+
     };
 
 
   // ----------------------
   // Manual refresh trigger
   // ----------------------
-  const refreshData = () => {
-    console.log("Refreshing HealthKit data...");
-    fetchHistoricalData();
+  const refreshData = async () => {
+    await fetchHistoricalData();
     fetchSteps();
     fetchLatestWeight();
   };

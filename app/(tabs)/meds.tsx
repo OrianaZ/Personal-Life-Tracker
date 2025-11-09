@@ -200,8 +200,7 @@ export default function MedsScreen() {
                     style={{
                       fontSize: 18,
                       fontWeight: "bold",
-                      color:
-                        topTime.time < now && !takenTimes[med.id]?.[topTime.idx]
+                        color: topTime.time < now && !takenTimes[med.id]?.[topTime.idx]
                           ? Colors.light.red
                           : Colors.light.text,
                       textDecorationLine: takenTimes[med.id]?.[topTime.idx] ? "line-through" : "none",
@@ -214,9 +213,7 @@ export default function MedsScreen() {
               )}
 
               {remainingUntaken.map(({ time, idx }) => {
-                const todayTime = new Date();
-                todayTime.setHours(time.getHours(), time.getMinutes(), 0, 0);
-                const isOverdue = todayTime < now && !takenTimes[med.id]?.[idx];
+                const isOverdue = time < now && !takenTimes[med.id]?.[idx];
 
                 return (
                   <TouchableOpacity

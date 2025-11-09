@@ -79,7 +79,7 @@ export default function ActivityScreen() {
                 </ThemedText>
               </View>
             ) : (
-              <ThemedText>Allow Health Permission or add weight Data</ThemedText>
+              <ThemedText>Allow health permission or add weight data</ThemedText>
             )}
 
             <ThemedText
