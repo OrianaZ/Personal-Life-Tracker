@@ -105,15 +105,13 @@ export const ActivityProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   // Fetch historical steps + weight (1 year)
   // ---------------------------------------
     const fetchHistoricalData = async (): Promise<void> => {
-      const endDate = new Date();
-      const startDate = new Date();
-      startDate.setFullYear(endDate.getFullYear() - 1);
+      const endDate = dayjs().endOf("day").toDate();
+      const startDate = dayjs().subtract(1, "year").startOf("day").toDate(); // full past year
 
       try {
         const cached = await AsyncStorage.getItem(STORAGE_KEYS.ACTIVITY_LOG);
         const existingLog: ActivityLog = cached ? JSON.parse(cached) : {};
         const logData: ActivityLog = { ...existingLog };
-        const today = dayjs().format("YYYY-MM-DD");
         let changed = false;
 
         // ---- Steps ----
@@ -121,18 +119,26 @@ export const ActivityProvider: React.FC<{ children: React.ReactNode }> = ({ chil
           AppleHealthKit.getDailyStepCountSamples(
             {
               startDate: startDate.toISOString(),
-              endDate: dayjs().subtract(1, "day").endOf("day").toISOString(),
+              endDate: endDate.toISOString(),
               includeManuallyAdded: true,
             },
             (err, results) => (err ? reject(err) : resolve(results || []))
           );
         });
 
+        // Aggregate total steps per date (merge samples from same day)
+        const stepTotals: Record<string, number> = {};
         stepResults.forEach((r) => {
-          const dateStr = r.startDate.split("T")[0];
-          const steps = Math.round(r.value);
-          if (!logData[dateStr] || steps > (logData[dateStr].steps ?? 0)) {
-            logData[dateStr] = { ...logData[dateStr], steps };
+          const dateStr = dayjs(r.startDate).format("YYYY-MM-DD");
+          const steps = Math.round(r.value || 0);
+          stepTotals[dateStr] = (stepTotals[dateStr] || 0) + steps;
+        });
+
+        // Merge into cached log
+        Object.entries(stepTotals).forEach(([dateStr, totalSteps]) => {
+          const prevSteps = logData[dateStr]?.steps ?? 0;
+          if (prevSteps !== totalSteps) {
+            logData[dateStr] = { ...logData[dateStr], steps: totalSteps };
             changed = true;
           }
         });
@@ -140,22 +146,27 @@ export const ActivityProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         // ---- Weight ----
         const weightResults: HealthValue[] = await new Promise((resolve, reject) => {
           AppleHealthKit.getWeightSamples(
-            { startDate: startDate.toISOString(), endDate: endDate.toISOString(), unit: "lb" },
+            {
+              startDate: startDate.toISOString(),
+              endDate: endDate.toISOString(),
+              unit: "lb",
+            },
             (err, results) => (err ? reject(err) : resolve(results || []))
           );
         });
 
+        // Add/Update weight entries by day
         weightResults.forEach((r) => {
-          if (!r.startDate) return;
-          const dateStr = r.startDate.split("T")[0];
+          const dateStr = dayjs(r.startDate).format("YYYY-MM-DD");
           const weight = r.value;
-          if (!logData[dateStr] || weight !== logData[dateStr].weight) {
+          const prevWeight = logData[dateStr]?.weight;
+          if (prevWeight !== weight) {
             logData[dateStr] = { ...logData[dateStr], weight };
             changed = true;
           }
         });
 
-        // ---- Save ----
+        // ---- Save to storage if changed ----
         if (changed) {
           await AsyncStorage.setItem(STORAGE_KEYS.ACTIVITY_LOG, JSON.stringify(logData));
           setLog(logData);
@@ -164,6 +175,7 @@ export const ActivityProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         console.log("Error fetching historical data", e);
       }
     };
+
 
 
 
